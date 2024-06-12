@@ -4,8 +4,8 @@ import Chat from './components/Chat';
 import './styles.css';
 
 const App = () => {
-  const defaultVideoPlayerSettings = { width: 600, height: 400, x: 0, y: 0 };
-  const defaultChatSettings = { width: 300, height: 500, x: 0, y: 0 };
+  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 100, y: 100 };
+  const defaultChatSettings = { width: 300, height: 500, x: 900, y:  100};
 
   const [url, setUrl] = useState('');
   const [videoId, setVideoId] = useState('');
@@ -56,6 +56,9 @@ const App = () => {
       localStorage.setItem('chatSettings', JSON.stringify(newSettings));
     }
   };
+  const handleRefresh = () => {
+    window.location.reload(); 
+  }
 
   const handleReset = () => {
     setVideoPlayerSettings(defaultVideoPlayerSettings);
@@ -67,6 +70,7 @@ const App = () => {
   return (
     <div className="app-container">
       <form onSubmit={handleSubmit}>
+        <button type="button" class="Home" onClick={handleRefresh}>Home</button>
         <input
           type="text"
           value={url}

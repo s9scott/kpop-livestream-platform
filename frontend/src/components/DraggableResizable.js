@@ -51,7 +51,7 @@ const DraggableResizable = ({ children, defaultWidth, defaultHeight, defaultX, d
     >
       <div style={{ width: '100%', height: '100%', position: 'relative' }}>
         {children}
-        <div className="drag-handle" style={{ width: 20, height: 20, backgroundColor: '#6441a4', position: 'absolute', bottom: 0, right: 0, cursor: 'move' }} />
+        <line className="drag-handle" style={{ width: 20, height: 20, backgroundColor: '#6441a4', position: 'absolute', bottom: 400, right: -25, cursor: 'move' }} />
       </div>
     </Rnd>
   );
