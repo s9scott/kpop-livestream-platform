@@ -1,6 +1,9 @@
 # Kpop Livestream Platform
 
-
+## To run
+cd frontend
+npm install 
+npm start
 
 ## Getting started
 
