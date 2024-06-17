@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import '../styles.css';
+import '../styles/VideoPlayerPage.css';
 
 
 const Header = ({ videoId, setVideoId, }) => {

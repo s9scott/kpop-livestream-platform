@@ -3,11 +3,13 @@ import VideoPlayer from '../components/VideoPlayer';
 import Chat from '../components/Chat';
 import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
+import '../styles.css';
 
 const VideoPlayerPage = () => {
-  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
-  const defaultChatSettings = { width: 300, height: 500, x: 900, y: 100 };
+  const defaultVideoPlayerSettings = { width: 600, height: 400, x: 0, y: 0 };
+  const defaultChatSettings = { width: 300, height: 500, x: 0, y: 0 };
 
+  const [url, setUrl] = useState('');
   const [videoId, setVideoId] = useState('');
   const [videoPlayerSettings, setVideoPlayerSettings] = useState(defaultVideoPlayerSettings);
   const [chatSettings, setChatSettings] = useState(defaultChatSettings);
@@ -15,15 +17,21 @@ const VideoPlayerPage = () => {
   useEffect(() => {
     const savedVideoPlayerSettings = JSON.parse(localStorage.getItem('videoPlayerSettings'));
     const savedChatSettings = JSON.parse(localStorage.getItem('chatSettings'));
-    const lastVideoId = localStorage.getItem('lastVideoId');
 
     if (savedVideoPlayerSettings) setVideoPlayerSettings(savedVideoPlayerSettings);
     if (savedChatSettings) setChatSettings(savedChatSettings);
-    if (lastVideoId) {
-      setVideoId(lastVideoId);
-      localStorage.removeItem('lastVideoId');
-    }
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const videoId = extractVideoId(url);
+    setVideoId(videoId);
+  };
+
+  const extractVideoId = (url) => {
+    const urlParams = new URLSearchParams(new URL(url).search);
+    return urlParams.get('v'); // Extracts 'v' parameter from YouTube URL
+  };
 
   const handleResizeStop = (type, data) => {
     const { size, position } = data;
@@ -51,9 +59,26 @@ const VideoPlayerPage = () => {
     }
   };
 
+  const handleReset = () => {
+    setVideoPlayerSettings(defaultVideoPlayerSettings);
+    setChatSettings(defaultChatSettings);
+    localStorage.removeItem('videoPlayerSettings');
+    localStorage.removeItem('chatSettings');
+  };
+
   return (
-    <div className="video-player-page">
-      <VideoHeader videoId={videoId} setVideoId={setVideoId} />
+    <div className="app-container">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter video URL"
+          className="url-input"
+        />
+        <button type="submit">Load Video</button>
+        <button type="button" onClick={handleReset}>Reset</button>
+      </form>
       {videoId && (
         <VideoPlayer
           videoId={videoId}
@@ -64,6 +89,7 @@ const VideoPlayerPage = () => {
       )}
       {videoId && (
         <Chat
+            className="chat"
           videoId={videoId}
           settings={chatSettings}
           onResizeStop={(data) => handleResizeStop('chat', data)}
@@ -73,5 +99,6 @@ const VideoPlayerPage = () => {
     </div>
   );
 };
+
 
 export default VideoPlayerPage;
