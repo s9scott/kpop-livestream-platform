@@ -1,0 +1,53 @@
+.artist-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.artist-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.artist-card h2 {
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+
+.artist-card p {
+  color: #555;
+}
+
+.artist-card .social-media-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.artist-card .social-media-links a {
+  text-decoration: none;
+  color: #1da1f2; /* Twitter blue color */
+}
+
+.artist-card .new-music {
+  margin-top: 10px;
+}
+
+.artist-card .new-music ul {
+  list-style: none;
+  padding: 0;
+}
+
+.artist-card .new-music ul li {
+  margin: 5px 0;
+}
+
+.artist-card .new-music ul li a {
+  text-decoration: none;
+  color: #0073e6; /* Link color */
+}

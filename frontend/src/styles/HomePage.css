@@ -1,0 +1,9 @@
+.home-page {
+  padding: 20px;
+}
+
+.artist-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
