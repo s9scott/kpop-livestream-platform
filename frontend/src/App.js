@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from './components/VideoPlayer';
 import Chat from './components/Chat';
+import Header from './components/Header';
 import './styles.css';
 
 const App = () => {
-  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 100, y: 100 };
+  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
   const defaultChatSettings = { width: 300, height: 500, x: 900, y:  100};
 
-  const [url, setUrl] = useState('');
   const [videoId, setVideoId] = useState('');
   const [videoPlayerSettings, setVideoPlayerSettings] = useState(defaultVideoPlayerSettings);
   const [chatSettings, setChatSettings] = useState(defaultChatSettings);
@@ -15,21 +15,16 @@ const App = () => {
   useEffect(() => {
     const savedVideoPlayerSettings = JSON.parse(localStorage.getItem('videoPlayerSettings'));
     const savedChatSettings = JSON.parse(localStorage.getItem('chatSettings'));
+    const lastVideoId = localStorage.getItem('lastVideoId');
 
     if (savedVideoPlayerSettings) setVideoPlayerSettings(savedVideoPlayerSettings);
     if (savedChatSettings) setChatSettings(savedChatSettings);
+    if (lastVideoId) {
+      setVideoId(lastVideoId);
+      localStorage.removeItem('lastVideoId');
+    }
+
   }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const videoId = extractVideoId(url);
-    setVideoId(videoId);
-  };
-
-  const extractVideoId = (url) => {
-    const urlParams = new URLSearchParams(new URL(url).search);
-    return urlParams.get('v'); // Extracts 'v' parameter from YouTube URL
-  };
 
   const handleResizeStop = (type, data) => {
     const { size, position } = data;
@@ -56,31 +51,13 @@ const App = () => {
       localStorage.setItem('chatSettings', JSON.stringify(newSettings));
     }
   };
-  const handleRefresh = () => {
-    window.location.reload(); 
-  }
-
-  const handleReset = () => {
-    setVideoPlayerSettings(defaultVideoPlayerSettings);
-    setChatSettings(defaultChatSettings);
-    localStorage.removeItem('videoPlayerSettings');
-    localStorage.removeItem('chatSettings');
-  };
 
   return (
     <div className="app-container">
-      <form onSubmit={handleSubmit}>
-        <button type="button" class="Home" onClick={handleRefresh}>Home</button>
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter video URL"
-          className="url-input"
-        />
-        <button type="submit">Load Video</button>
-        <button type="button" onClick={handleReset}>Reset</button>
-      </form>
+      <Header 
+        videoId={videoId} 
+        setVideoId={setVideoId} >
+      </Header>
       {videoId && (
         <VideoPlayer
           videoId={videoId}
