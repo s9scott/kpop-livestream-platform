@@ -1,30 +1,35 @@
-import React from 'react';
-import '../styles/pages.css';
+import React, { useState, useEffect } from 'react';
+import '../styles/ArtistPage.css';
 import ArtistCard from '../components/ArtistCard';
 
 const ArtistPage = () => {
-  const defaultArtist = {
-    id: 1,
-    name: "Artist Name",
-    photo: "https://via.placeholder.com/150",
-    description: "This is a default artist description.",
-    socialMediaLinks: [
-      { platform: "Twitter", url: "https://twitter.com/artist" },
-      { platform: "Instagram", url: "https://instagram.com/artist" }
-    ],
-    newMusic: [
-      { title: "New Song 1", url: "https://example.com/new-song-1" },
-      { title: "New Song 2", url: "https://example.com/new-song-2" }
-    ]
-  };
+  const [artists, setArtists] = useState([]);
 
-  console.log('Rendering ArtistPage with artist:', defaultArtist);
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/api/artists');
+        const data = await response.json();
+        setArtists(data);
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+      }
+    };
+
+    fetchArtists();
+  }, []);
 
   return (
     <div className="artist-page">
-      <h1>Artists</h1>
+      <h1>K-pop Artists</h1>
       <div className="artist-list">
-        <ArtistCard artist={defaultArtist} />
+        {artists.length > 0 ? (
+          artists.map((artist, index) => (
+            <ArtistCard key={index} artist={artist} />
+          ))
+        ) : (
+          <p>Loading artists...</p>
+        )}
       </div>
     </div>
   );
