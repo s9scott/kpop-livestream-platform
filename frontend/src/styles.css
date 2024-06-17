@@ -82,6 +82,14 @@ body {
     flex-grow: 1;
     z-index: 1;
   }
+
+  .header.slide {
+    animation: slideBar .9s forwards;
+  }
+
+  .header.slideReverse {
+    animation: slideBarReverse .9s backwards;
+  }
   
   .home {
     margin-right: 20px; 
@@ -94,25 +102,43 @@ body {
   }
   
   .toggle-btn.slide {
-    animation: slideMe 0.8s forwards;
+    animation: slideBtn 0.8s forwards;
   }
   
   .toggle-btn.slideReverse {
-    animation: slideMeReverse 0.8s backwards;
+    animation: slideBtnReverse 0.8s backwards;
   }
   
-  @keyframes slideMe {
+  @keyframes slideBtn {
     0% {
       transform: skewX(20deg) translateX(0);
     }
     100% {
-      transform: skew(0deg) translateX(calc(100vw - 55vw));
+      transform: skew(0deg) translateX(calc(100vw - 40vw));
     }
   }
   
-  @keyframes slideMeReverse {
+  @keyframes slideBtnReverse {
     0% {
-      transform: skewX(340deg) translateX(calc(100vw - 55vw));
+      transform: skewX(340deg) translateX(calc(100vw - 40vw));
+    }
+    100% {
+      transform: skew(0deg) translateX(0);
+    }
+  }
+
+  @keyframes slideBar {
+    0% {
+      transform: skewX(20deg) translateX(0);
+    }
+    100% {
+      transform: skew(0deg) translateX(calc(100vw - 30vw));
+    }
+  }
+  
+  @keyframes slideBarReverse {
+    0% {
+      transform: skewX(340deg) translateX(calc(100vw - 30vw));
     }
     100% {
       transform: skew(0deg) translateX(0);
