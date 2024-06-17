@@ -1,22 +1,4 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #18181b;
-  color: #ffffff;
-  margin: 0;
-  padding: 0;
-}
-
-.app {
-  text-align: center;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-body {
     font-family: 'Arial', sans-serif;
     background-color: #18181b;
     color: #ffffff;
@@ -26,6 +8,7 @@ body {
   
   .app {
     text-align: center;
+    display: flex;
   }
   
   .app-container {
@@ -34,4 +17,16 @@ body {
     align-items: center;
     padding: 20px;
   }
+  
+  .content {
+    margin-left: 60px; /* Width of the collapsed sidebar */
+    transition: margin-left 0.3s ease;
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .sidebar.open ~ .content {
+    margin-left: 250px; /* Width of the expanded sidebar */
+  }
+  
   

@@ -1,0 +1,91 @@
+/* General body and app styles */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #0e0e10;
+    color: #ffffff;
+  }
+  
+  /* Sidebar styles */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0px;
+    background-color: #1f1f23;
+    color: #fff;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  
+  .sidebar.open {
+    width: 250px;
+  }
+  
+  .sidebar-content {
+    padding: 20px;
+  }
+  
+  .sidebar-content h2 {
+    font-size: 1.2em;
+    color: #9147ff;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-content ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar-content ul li {
+    margin: 10px 0;
+  }
+  
+  .sidebar-content ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+  }
+  
+  .sidebar-content ul li a:hover {
+    color: #9147ff;
+  }
+  
+  /* Sidebar toggle button styles */
+  .sidebar-toggle {
+    position: fixed;
+    top: 50%;
+    left: 60px; /* Adjust based on the width of the closed sidebar */
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #1f1f23;
+    border: 1px solid #303032;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: left 0.3s ease;
+    z-index: 1001; /* Ensure it is above the sidebar */
+  }
+  
+  .sidebar-toggle.open {
+    left: 250px; /* Adjust based on the width of the opened sidebar */
+  }
+  
+  .sidebar-toggle .arrow {
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #fff;
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar-toggle .arrow.open {
+    transform: rotate(180deg);
+  }
+  
