@@ -44,12 +44,11 @@ const Header = ({ videoId, setVideoId, }) => {
       }
     }
   }
-
+  
   return (
     <div className="header-container">
       <button type="button" className="toggle-btn" onClick={toggle}>↔</button>
       <form onSubmit={handleSubmit} className='header'>
-        <button type="button" className="home" onClick={() => window.location.reload() }>Home</button>
         <input
           type="text"
           value={url}

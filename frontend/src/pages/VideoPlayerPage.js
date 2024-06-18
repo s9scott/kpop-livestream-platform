@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import '../styles/VideoPlayerPage.css';
 
 const VideoPlayerPage = () => {
-  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
+  const defaultVideoPlayerSettings = { width: 800, height: 500, x: 70, y: 100 };
   const defaultChatSettings = { width: 300, height: 500, x: 900, y: 100 };
 
   const [videoId, setVideoId] = useState('');
@@ -52,8 +52,8 @@ const VideoPlayerPage = () => {
   };
 
   return (
-    <div className="video-player-page">
-      <Header videoId={videoId} setVideoId={setVideoId} />
+    <div className="app-container">
+      <Header videoId={videoId} setVideoId={setVideoId}></Header>
       {videoId && (
         <>
           <VideoPlayer
@@ -63,12 +63,13 @@ const VideoPlayerPage = () => {
             onDragStop={(data) => handleDragStop('video', data)}
           />
           <Chat
+            className="chat"
             videoId={videoId}
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}
             onDragStop={(data) => handleDragStop('chat', data)}
           />
-        </>
+        </> 
       )}
     </div>
   );
