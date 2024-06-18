@@ -60,17 +60,17 @@ const fetchArtistData = async (artistId) => {
       { platform: 'Spotify', url: data.external_urls.spotify }
     ],
     newMusic: [], // Add top tracks or new releases if needed
-    members: data.genres // Using genres as a placeholder for members
+    members: data.genres // Placeholder
   };
 };
 
 app.get('/api/artists', async (req, res) => {
-  const playlistId = '37i9dQZF1DX9tPFwDMOaN1'; // Replace with your chosen K-pop playlist ID
+  const playlistId = '37i9dQZF1DX9tPFwDMOaN1'; 
   try {
     await getSpotifyAccessToken();
     const playlistTracks = await fetchPlaylistTracks(playlistId);
     const uniqueArtists = [...new Map(playlistTracks.map(artist => [artist.id, artist])).values()]; // Remove duplicate artists
-    const topArtists = uniqueArtists.slice(0, 200); // Get the top 100 artists
+    const topArtists = uniqueArtists.slice(0, 50); // Get the top 100 artists
 
     const artists = await Promise.all(topArtists.map(artist => fetchArtistData(artist.id)));
     console.log('Fetched artists:', artists); // Debug log
