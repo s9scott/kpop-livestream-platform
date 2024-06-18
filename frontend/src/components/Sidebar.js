@@ -13,14 +13,13 @@ const Sidebar = () => {
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
-          <h2></h2>
           <ul>
-        <li><NavLink to="/" exact>Home</NavLink></li>
-        <li><NavLink to="/artists">Artists</NavLink></li>
-        <li><NavLink to="/about">About</NavLink></li>
-        <li><NavLink to="/contact">Contact</NavLink></li>
-        <li><NavLink to="/video">Video</NavLink></li>
-      </ul>
+            <li><NavLink to="/" exact>Home</NavLink></li>
+            <li><NavLink to="/artists">Artists</NavLink></li>
+            <li><NavLink to="/load-live">Load Live</NavLink></li>
+            <li><NavLink to="/about">About</NavLink></li>
+            <li><NavLink to="/contact">Contact</NavLink></li>
+          </ul>
         </div>
       </div>
       <div className={`sidebar-toggle ${isOpen ? 'open' : ''}`} onClick={toggleSidebar}>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const Header = ({ videoId, setVideoId, }) => {
   const [url, setUrl] = useState('');
+  const [isShowing, setShowing] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,33 +29,31 @@ const Header = ({ videoId, setVideoId, }) => {
     const header = document.getElementsByClassName("header")[0];
     const toggleBtn = document.getElementsByClassName("toggle-btn")[0];
     if (header) {
-      let hidden = header.getAttribute("hidden");
-
-      if (hidden) {
-        header.removeAttribute("hidden");
+      if (!isShowing) {
+        header.classList.remove('slide');
         toggleBtn.classList.remove('slide');
+        header.classList.add('slideReverse');
         toggleBtn.classList.add('slideReverse')
+        setShowing(true);
       } else {
+        header.classList.add('slide');
         toggleBtn.classList.add('slide');
-        toggleBtn.classList.remove('slideReverse')
-        header.setAttribute("hidden", "hidden");
-
+        header.classList.remove('slideReverse');
+        toggleBtn.classList.remove('slideReverse');
+        setShowing(false);
       }
     }
   }
-
   
-
   return (
     <div className="header-container">
       <button type="button" className="toggle-btn" onClick={toggle}>↔</button>
       <form onSubmit={handleSubmit} className='header'>
-        <button type="button" className="home" onClick={() => window.location.reload() }>Home</button>
         <input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter video URL"
+          placeholder="Enter YouTube URL"
           className="url-input"
         />
         <button type="submit">Load Video</button>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import Chat from '../components/Chat';
-import VideoHeader from '../components/VideoHeader';
+import Header from '../components/Header';
+import '../styles/VideoPlayerPage.css';
 
 const VideoPlayerPage = () => {
   const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
@@ -52,22 +53,22 @@ const VideoPlayerPage = () => {
 
   return (
     <div className="video-player-page">
-      <VideoHeader videoId={videoId} setVideoId={setVideoId} />
+      <Header videoId={videoId} setVideoId={setVideoId} />
       {videoId && (
-        <VideoPlayer
-          videoId={videoId}
-          settings={videoPlayerSettings}
-          onResizeStop={(data) => handleResizeStop('video', data)}
-          onDragStop={(data) => handleDragStop('video', data)}
-        />
-      )}
-      {videoId && (
-        <Chat
-          videoId={videoId}
-          settings={chatSettings}
-          onResizeStop={(data) => handleResizeStop('chat', data)}
-          onDragStop={(data) => handleDragStop('chat', data)}
-        />
+        <>
+          <VideoPlayer
+            videoId={videoId}
+            settings={videoPlayerSettings}
+            onResizeStop={(data) => handleResizeStop('video', data)}
+            onDragStop={(data) => handleDragStop('video', data)}
+          />
+          <Chat
+            videoId={videoId}
+            settings={chatSettings}
+            onResizeStop={(data) => handleResizeStop('chat', data)}
+            onDragStop={(data) => handleDragStop('chat', data)}
+          />
+        </>
       )}
     </div>
   );
