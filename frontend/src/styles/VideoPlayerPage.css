@@ -1,15 +1,8 @@
 .video-player-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
   }
   
   .video-player-page .video-player {
-    margin-bottom: 20px;
   }
   
   .video-player-page .chat {
-    margin-left: 20px;
   }
-  

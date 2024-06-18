@@ -1,11 +1,11 @@
 .artist-card {
+  display: flex;
   background-color: #1f1f23;
   border: 1px solid #303032;
   border-radius: 8px;
   padding: 16px;
   margin: 16px;
-  width: 300px;
-  text-align: center;
+  width: calc(50% - 40px); /* Two columns layout */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s;
 }
@@ -15,46 +15,55 @@
 }
 
 .artist-card img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  margin-right: 16px;
 }
 
-.artist-card h2 {
+.artist-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-info h2 {
   font-size: 1.5em;
-  margin: 10px 0;
+  margin: 0;
 }
 
-.artist-card p {
+.artist-info p {
   font-size: 1em;
-  margin-bottom: 10px;
   color: #d1d1d1;
 }
 
-.artist-card .social-media-links a {
-  margin: 0 8px;
+.members {
+  margin-top: 10px;
+}
+
+.members h3 {
+  margin: 0;
+}
+
+.members ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.members li {
+  font-size: 1em;
+  color: #d1d1d1;
+}
+
+.social-media-links {
+  margin-top: 10px;
+}
+
+.social-media-links a {
+  margin-right: 8px;
   text-decoration: none;
   color: #9147ff;
 }
 
-.artist-card .social-media-links a:hover {
-  color: #c47aff;
-}
-
-.artist-card .new-music ul {
-  list-style: none;
-  padding: 0;
-}
-
-.artist-card .new-music li {
-  margin: 8px 0;
-}
-
-.artist-card .new-music a {
-  color: #9147ff;
-}
-
-.artist-card .new-music a:hover {
+.social-media-links a:hover {
   color: #c47aff;
 }

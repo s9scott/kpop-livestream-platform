@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import Chat from '../components/Chat';
 import VideoHeader from '../components/VideoHeader';
-import '../styles/VideoPlayerPage.css';
 
 const VideoPlayerPage = () => {
   const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
