@@ -1,5 +1,6 @@
 .artist-card {
   display: flex;
+  flex-direction: column;
   background-color: #1f1f23;
   border: 1px solid #303032;
   border-radius: 8px;
@@ -15,10 +16,9 @@
 }
 
 .artist-card img {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   border-radius: 8px;
-  margin-right: 16px;
 }
 
 .artist-info {
@@ -59,7 +59,6 @@
 }
 
 .social-media-links a {
-  margin-right: 8px;
   text-decoration: none;
   color: #9147ff;
 }

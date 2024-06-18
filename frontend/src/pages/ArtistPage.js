@@ -38,7 +38,7 @@ const ArtistPage = () => {
 
   return (
     <div className="artist-page">
-      <h1>K-pop Artists</h1>
+      <h1 className="title">Trending K-Pop Artists</h1>
       <div className="artist-list">
         {artists.length > 0 ? (
           artists.map((artist, index) => (

@@ -4,9 +4,9 @@ import '../styles/ArtistCard.css';
 const ArtistCard = ({ artist }) => {
   return (
     <div className="artist-card">
-      <img src={artist.photo} alt={artist.name} />
+      <h2>{artist.name}</h2>
       <div className="artist-info">
-        <h2>{artist.name}</h2>
+        <img src={artist.photo} alt={artist.name} />
         <p dangerouslySetInnerHTML={{ __html: artist.description }}></p>
         {artist.members.length > 0 && (
           <div className="members">

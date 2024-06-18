@@ -58,11 +58,9 @@ body {
     position: fixed;
     top: 50%;
     left: 60px; /* Adjust based on the width of the closed sidebar */
-    transform: translateY(-50%);
+    transform: translateY(-50%) translateX(-100%);
     width: 40px;
     height: 40px;
-    background-color: #1f1f23;
-    border: 1px solid #303032;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -86,6 +84,6 @@ body {
   }
   
   .sidebar-toggle .arrow.open {
-    transform: rotate(180deg);
+    transform: rotate(180deg) translateX(-100%);
   }
   

@@ -1,12 +1,14 @@
 .artist-page {
   text-align: center;
   padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+  margin-left: 10%;
 }
 
 .artist-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .artist-page input {
@@ -16,4 +18,8 @@
   border: 1px solid #303032;
   background-color: #1f1f23;
   color: #fff;
+}
+
+.title {
+  justify-content: center;
 }
