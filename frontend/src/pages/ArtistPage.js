@@ -57,7 +57,7 @@ const ArtistPage = () => {
   // Render the list of artists or a no artists message
   return (
     <div className="artist-page">
-      <h1>K-pop Artists</h1>
+      <h1 className="title">Trending K-Pop Artists</h1>
       <div className="artist-list">
         {content}
       </div>
