@@ -75,6 +75,17 @@
   .home-header h1 {
     justify-content: center;
   }
+
+  .pfp {
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+    border-radius: 25%;
+  }
+
+  .login {
+    margin-bottom: 5%;
+  }
   
   .artist-cards-container {
     display: flex;

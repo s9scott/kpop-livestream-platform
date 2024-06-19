@@ -3,18 +3,39 @@ import ArtistCard from '../components/ArtistCard';
 import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
 import '../styles/pages.css';
 
-
 const HomePage = () => {
   const [artists, setArtists] = useState([]);
   const [user, setUser] = useState(null);
-  const [buttonClickHandler, setButtonClickHandler] = useState(() => handleSignIn);
 
   useEffect(() => {
     fetch('/api/artists')
       .then(response => response.json())
       .then(data => setArtists(data))
       .catch(error => console.error('Error fetching artists:', error));
+
+    const lastUserData = localStorage.getItem("lastUser");
+    if (lastUserData) {
+      const lastUser = JSON.parse(lastUserData);
+      setUser(lastUser);
+    }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      document.getElementById("login").textContent = "Sign Out";
+      document.getElementById("pfp-img").src = user.photoURL;
+      document.getElementById("pfp-img").alt = user.displayName;
+      document.getElementById("pfp-name").textContent = user.displayName;
+    } else {
+      document.getElementById("login").textContent = "Google Login";
+      try{
+        document.getElementById("pfp-img").src = ''; // Clear the image
+        document.getElementById("pfp-name").textContent = ''; // Clear the name
+      } catch {
+        console.log("Error while resetting photoURL and displayName")
+      } 
+    }
+  }, [user]);
 
   async function handleSignIn() {
     const response = await GoogleUserSignIn();
@@ -23,17 +44,14 @@ const HomePage = () => {
       console.log("An error occurred while signing in...");
     } else {
       console.log("Success, user has signed in with Google...");
-      console.log("response: ", response);
-      const user = response.userInfo; // Assuming response.user contains user information
+      const user = response.userInfo;
       if (user) {
-        console.log("User info: ", user);
-        setUser({
+        const userInfo = {
           displayName: user.displayName,
           photoURL: user.photoURL
-        });
-
-        setButtonClickHandler(() => handleSignOut);
-        document.getElementById("login").textContent = "Sign Out";
+        };
+        localStorage.setItem("lastUser", JSON.stringify(userInfo));
+        setUser(userInfo);
       } else {
         console.log("Error fetching user information...");
       }
@@ -43,25 +61,26 @@ const HomePage = () => {
   function handleSignOut() {
     const response = signOutUser();
 
-    if (response  === "error") {
+    if (response === "error") {
       console.log("Error, user not signed out!");
     } else {
-      setButtonClickHandler(() => handleSignIn);
-      document.getElementById("login").textContent = "Google Login";
       setUser(null);
+      localStorage.removeItem("lastUser");
     }
   }
+
+  const buttonClickHandler = user ? handleSignOut : handleSignIn;
 
   return (
     <div className="home-page">
       <div className="home-header">
         <h1>Featured Artists</h1>
         <div className="header-actions">
-          <button onClick={buttonClickHandler} id="login">Google Login</button>
+          <button onClick={buttonClickHandler} id="login" className="login">Google Login</button>
           {user && (
             <div>
-              <img src={user.photoURL} alt={user.displayName}/>
-              <p>{user.displayName}</p>
+              <img src="" alt="" id="pfp-img" className="pfp"/>
+              <p id="pfp-name"></p>
             </div>
           )}
         </div>
