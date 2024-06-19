@@ -2,10 +2,10 @@ import { getAuth, GoogleAuthProvider, signOut, signInWithPopup } from "firebase/
 import { app } from "../firebaseConfig.js";
 
 const auth = getAuth();
+auth.useDeviceLanguage();
 
-export default async function GoogleUserSignIn() {
+export async function GoogleUserSignIn() {
     const provider = new GoogleAuthProvider();
-    auth.useDeviceLanguage();
 
     try {
         const result = await signInWithPopup(auth, provider)
@@ -36,7 +36,9 @@ export function signOutUser() {
     try {
         signOut(auth);
         console.log("User has been signed out...");
+        return "success";
     } catch (error) {
         console.log("An error occurred while signing out...");
+        return "error";
     }
 }

@@ -53,6 +53,39 @@
   .home-page {
     padding: 20px;
   }
+
+  .home-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text */
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: flex-end; /* Align items to the left (use flex-end for right alignment) */
+    width: 100%; /* Make sure it takes full width */
+    gap: 10px; /* Add some spacing between items */
+    position: absolute;
+    margin-right: 100px;
+    margin-bottom: 100px;
+  }
+  
+  .home-header h1 {
+    justify-content: center;
+  }
+
+  .pfp {
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+    border-radius: 25%;
+  }
+
+  .login {
+    margin-bottom: 5%;
+  }
   
   .artist-cards-container {
     display: flex;
