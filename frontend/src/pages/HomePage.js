@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ArtistCard from '../components/ArtistCard';
-import  GoogleUserSignIn  from '../auth/googleAuth';
+import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
 import '../styles/pages.css';
+
 
 const HomePage = () => {
   const [artists, setArtists] = useState([]);
   const [user, setUser] = useState(null);
+  const [buttonClickHandler, setButtonClickHandler] = useState(() => handleSignIn);
 
   useEffect(() => {
     fetch('/api/artists')
@@ -29,9 +31,24 @@ const HomePage = () => {
           displayName: user.displayName,
           photoURL: user.photoURL
         });
+
+        setButtonClickHandler(() => handleSignOut);
+        document.getElementById("login").textContent = "Sign Out";
       } else {
         console.log("Error fetching user information...");
       }
+    }
+  }
+
+  function handleSignOut() {
+    const response = signOutUser();
+
+    if (response  === "error") {
+      console.log("Error, user not signed out!");
+    } else {
+      setButtonClickHandler(() => handleSignIn);
+      document.getElementById("login").textContent = "Google Login";
+      setUser(null);
     }
   }
 
@@ -39,13 +56,15 @@ const HomePage = () => {
     <div className="home-page">
       <div className="home-header">
         <h1>Featured Artists</h1>
-        <button onClick={handleSignIn}>Google Login</button>
-        {user && (
-          <div>
-            <img src={user.photoURL} alt={user.displayName}/>
-            <p>{user.displayName}</p>
-          </div>
-        )}
+        <div className="header-actions">
+          <button onClick={buttonClickHandler} id="login">Google Login</button>
+          {user && (
+            <div>
+              <img src={user.photoURL} alt={user.displayName}/>
+              <p>{user.displayName}</p>
+            </div>
+          )}
+        </div>
       </div>
       <div className="artist-cards-container">
         {artists.map(artist => (
