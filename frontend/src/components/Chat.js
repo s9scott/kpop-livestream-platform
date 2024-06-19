@@ -1,5 +1,7 @@
+// Chat.js
 import React from 'react';
 import DraggableResizable from './DraggableResizable';
+import NativeChat from './NativeChat';
 
 const Chat = ({ videoId, settings, onResizeStop, onDragStop }) => {
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`;
@@ -13,7 +15,7 @@ const Chat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       onResizeStop={onResizeStop}
       onDragStop={onDragStop}
     >
-      <div className="chat-container" style={{ width: '100%', height: '100%' }}>
+      <div className="chat-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
         <iframe
           width="100%"
           height="100%"
@@ -23,6 +25,9 @@ const Chat = ({ videoId, settings, onResizeStop, onDragStop }) => {
           allowFullScreen
           title="Live Chat"
         ></iframe>
+        <div className="native-chat-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+          <NativeChat videoId={videoId} />
+        </div>
       </div>
     </DraggableResizable>
   );

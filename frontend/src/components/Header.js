@@ -1,22 +1,27 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-
-const Header = ({ videoId, setVideoId, }) => {
+const Header = ({ setVideoId }) => {
   const [url, setUrl] = useState('');
   const [isShowing, setShowing] = useState(true);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newVideoId = extractVideoId(url);
     setVideoId(newVideoId);
+
+    try {
+      const response = await axios.post('http://localhost:3001/setVideoId', { videoId: newVideoId });
+      console.log('Response from backend:', response.data);
+    } catch (error) {
+      console.error('Error sending video ID to the backend:', error);
+    }
   };
 
   const handleReset = () => {
     localStorage.removeItem('videoPlayerSettings');
     localStorage.removeItem('chatSettings');
     
-    localStorage.setItem('lastVideoId', videoId);
     window.location.reload();
   };
 
@@ -24,7 +29,7 @@ const Header = ({ videoId, setVideoId, }) => {
     const urlParams = new URLSearchParams(new URL(url).search);
     return urlParams.get('v'); // Extracts 'v' parameter from YouTube URL
   };
-  
+
   const toggle = () => {
     const header = document.getElementsByClassName("header")[0];
     const toggleBtn = document.getElementsByClassName("toggle-btn")[0];
@@ -43,8 +48,8 @@ const Header = ({ videoId, setVideoId, }) => {
         setShowing(false);
       }
     }
-  }
-  
+  };
+
   return (
     <div className="header-container">
       <button type="button" className="toggle-btn" onClick={toggle}>↔</button>

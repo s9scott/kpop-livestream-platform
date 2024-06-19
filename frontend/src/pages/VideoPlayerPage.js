@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
-import Chat from '../components/Chat';
+import NativeChat from '../components/NativeChat';
 import Header from '../components/Header';
 import '../styles/VideoPlayerPage.css';
 
@@ -52,8 +52,8 @@ const VideoPlayerPage = () => {
   };
 
   return (
-    <div className="video-player-page">
-      <Header videoId={videoId} setVideoId={setVideoId} />
+    <div className="app-container">
+      <Header setVideoId={setVideoId} />
       {videoId && (
         <>
           <VideoPlayer
@@ -62,7 +62,7 @@ const VideoPlayerPage = () => {
             onResizeStop={(data) => handleResizeStop('video', data)}
             onDragStop={(data) => handleDragStop('video', data)}
           />
-          <Chat
+          <NativeChat
             videoId={videoId}
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}
