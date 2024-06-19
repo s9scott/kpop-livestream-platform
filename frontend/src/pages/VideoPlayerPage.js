@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import Chat from '../components/Chat';
-import VideoHeader from '../components/VideoHeader';
+import Header from '../components/Header';
 import '../styles/VideoPlayerPage.css';
 
 const VideoPlayerPage = () => {
-  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 80 };
-  const defaultChatSettings = { width: 300, height: 500, x: 850, y: 80 };
+  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 70, y: 100 };
+  const defaultChatSettings = { width: 300, height: 500, x: 900, y: 100 };
 
   const [videoId, setVideoId] = useState('');
   const [videoPlayerSettings, setVideoPlayerSettings] = useState(defaultVideoPlayerSettings);
@@ -52,8 +52,8 @@ const VideoPlayerPage = () => {
   };
 
   return (
-    <div className="app-container">
-      <VideoHeader videoId={videoId} setVideoId={setVideoId} />
+    <div className="video-player-page">
+      <Header videoId={videoId} setVideoId={setVideoId} />
       {videoId && (
         <>
           <VideoPlayer

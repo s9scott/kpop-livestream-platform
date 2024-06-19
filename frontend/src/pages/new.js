@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import Chat from '../components/Chat';
-import VideoHeader from '../components/VideoHeader';
+import VideoHeader from '../components/Header';
 import '../styles/VideoPlayerPage.css';
 import '../styles.css';
 
