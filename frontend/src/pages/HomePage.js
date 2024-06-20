@@ -27,13 +27,7 @@ const HomePage = () => {
       document.getElementById("pfp-img").alt = user.displayName;
       document.getElementById("pfp-name").textContent = user.displayName;
     } else {
-      document.getElementById("login").textContent = "Google Login";
-      try{
-        document.getElementById("pfp-img").src = ''; // Clear the image
-        document.getElementById("pfp-name").textContent = ''; // Clear the name
-      } catch {
-        console.log("Error while resetting photoURL and displayName")
-      } 
+      document.getElementById("login").textContent = "Google Login"; 
     }
   }, [user]);
 

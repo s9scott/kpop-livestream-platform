@@ -30,7 +30,7 @@
   }
   
   .message .author {
-    color: #1e90ff;
+    color: #a480dd;
     font-weight: bold;
   }
   
@@ -53,13 +53,13 @@
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background: #1e90ff;
+    background: #7c5cb1;
     color: #fff;
     cursor: pointer;
     margin-left: 10px;
   }
   
   .chat-input-button:hover {
-    background: #1c86ee;
+    background: #6441a4;
   }
   

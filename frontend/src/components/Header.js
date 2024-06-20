@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Header = ({ setVideoId }) => {
+const Header = ({ setVideoId, videoId }) => {
   const [url, setUrl] = useState('');
   const [isShowing, setShowing] = useState(true);
 
@@ -22,6 +22,7 @@ const Header = ({ setVideoId }) => {
     localStorage.removeItem('videoPlayerSettings');
     localStorage.removeItem('chatSettings');
     
+    localStorage.setItem('lastVideoId', videoId);
     window.location.reload();
   };
 
