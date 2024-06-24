@@ -1,9 +1,12 @@
 # Kpop Livestream Platform
 
 ## To run
-cd frontend
-npm install 
-npm start
+- cd frontend
+ - npm install 
+ - npm start
+- In a new terminal, cd backend
+ - npm install
+ - npm start
 
 ## Getting started
 

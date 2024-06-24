@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import NativeChat from '../components/NativeChat';
-import Header from '../components/Header';
+import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
 
 const VideoPlayerPage = () => {
@@ -53,7 +53,7 @@ const VideoPlayerPage = () => {
 
   return (
     <div className="app-container">
-      <Header setVideoId={setVideoId} videoId={videoId}/>
+      <VideoHeader setVideoId={setVideoId} videoId={videoId}/>
       {videoId && (
         <>
           <VideoPlayer
