@@ -14,7 +14,7 @@ const Sidebar = () => {
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
           <ul>
-            <li><NavLink to="/" exact>Home</NavLink></li>
+            <li><NavLink to="/" exact='true'>Home</NavLink></li>
             <li><NavLink to="/artists">Artists</NavLink></li>
             <li><NavLink to="/load-live">Load Live</NavLink></li>
             <li><NavLink to="/about">About</NavLink></li>
