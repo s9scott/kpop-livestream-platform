@@ -56,7 +56,7 @@ const LoginHeader = () => {
             }
         }
 
-        window.location.href = authUrl;
+        //window.location.href = authUrl;
 
         if (response.token) {
             const subscriptions = await getYouTubeSubscriptions(response.token);

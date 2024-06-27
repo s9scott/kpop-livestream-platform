@@ -59,28 +59,44 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       setTimeout(processMessageQueue, 1000); // Adjust delay for typing effect
     }
   }, []);
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
-
+  
+  const handleSendClick = async (e) => {
+    e.preventDefault()
     const messageData = {
       text: input,
       author: 'You', // Assuming the user's name is 'You' for simplicity
       timestamp: new Date().toLocaleString(),
     };
 
+    // Save message to Firestore
     const messagesRef = collection(db, 'chats', videoId, 'messages');
-
     await addDoc(messagesRef, {
       text: input,
       author: 'You',
       timestamp: serverTimestamp(),
     });
 
-    await axios.post('http://localhost:3001/sendMessage', { message: input });
+    // Send message to server
+    try {
+      const response = await axios.post('http://localhost:3001/insert-message', { message: input });
+      console.log('Message inserted:', response.data);
+    } catch (error) {
+      console.error('Error inserting message:', error);
+    }
 
+    // Update local state
     setMessages(prevMessages => [...prevMessages, messageData]);
     setInput('');
+  };
+
+  const handleAuthorizeClick = async () => {
+    try {
+      //const response = await axios.get('http://localhost:3001/authorize');
+      window.location.href = 'http://localhost:3001/authorize'
+      //console.log('Authorize response:', response.data);
+    } catch (error) {
+      console.error('Error authorizing:', error);
+    }
   };
 
   const scrollToBottom = () => {
@@ -110,7 +126,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={sendMessage} className="chat-input">
+        <form onSubmit={handleSendClick} className="chat-input">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -118,6 +134,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
             className="chat-input-field"
           />
           <button type="submit" className="chat-input-button">Send</button>
+          <button type="button" onClick={handleAuthorizeClick} id='authorizeButton' className="auth">auth</button>
         </form>
       </div>
     </DraggableResizable>
