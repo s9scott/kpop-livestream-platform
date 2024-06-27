@@ -58,7 +58,7 @@ app.post('/setVideoId', async (req, res) => {
     res.status(500).send('Error setting Live Chat ID');
   }
 });
-
+/*
 app.post('/sendMessage', async (req, res) => {
   const { message } = req.body;
 
@@ -92,7 +92,7 @@ app.post('/sendMessage', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
+*/
 app.get('/fetchChatMessages', async (req, res) => {
   if (!liveChatId) {
     return res.status(500).send('Live Chat ID not available');
