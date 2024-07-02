@@ -50,6 +50,14 @@ const VideoHeader = ({ setVideoId, videoId }) => {
       }
     }
   };
+  
+  const handleAuthorizeClick = async () => {
+    try {
+      window.location.href = 'http://localhost:3001/authorize';
+    } catch (error) {
+      console.error('Error authorizing:', error);
+    }
+  };
 
   return (
     <div className="header-container">
@@ -64,6 +72,7 @@ const VideoHeader = ({ setVideoId, videoId }) => {
         />
         <button type="submit">Load Video</button>
         <button type="button" onClick={handleReset}>Reset Settings</button>
+        <button type="button" onClick={handleAuthorizeClick} id="authorizeButton" className="auth">Authorize</button>
       </form>
     </div>
   );

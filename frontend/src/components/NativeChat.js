@@ -11,6 +11,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const messageQueue = useRef([]);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchLiveChatId = async () => {
@@ -61,11 +62,12 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
   }, []);
   
   const handleSendClick = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const messageData = {
       text: input,
       author: 'You', // Assuming the user's name is 'You' for simplicity
-      timestamp: new Date().toLocaleString(),
+      authorProfileImageUrl: 'your-profile-image-url', // Replace with actual profile image URL if available
+      timestamp: new Date().toISOString(),
     };
 
     // Save message to Firestore
@@ -91,21 +93,26 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
 
   const handleAuthorizeClick = async () => {
     try {
-      //const response = await axios.get('http://localhost:3001/authorize');
-      window.location.href = 'http://localhost:3001/authorize'
-      //console.log('Authorize response:', response.data);
+      window.location.href = 'http://localhost:3001/authorize';
     } catch (error) {
       console.error('Error authorizing:', error);
     }
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
   return (
     <DraggableResizable
@@ -116,12 +123,19 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       onResizeStop={onResizeStop}
       onDragStop={onDragStop}
     >
-      <div className="native-chat">
+      <div className="native-chat" style={{ width: '100%', height: '100%' }}>
         <div className="chat-header">Live Chat</div>
-        <div className="messages">
+        <div className="messages" ref={messagesContainerRef}>
           {messages.map((message, index) => (
             <div key={index} className="message">
-              <span className="author">{message.author}:</span> {message.text}
+              <img src={message.authorProfileImageUrl} alt="Profile" className="profile-pic" />
+              <div className="message-info">
+                <span className="author">{message.author}</span>
+                <div className="message-content">
+                  <div className="text">{message.text}</div>
+                  <span className="timestamp">{formatTimestamp(message.timestamp)}</span>
+                </div>
+              </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -134,7 +148,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
             className="chat-input-field"
           />
           <button type="submit" className="chat-input-button">Send</button>
-          <button type="button" onClick={handleAuthorizeClick} id='authorizeButton' className="auth">auth</button>
+          <button type="button" onClick={handleAuthorizeClick} id="authorizeButton" className="auth">Authorize</button>
         </form>
       </div>
     </DraggableResizable>

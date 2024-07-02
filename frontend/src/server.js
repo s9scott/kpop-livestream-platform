@@ -112,7 +112,8 @@ app.get('/fetchChatMessages', async (req, res) => {
     const messages = data.items.map(item => ({
       text: item.snippet.displayMessage,
       author: item.authorDetails.displayName,
-      timestamp: new Date(item.snippet.publishedAt).toLocaleString(),
+      authorProfileImageUrl: item.authorDetails.profileImageUrl, // Add profile picture URL
+      timestamp: item.snippet.publishedAt,
     }));
 
     res.status(200).send(messages);
@@ -125,3 +126,5 @@ app.get('/fetchChatMessages', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+
