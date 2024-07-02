@@ -1,11 +1,13 @@
+// NativeChat.js
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { db } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import DraggableResizable from './DraggableResizable';
 import '../styles/NativeChat.css';
+import { logMessageSent } from '../firestoreUtils';
 
-const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
+const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, userId }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [initialFetchDone, setInitialFetchDone] = useState(false);
@@ -34,7 +36,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       try {
         const response = await axios.get('http://localhost:3001/fetchChatMessages');
         const newMessages = response.data;
-
+  
         if (!initialFetchDone) {
           setMessages(newMessages);
           setInitialFetchDone(true);
@@ -46,17 +48,17 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
         console.error('Error fetching chat messages:', error);
       }
     };
-
+  
     fetchMessages(); // Initial fetch
     const intervalId = setInterval(fetchMessages, 5000); // Fetch messages every 5 seconds
     return () => clearInterval(intervalId);
   };
-
+  
   const processMessageQueue = useCallback(() => {
     if (messageQueue.current.length > 0) {
       const message = messageQueue.current.shift();
       setMessages(prevMessages => [...prevMessages, message]);
-
+  
       setTimeout(processMessageQueue, 1000); // Adjust delay for typing effect
     }
   }, []);
@@ -77,6 +79,11 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       author: 'You',
       timestamp: serverTimestamp(),
     });
+
+    // Log message sent
+    if (userId) {
+      await logMessageSent(userId, input);
+    }
 
     // Send message to server
     try {

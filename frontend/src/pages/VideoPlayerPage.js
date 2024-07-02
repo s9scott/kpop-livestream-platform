@@ -1,10 +1,12 @@
+// VideoPlayerPage.js
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import NativeChat from '../components/NativeChat';
 import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
+import { logWebsiteUsage } from '../firestoreUtils';
 
-const VideoPlayerPage = () => {
+const VideoPlayerPage = ({ userId }) => {
   const defaultVideoPlayerSettings = { width: 750, height: 500, x: 30, y: 120 };
   const defaultChatSettings = { width: 300, height: 500, x: 850, y: 120 };
 
@@ -24,6 +26,12 @@ const VideoPlayerPage = () => {
       localStorage.removeItem('lastVideoId');
     }
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      logWebsiteUsage(userId, 'Visited VideoPlayerPage');
+    }
+  }, [userId]);
 
   const handleResizeStop = (type, data) => {
     const { size, position } = data;
@@ -53,7 +61,7 @@ const VideoPlayerPage = () => {
 
   return (
     <div className="app-container">
-      <VideoHeader setVideoId={setVideoId} videoId={videoId}/>
+      <VideoHeader setVideoId={setVideoId} videoId={videoId} />
       {videoId && (
         <>
           <VideoPlayer
@@ -67,6 +75,7 @@ const VideoPlayerPage = () => {
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}
             onDragStop={(data) => handleDragStop('chat', data)}
+            userId={userId} // Pass userId to NativeChat
           />
         </>
       )}

@@ -1,5 +1,5 @@
 // App.js
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
@@ -7,19 +7,23 @@ import ArtistPage from './pages/ArtistPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import VideoPlayerPage from './pages/VideoPlayerPage';
+import LoginHeader from './components/LoginHeader';
 import './styles/App.css';
 import './styles.css';
 
 const App = () => {
+  const [userId, setUserId] = useState(null);
+
   return (
     <Router>
       <div className="app">
         <Sidebar />
         <div className="content">
+          <LoginHeader setUser={setUserId} />
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/artists" element={<ArtistPage />} />
-            <Route path="/load-live" element={<VideoPlayerPage />} />
+            <Route path="/load-live" element={<VideoPlayerPage userId={userId} />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
