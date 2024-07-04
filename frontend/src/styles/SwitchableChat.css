@@ -1,0 +1,40 @@
+/* SwitchableChat.css */
+.switchable-chat-container {
+    background: #1c1c1e;
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-toggle {
+    background: #333;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #444;
+  }
+  
+  .toggle-chat-button {
+    background: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.3s;
+  }
+  
+  .toggle-chat-button:hover {
+    background: #3700b3;
+  }
+  
+  .chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  

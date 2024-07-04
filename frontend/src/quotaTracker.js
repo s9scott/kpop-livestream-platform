@@ -1,6 +1,6 @@
 /*
  * Quota Tracker
- * 
+ * to run: node cli.js showQuota
  */
 const fs = require('fs');
 const path = './quotaUsage.json';
