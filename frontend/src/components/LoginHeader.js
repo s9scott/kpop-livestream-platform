@@ -1,11 +1,9 @@
-// LoginHeader.js
 import React, { useState, useEffect } from 'react';
 import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
-import authUrl from '../auth/authConfig';
 import { addUser } from '../firestoreUtils';
 import '../styles/pages.css';
 
-const jsonTokens = require('../tokens.json');
+//const jsonTokens = require('../tokens.json');
 
 const LoginHeader = () => {
   const [curUser, setCurUser] = useState(null);
@@ -74,14 +72,14 @@ const LoginHeader = () => {
 
   return (
     <div className="header-actions">
-      <button onClick={handleAuthorizeClick} id='authBtn' className='home-auth'>Authorize YouTube Access</button>
-      <button onClick={buttonClickHandler} id="login" className="login">Google Login</button>
       {curUser && (
         <div>
+          <button onClick={handleAuthorizeClick} id='authBtn' className='home-auth'>Authorize YouTube Access</button>
           <img src="" alt="" id="pfp-img" className="pfp"/>
           <p id="pfp-name"></p>
         </div>
       )}
+      <button onClick={buttonClickHandler} id="login" className="login" >Google Login</button>
     </div>
   );
 }

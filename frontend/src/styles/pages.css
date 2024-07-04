@@ -1,99 +1,165 @@
-.about-page {
-    padding: 20px;
-  }
-  
-  .about-page h1 {
-    margin-bottom: 20px;
-  }
-  
-  .about-page p {
-    line-height: 1.6;
-  }
+.about-page,
+.artist-page,
+.home-page {
+  padding: 20px;
+}
 
+.about-page h1,
+.artist-page h1,
+.home-header h1 {
+  margin-bottom: 20px;
+}
 
-  .artist-page {
-    padding: 20px;
-  }
-  
-  .artist-page h1 {
-    margin-bottom: 20px;
-  }
-  
-  .artist-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .artist-details img {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
-  }
-  
-  .artist-details h2 {
-    margin-bottom: 10px;
-  }
-  
-  .artist-details p {
-    margin-bottom: 10px;
-  }
-  .artist-page {
-    padding: 20px;
-  }
-  
-  .artist-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.about-page p,
+.artist-details p,
+.artist-music,
+.music-item {
+  line-height: 1.6;
+  margin-bottom: 10px; /* Adjust spacing as needed */
+}
 
-  .home-page {
-    padding: 20px;
-  }
+.artist-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .home-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center items horizontally */
-    text-align: center; /* Center text */
-  }
-  
-  .header-actions {
-    display: flex;
-    align-items: center; /* Center items vertically */
-    justify-content: flex-end; /* Align items to the left (use flex-end for right alignment) */
-    width: 100%; /* Make sure it takes full width */
-    gap: 10px; /* Add some spacing between items */
-    position: absolute;
-    margin-right: 100px;
-    margin-bottom: 100px;
-  }
-  
-  .home-header h1 {
-    justify-content: center;
-  }
+.artist-details img,
+.pfp {
+  width: 125px; /* Adjust size as needed */
+  height: 125px; /* Adjust size as needed */
+  border-radius: 25%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
 
-  .pfp {
-    height: 80px;
-    width: 80px;
-    object-fit: cover;
-    border-radius: 25%;
-  }
+.artist-details h2 {
+  margin-bottom: 10px;
+}
 
-  .login {
-    margin-bottom: 5%;
-  }
-  
-  .artist-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.header-actions {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-end; /* Align items to the right */
+  gap: 10px; /* Add space between items */
+  position: absolute;
+  bottom: 20px; /* Adjust bottom spacing */
+  right: 20px; /* Adjust right spacing */
+}
 
-  .artist-card {
+.login,
+.home-auth {
+  background: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+.login {
+  margin-bottom: 10px; /* Adjust spacing as needed */
+  margin-right: 30%;
+}
+
+.home-auth {
+  margin-bottom: 10px; /* Adjust spacing as needed */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px; /* Adjust width as needed */
+  background-color: #1f1f23;
+  color: #fff;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  width: 300px; /* Adjust width as needed */
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+.sidebar-content h2 {
+  font-size: 1.2em;
+  color: #9147ff;
+  margin-bottom: 20px;
+}
+
+.sidebar-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar-content ul li {
+  margin: 10px 0;
+}
+
+.sidebar-content ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5em;
+}
+
+.sidebar-content ul li a:hover {
+  color: #9147ff;
+}
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 20px; /* Adjust bottom spacing */
+  left: 20px; /* Adjust left spacing */
+  width: calc(100% - 40px); /* Adjust width minus padding */
+}
+
+.sidebar-toggle {
+  position: fixed;
+  bottom: 20px; /* Adjust bottom spacing */
+  left: calc(300px - 60px); /* Adjust left spacing based on sidebar width */
+  transform: translateX(-100%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  z-index: 1001; /* Ensure it is above the sidebar */
+}
+
+.sidebar-toggle.open {
+  left: calc(300px - 250px); /* Adjust left spacing for open state */
+}
+
+.sidebar-toggle .arrow {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #fff;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-toggle .arrow.open {
+  transform: rotate(180deg) translateX(-100%);
+}
+
+.artist-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.artist-card {
   border: 1px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
@@ -125,23 +191,3 @@
   text-decoration: none;
   color: #0073e6;
 }
-
-.artist-music {
-  padding: 10px;
-}
-
-.music-item {
-  margin: 5px 0;
-}
-
-.home-auth {
-  background: #6200ea;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  cursor: pointer;
-  outline: none;
-  margin-bottom: 5%;
-} 
-  
