@@ -1,7 +1,7 @@
 // VideoPlayerPage.js
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
-import NativeChat from '../components/NativeChat';
+import Chat from '../components/Chat';
 import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
 import { logWebsiteUsage } from '../firestoreUtils';
@@ -70,12 +70,11 @@ const VideoPlayerPage = ({ userId }) => {
             onResizeStop={(data) => handleResizeStop('video', data)}
             onDragStop={(data) => handleDragStop('video', data)}
           />
-          <NativeChat
+          <Chat
             videoId={videoId}
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}
             onDragStop={(data) => handleDragStop('chat', data)}
-            userId={userId} // Pass userId to NativeChat
           />
         </>
       )}

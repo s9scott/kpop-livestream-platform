@@ -1,9 +1,15 @@
 // Chat.js
-import React from 'react';
+import React, { useState } from 'react';
 import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
 
 const Chat = ({ videoId, settings, onResizeStop, onDragStop }) => {
+  const [useNativeChat, setUseNativeChat] = useState(false); // State to toggle between YouTube chat and native chat
+
+  const toggleChat = () => {
+    setUseNativeChat(prev => !prev);
+  };
+
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`;
 
   return (
@@ -16,18 +22,22 @@ const Chat = ({ videoId, settings, onResizeStop, onDragStop }) => {
       onDragStop={onDragStop}
     >
       <div className="chat-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
-        <iframe
-          width="100%"
-          height="100%"
-          src={chatSrc}
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          title="Live Chat"
-        ></iframe>
-        <div className="native-chat-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-          <NativeChat videoId={videoId} />
-        </div>
+        <button onClick={toggleChat} className="toggle-chat-button">
+          {useNativeChat ? 'Switch to YouTube Chat' : 'Switch to Native Chat'}
+        </button>
+        {useNativeChat ? (
+          <NativeChat videoId={videoId} settings={settings} />
+        ) : (
+          <iframe
+            width="100%"
+            height="100%"
+            src={chatSrc}
+            frameBorder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Live Chat"
+          ></iframe>
+        )}
       </div>
     </DraggableResizable>
   );
