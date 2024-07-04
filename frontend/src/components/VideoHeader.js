@@ -72,7 +72,6 @@ const VideoHeader = ({ setVideoId, videoId }) => {
         />
         <button type="submit">Load Video</button>
         <button type="button" onClick={handleReset}>Reset Settings</button>
-        <button type="button" onClick={handleAuthorizeClick} id="authorizeButton" className="auth">Authorize</button>
       </form>
     </div>
   );

@@ -134,5 +134,14 @@
   margin: 5px 0;
 }
 
-  
+.home-auth {
+  background: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 5%;
+} 
   

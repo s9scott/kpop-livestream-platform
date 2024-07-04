@@ -5,7 +5,9 @@ import authUrl from '../auth/authConfig';
 import { addUser } from '../firestoreUtils';
 import '../styles/pages.css';
 
-const LoginHeader = ({ setUser }) => {
+const jsonTokens = require('../tokens.json');
+
+const LoginHeader = () => {
   const [curUser, setCurUser] = useState(null);
 
   useEffect(() => {
@@ -24,20 +26,17 @@ const LoginHeader = ({ setUser }) => {
     if (lastUserData && !curUser) {
       const lastUser = JSON.parse(lastUserData);
       setCurUser(lastUser);
-      setUser(lastUser.uid); // Pass user ID to parent component
       return;
     }
-  }, [curUser, setUser]);
+  }, [curUser]);
 
-  const getYouTubeSubscriptions = async (accessToken) => {
-    const response = await fetch('https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    const data = await response.json();
-    return data;
-  };
+  async function handleAuthorizeClick() {
+    try {
+      window.location.href = 'http://localhost:3001/authorize';
+    } catch (error) {
+      console.error('Error authorizing:', error);
+    }
+  }
 
   async function handleSignIn() {
     const response = await GoogleUserSignIn();
@@ -55,19 +54,9 @@ const LoginHeader = ({ setUser }) => {
         };
         localStorage.setItem("lastUser", JSON.stringify(userInfo));
         setCurUser(userInfo);
-        setUser(userInfo.uid); // Pass user ID to parent component
       } else {
         console.log("Error fetching user information...");
       }
-    }
-
-    //window.location.href = authUrl;
-
-    if (response.token) {
-      const subscriptions = await getYouTubeSubscriptions(response.token);
-      console.log(subscriptions);
-    } else {
-      console.log("Access token invalid");
     }
   }
 
@@ -77,7 +66,6 @@ const LoginHeader = ({ setUser }) => {
       console.log("Error, user not signed out!");
     } else {
       setCurUser(null);
-      setUser(null); // Clear user ID in parent component
       localStorage.removeItem("lastUser");
     }
   }
@@ -86,6 +74,7 @@ const LoginHeader = ({ setUser }) => {
 
   return (
     <div className="header-actions">
+      <button onClick={handleAuthorizeClick} id='authBtn' className='home-auth'>Authorize YouTube Access</button>
       <button onClick={buttonClickHandler} id="login" className="login">Google Login</button>
       {curUser && (
         <div>

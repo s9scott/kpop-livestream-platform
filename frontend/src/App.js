@@ -19,7 +19,9 @@ const App = () => {
       <div className="app">
         <Sidebar />
         <div className="content">
-          <LoginHeader setUser={setUserId} />
+          <div className='home-header'>
+            <LoginHeader />
+          </div>
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/artists" element={<ArtistPage />} />
