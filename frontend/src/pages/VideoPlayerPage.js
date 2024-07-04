@@ -1,7 +1,7 @@
 // VideoPlayerPage.js
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
-import Chat from '../components/Chat';
+import SwitchableChat from '../components/SwitchableChat';
 import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
 import { logWebsiteUsage } from '../firestoreUtils';
@@ -70,7 +70,7 @@ const VideoPlayerPage = ({ userId }) => {
             onResizeStop={(data) => handleResizeStop('video', data)}
             onDragStop={(data) => handleDragStop('video', data)}
           />
-          <Chat
+          <SwitchableChat
             videoId={videoId}
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}

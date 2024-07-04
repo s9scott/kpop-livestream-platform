@@ -3,7 +3,6 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  max-width: 800px; /* Increased width */
   background: #000; /* Dark background as in the screenshot */
   color: white; /* White text color for better contrast */
   border-radius: 10px;
