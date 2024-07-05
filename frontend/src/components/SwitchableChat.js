@@ -4,8 +4,9 @@ import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
 import '../styles/SwitchableChat.css';
 
-const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
+const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
   const [useNativeChat, setUseNativeChat] = useState(false);
+  console.log('SwitchableChat.js: user:', user);
 
   const toggleChat = () => {
     setUseNativeChat((prev) => !prev);
@@ -30,7 +31,13 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop }) => {
         </div>
         <div className="chat-content" style={{ width: '100%', height: '100%' }}>
           {useNativeChat ? (
-            <NativeChat settings={settings} onResizeStop={onResizeStop} onDragStop={onDragStop} />
+            <NativeChat
+              videoId={videoId}
+              settings={settings}
+              onResizeStop={onResizeStop}
+              onDragStop={onDragStop}
+              user={user} // Pass user to NativeChat
+            />
           ) : (
             <iframe
               width="100%"

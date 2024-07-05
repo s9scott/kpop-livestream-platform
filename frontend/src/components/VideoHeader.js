@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 
 const VideoHeader = ({ setVideoId, videoId }) => {
   const [url, setUrl] = useState('');
@@ -9,13 +9,7 @@ const VideoHeader = ({ setVideoId, videoId }) => {
     e.preventDefault();
     const newVideoId = extractVideoId(url);
     setVideoId(newVideoId);
-
-    try {
-      const response = await axios.post('http://localhost:3001/setVideoId', { videoId: newVideoId });
-      console.log('Response from backend:', response.data);
-    } catch (error) {
-      console.error('Error sending video ID to the backend:', error);
-    }
+    localStorage.setItem('lastVideoId', newVideoId);
   };
 
   const handleReset = () => {
@@ -51,14 +45,6 @@ const VideoHeader = ({ setVideoId, videoId }) => {
     }
   };
   
-  const handleAuthorizeClick = async () => {
-    try {
-      window.location.href = 'http://localhost:3001/authorize';
-    } catch (error) {
-      console.error('Error authorizing:', error);
-    }
-  };
-
   return (
     <div className="header-container">
       <button type="button" className="toggle-btn" onClick={toggle}>↔</button>

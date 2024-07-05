@@ -6,7 +6,7 @@ import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
 import { logWebsiteUsage } from '../firestoreUtils';
 
-const VideoPlayerPage = ({ userId }) => {
+const VideoPlayerPage = ({ user }) => {
   const defaultVideoPlayerSettings = { width: 750, height: 500, x: 30, y: 120 };
   const defaultChatSettings = { width: 300, height: 500, x: 850, y: 120 };
 
@@ -28,10 +28,10 @@ const VideoPlayerPage = ({ userId }) => {
   }, []);
 
   useEffect(() => {
-    if (userId) {
-      logWebsiteUsage(userId, 'Visited VideoPlayerPage');
+    if (user) {
+      logWebsiteUsage(user.uid, 'Visited VideoPlayerPage');
     }
-  }, [userId]);
+  }, [user]);
 
   const handleResizeStop = (type, data) => {
     const { size, position } = data;
@@ -75,6 +75,7 @@ const VideoPlayerPage = ({ userId }) => {
             settings={chatSettings}
             onResizeStop={(data) => handleResizeStop('chat', data)}
             onDragStop={(data) => handleDragStop('chat', data)}
+            user={user} // Pass user to SwitchableChat
           />
         </>
       )}

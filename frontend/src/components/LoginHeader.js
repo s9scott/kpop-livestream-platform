@@ -3,10 +3,8 @@ import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
 import { addUser } from '../firestoreUtils';
 import '../styles/pages.css';
 
-//const jsonTokens = require('../tokens.json');
-
-const LoginHeader = () => {
-  const [curUser, setCurUser] = useState(null);
+const LoginHeader = ({ user, setUser }) => {
+  const [curUser, setCurUser] = useState(user);
 
   useEffect(() => {
     if (curUser) {
@@ -24,17 +22,10 @@ const LoginHeader = () => {
     if (lastUserData && !curUser) {
       const lastUser = JSON.parse(lastUserData);
       setCurUser(lastUser);
+      setUser(lastUser);  // Update the parent state
       return;
     }
-  }, [curUser]);
-
-  async function handleAuthorizeClick() {
-    try {
-      window.location.href = 'http://localhost:3001/authorize';
-    } catch (error) {
-      console.error('Error authorizing:', error);
-    }
-  }
+  }, [curUser, setUser]);
 
   async function handleSignIn() {
     const response = await GoogleUserSignIn();
@@ -52,6 +43,7 @@ const LoginHeader = () => {
         };
         localStorage.setItem("lastUser", JSON.stringify(userInfo));
         setCurUser(userInfo);
+        setUser(userInfo);  // Update the parent state
       } else {
         console.log("Error fetching user information...");
       }
@@ -64,6 +56,7 @@ const LoginHeader = () => {
       console.log("Error, user not signed out!");
     } else {
       setCurUser(null);
+      setUser(null);  // Update the parent state
       localStorage.removeItem("lastUser");
     }
   }
@@ -72,16 +65,17 @@ const LoginHeader = () => {
 
   return (
     <div className="header-actions">
+      <button onClick={buttonClickHandler} id="login" className="login">
+        {curUser ? "Sign Out" : "Google Login"}
+      </button>
       {curUser && (
         <div>
-          <button onClick={handleAuthorizeClick} id='authBtn' className='home-auth'>Authorize YouTube Access</button>
           <img src="" alt="" id="pfp-img" className="pfp"/>
           <p id="pfp-name"></p>
         </div>
       )}
-      <button onClick={buttonClickHandler} id="login" className="login" >Google Login</button>
     </div>
   );
-}
+};
 
 export default LoginHeader;

@@ -106,3 +106,10 @@
 .chat-input-button:hover, .auth:hover {
   background: #3700b3;
 }
+
+.tooltip-content {
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}

@@ -1,5 +1,4 @@
-// App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
@@ -11,17 +10,24 @@ import './styles/App.css';
 import './styles.css';
 
 const App = () => {
-  const [userId] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('lastUser');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <Router>
       <div className="app">
-        <Sidebar />
+        <Sidebar user={user} setUser={setUser} />
         <div className="content">
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/artists" element={<ArtistPage />} />
-            <Route path="/load-live" element={<VideoPlayerPage userId={userId} />} />
+            <Route path="/load-live" element={<VideoPlayerPage user={user} />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
