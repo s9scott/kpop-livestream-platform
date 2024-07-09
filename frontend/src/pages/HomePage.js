@@ -1,4 +1,3 @@
-import LoginHeader from '../components/LoginHeader';
 import '../styles/pages.css';
 import '../styles/HomePage.css';
 

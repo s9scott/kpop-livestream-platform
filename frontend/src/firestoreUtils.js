@@ -22,14 +22,6 @@ const updateUserStatus = async (userId, isActive) => {
   }
 };
 
-// Function to add a muted user
-export const addMutedUser = async (userId, mutedUserId) => {
-  const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
-  await updateDoc(userRef, {
-    mutedUsers: arrayUnion(mutedUserId),
-  });
-};
-
 // Function to log a message sent
 export const logMessageSent = async (userId, message) => {
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID

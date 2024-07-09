@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import '../styles/SwitchableChat.css';
 
@@ -13,14 +13,40 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
   console.log('SwitchableChat.js: user:', user);
 
   useEffect(() => {
-    const q = query(collection(db, 'users'), where('activeStatus', '==', true));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const users = snapshot.docs.map((doc) => doc.data());
-      setActiveUsers(users);
-    });
+    const fetchActiveUsers = async () => {
+      const now = Timestamp.now();
+      const fiveMinutesAgo = new Timestamp(now.seconds - 300, now.nanoseconds); // 300 seconds = 5 minutes
 
-    return () => unsubscribe();
-  }, []);
+      const q = query(
+        collection(db, 'livestreams', videoId, 'messages'),
+        where('timestamp', '>=', fiveMinutesAgo)
+      );
+
+      const unsubscribe = onSnapshot(q, async (snapshot) => {
+        const userIds = new Set();
+        snapshot.forEach((doc) => {
+          userIds.add(doc.data().authorUid);
+        });
+
+        const activeUserPromises = Array.from(userIds).map(async (uid) => {
+          const userRef = doc(db, 'users', uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            return userSnap.data();
+          }
+          return null;
+        });
+
+        Promise.all(activeUserPromises).then((users) => {
+          setActiveUsers(users.filter((user) => user !== null));
+        });
+      });
+
+      return () => unsubscribe();
+    };
+
+    fetchActiveUsers();
+  }, [videoId]);
 
   const toggleChat = () => {
     setUseNativeChat((prev) => !prev);

@@ -22,7 +22,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
             const userSnap = await getDoc(userRef);
             if (userSnap.exists()) {
               const userData = userSnap.data();
-              return { ...message, authorPhotoURL: userData.photoURL, userInfo: userData };
+              return { ...message, authorPhotoURL: userData.profilePicture, userInfo: userData };
             }
           }
           return message;
