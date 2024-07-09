@@ -13,6 +13,15 @@ export const addUser = async (user) => {
   }, { merge: true });
 };
 
+const updateUserStatus = async (userId, isActive) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await setDoc(userRef, { activeStatus: isActive }, { merge: true });
+  } catch (error) {
+    console.error("Error updating user status: ", error);
+  }
+};
+
 // Function to add a muted user
 export const addMutedUser = async (userId, mutedUserId) => {
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID

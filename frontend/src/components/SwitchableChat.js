@@ -1,15 +1,33 @@
-// SwitchableChat.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 import '../styles/SwitchableChat.css';
 
 const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
   const [useNativeChat, setUseNativeChat] = useState(false);
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
+
   console.log('SwitchableChat.js: user:', user);
+
+  useEffect(() => {
+    const q = query(collection(db, 'users'), where('activeStatus', '==', true));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const users = snapshot.docs.map((doc) => doc.data());
+      setActiveUsers(users);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const toggleChat = () => {
     setUseNativeChat((prev) => !prev);
+  };
+
+  const toggleActiveUsersModal = () => {
+    setIsActiveUsersModalOpen((prev) => !prev);
   };
 
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`;
@@ -25,6 +43,9 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
     >
       <div className="switchable-chat-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
         <div className="chat-toggle">
+          <button onClick={toggleActiveUsersModal} className="active-users-button">
+            Active Users
+          </button>
           <button onClick={toggleChat} className="toggle-chat-button">
             {useNativeChat ? 'Switch to YouTube Chat' : 'Switch to Native Chat'}
           </button>
@@ -50,6 +71,20 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
             ></iframe>
           )}
         </div>
+
+        {isActiveUsersModalOpen && (
+          <div className="active-users-modal">
+            <div className="modal-content">
+              <span className="close" onClick={toggleActiveUsersModal}>&times;</span>
+              <h2>Active Users</h2>
+              <ul>
+                {activeUsers.map((activeUser, index) => (
+                  <li key={index}>{activeUser.displayName}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
     </DraggableResizable>
   );

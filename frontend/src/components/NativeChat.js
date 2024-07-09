@@ -7,7 +7,8 @@ import { Tooltip } from 'react-tooltip';
 const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [hoveredUser, setHoveredUser] = useState(null);
+  const [showOptions, setShowOptions] = useState({});
+  const [selectedUser, setSelectedUser] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -57,23 +58,35 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const handleMouseEnter = async (uid) => {
-    if (!uid) return;
+  const toggleOptions = (index) => {
+    setShowOptions((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
 
+  const handleClickOutside = (event) => {
+    if (!event.target.closest('.options-menu')) {
+      setShowOptions({});
+    }
+  };
+
+  const handleSeeAccountInfo = async (uid) => {
+    if (!uid) return;
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
-        setHoveredUser(userSnap.data());
+        setSelectedUser(userSnap.data());
       }
     } catch (error) {
       console.error("Failed to fetch user data:", error);
     }
   };
 
-  const handleMouseLeave = () => {
-    setHoveredUser(null);
-  };
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="native-chat" style={{ width: '100%', height: '100%' }}>
@@ -83,9 +96,6 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
           <div
             key={index}
             className="message"
-            data-tooltip-id={`user-tooltip-${index}`}
-            onMouseEnter={() => handleMouseEnter(message.authorUid)}
-            onMouseLeave={handleMouseLeave}
           >
             <img src={message.authorPhotoURL || 'default-profile-pic-url'} alt="Profile" className="profile-pic" />
             <div className="message-info">
@@ -95,21 +105,25 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
                 <span className="timestamp">{formatTimestamp(message.timestamp)}</span>
               </div>
             </div>
-            {hoveredUser && (
-              <Tooltip id={`user-tooltip-${index}`} place="top" type="dark" effect="solid">
-                <div className="tooltip-content">
-                  <p><strong>{hoveredUser.displayName}</strong></p>
-                  <p>{hoveredUser.email}</p>
-                  <p>Joined: {new Date(hoveredUser.createdAt.seconds * 1000).toDateString()}</p>
+            <div
+              className="options-menu"
+              onClick={() => toggleOptions(index)}
+            >
+              <span className="three-dots">⋮</span>
+              {showOptions[index] && (
+                <div className="options">
+                  <p onClick={() => console.log("Mute account")}>Mute account</p>
+                  <p onClick={() => handleSeeAccountInfo(message.authorUid)}>See account info</p>
+                  <p onClick={() => console.log("Add to chat")}>Add to chat</p>
                 </div>
-              </Tooltip>
-            )}
+              )}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      {user ? ( 
-          <form onSubmit={handleSendClick} className="chat-input">
+      <form onSubmit={handleSendClick} className="chat-input-container">
+        <div className="chat-input">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -117,33 +131,20 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
             className="chat-input-field"
           />
           <button type="submit" className="chat-input-button">Send</button>
-        </form>
-        ) : (
-          <div className="chat-input">
-            <span className="chat-input-message">Sign in to chat</span>
+        </div>
+      </form>
+      {selectedUser && (
+        <div className="user-info-modal">
+          <div className="user-info-content">
+            <span className="close" onClick={() => setSelectedUser(null)}>&times;</span>
+            <p><strong>{selectedUser.displayName}</strong></p>
+            <p>{selectedUser.email}</p>
+            <p>Joined: {new Date(selectedUser.createdAt.seconds * 1000).toDateString()}</p>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
 
 export default NativeChat;
-
-
-/*
-{user ? ( 
-  <form onSubmit={handleSendClick} className="chat-input">
-  <input
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    placeholder="Type a message"
-    className="chat-input-field"
-  />
-  <button type="submit" className="chat-input-button">Send</button>
-</form>
-) : (
-  <div className="chat-input">
-    <span className="chat-input-message">Sign in to chat</span>
-  </div>
-)}
-*/
