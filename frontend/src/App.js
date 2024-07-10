@@ -6,6 +6,7 @@ import ArtistPage from './pages/ArtistPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import VideoPlayerPage from './pages/VideoPlayerPage';
+import AccountPage from './pages/AccountPage';
 import './styles/App.css';
 import './styles.css';
 
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/load-live" element={<VideoPlayerPage user={user} />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/account" element={<AccountPage user={user} setUser={setUser}/> } />
           </Routes>
         </div>
       </div>

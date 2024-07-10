@@ -72,6 +72,13 @@ const LoginHeader = ({ user, setUser }) => {
         <div>
           <img src="" alt="" id="pfp-img" className="pfp"/>
           <p id="pfp-name"></p>
+          <button onClick={() => window.location.href="/account/"} >
+            <img src="../assets/pfp-placeholder.jpg"
+                alt = "Profile"  
+                id='account-btn' 
+                className='account-btn'
+            />
+          </button>
         </div>
       )}
     </div>
