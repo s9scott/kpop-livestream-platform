@@ -36,7 +36,6 @@ const AccountPage = ({ user, setUser }) => {
             console.log(user);
             setUser(user);
             localStorage.setItem('lastUser', JSON.stringify(user));
-            addUser(user);
         }
     };
 
@@ -48,7 +47,6 @@ const AccountPage = ({ user, setUser }) => {
         console.log(user);
         setUser(user);
         localStorage.setItem('lastUser', JSON.stringify(user));
-        addUser(user);
     };
 
     return (
