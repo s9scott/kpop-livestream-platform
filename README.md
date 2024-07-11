@@ -6,7 +6,7 @@
  - npm start
 - In a new terminal, cd backend
  - npm install
- - npm start
+ - node spotify.js
 
 ## Getting started
 
