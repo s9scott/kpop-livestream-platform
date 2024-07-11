@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { getActiveUsers } from '../firestoreUtils';
 import '../styles/NativeChat.css';
 
 const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeUsers }) => {
@@ -84,7 +83,8 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeU
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    //activeUsers = getActiveUsers();
+    setInput(value);
+
     if (value.includes('@')) {
       const mentionPart = value.split('@').pop().toLowerCase();
       if (mentionPart) {
