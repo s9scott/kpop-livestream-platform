@@ -9,6 +9,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 14px; /* Smaller font size */
+  margin-bottom: 55px;
 }
 
 .chat-header {
@@ -37,6 +38,10 @@
   border-bottom: 1px solid #333; /* Add a bottom border for separation */
   padding-bottom: 10px;
   padding-right: 20px; /* Add right padding to avoid the white line extending */
+}
+
+.message.highlight {
+  background: rgba(255, 255, 0, 0.2); /* Highlight background color */
 }
 
 .profile-pic {
@@ -203,4 +208,28 @@
   right: 10px;
   cursor: pointer;
   font-size: 20px;
+}
+
+/* Mention dropdown styles */
+.mention-dropdown {
+  position: absolute;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 5px;
+  width: calc(100% - 40px);
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0;
+}
+
+.mention-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.mention-dropdown li:hover {
+  background: #444;
 }

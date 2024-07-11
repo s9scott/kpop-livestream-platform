@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
-import { collection, onSnapshot, query, where, doc, getDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { getActiveUsers } from '../firestoreUtils';
 import '../styles/SwitchableChat.css';
 
 const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
@@ -10,42 +9,16 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
   const [activeUsers, setActiveUsers] = useState([]);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
 
-  console.log('SwitchableChat.js: user:', user);
-
   useEffect(() => {
     const fetchActiveUsers = async () => {
-      const now = Timestamp.now();
-      const fiveMinutesAgo = new Timestamp(now.seconds - 300, now.nanoseconds); // 300 seconds = 5 minutes
-
-      const q = query(
-        collection(db, 'livestreams', videoId, 'messages'),
-        where('timestamp', '>=', fiveMinutesAgo)
-      );
-
-      const unsubscribe = onSnapshot(q, async (snapshot) => {
-        const userIds = new Set();
-        snapshot.forEach((doc) => {
-          userIds.add(doc.data().authorUid);
-        });
-
-        const activeUserPromises = Array.from(userIds).map(async (uid) => {
-          const userRef = doc(db, 'users', uid);
-          const userSnap = await getDoc(userRef);
-          if (userSnap.exists()) {
-            return userSnap.data();
-          }
-          return null;
-        });
-
-        Promise.all(activeUserPromises).then((users) => {
-          setActiveUsers(users.filter((user) => user !== null));
-        });
-      });
-
-      return () => unsubscribe();
+      const users = await getActiveUsers(videoId);
+      setActiveUsers(users);
     };
 
     fetchActiveUsers();
+    const interval = setInterval(fetchActiveUsers, 60000); // Update every minute
+
+    return () => clearInterval(interval);
   }, [videoId]);
 
   const toggleChat = () => {
@@ -84,6 +57,7 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
               onResizeStop={onResizeStop}
               onDragStop={onDragStop}
               user={user} // Pass user to NativeChat
+              activeUsers={activeUsers} // Pass active users to NativeChat
             />
           ) : (
             <iframe
@@ -104,9 +78,21 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
               <span className="close" onClick={toggleActiveUsersModal}>&times;</span>
               <h2>Active Users</h2>
               <ul>
-                {activeUsers.map((activeUser, index) => (
-                  <li key={index}>{activeUser.displayName}</li>
-                ))}
+                {activeUsers.length > 0 ? (
+                  activeUsers.map((activeUser, index) => (
+                    <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                      <img 
+                        src={activeUser.profilePicture || 'default-profile-pic-url'} 
+                        alt="Profile" 
+                        className="profile-pic" 
+                        style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }} 
+                      />
+                      {activeUser.username || 'Unknown User'}
+                    </li>
+                  ))
+                ) : (
+                  <li>No active users</li>
+                )}
               </ul>
             </div>
           </div>

@@ -1,6 +1,5 @@
-// firestoreUtils.js
 import { db } from './firebaseConfig';
-import { doc, setDoc, updateDoc, arrayUnion, serverTimestamp, getDoc } from 'firebase/firestore';
+import { collection, query, orderBy, limit, where, onSnapshot, Timestamp, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
 
 // Function to add or update a user
 export const addUser = async (user) => {
@@ -11,15 +10,6 @@ export const addUser = async (user) => {
     profilePicture: user.photoURL,
     createdAt: serverTimestamp(),
   }, { merge: true });
-};
-
-const updateUserStatus = async (userId, isActive) => {
-  try {
-    const userRef = doc(db, "users", userId);
-    await setDoc(userRef, { activeStatus: isActive }, { merge: true });
-  } catch (error) {
-    console.error("Error updating user status: ", error);
-  }
 };
 
 // Function to log a message sent
@@ -48,4 +38,44 @@ export const logWebsiteUsage = async (userId, activity) => {
   await updateDoc(userRef, {
     websiteUsage: arrayUnion({ activity, timestamp: new Date() }),
   });
+};
+
+// Function to get active users based on the last 100 messages within the last 5 minutes
+export const getActiveUsers = async (videoId) => {
+  try {
+    // Query to get the last 100 messages ordered by timestamp
+    const q = query(
+      collection(db, 'livestreams', videoId, 'messages'),
+      orderBy('timestamp', 'desc'),
+      limit(100)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const userIds = new Set();
+    const now = new Date();
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+    querySnapshot.forEach((doc) => {
+      const messageData = doc.data();
+      const messageTimestamp = new Date(messageData.timestamp); // Convert ISO 8601 to Date object
+      if (messageTimestamp >= fiveMinutesAgo) {
+        userIds.add(messageData.authorUid);
+      }
+    });
+
+    const activeUserPromises = Array.from(userIds).map(async (uid) => {
+      const userRef = doc(db, 'users', uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        return userSnap.data();
+      }
+      return null;
+    });
+
+    const activeUsers = await Promise.all(activeUserPromises);
+    return activeUsers.filter((user) => user !== null);
+  } catch (error) {
+    console.error("Error getting active users: ", error);
+    return [];
+  }
 };

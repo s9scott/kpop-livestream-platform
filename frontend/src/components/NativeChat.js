@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { getActiveUsers } from '../firestoreUtils';
 import '../styles/NativeChat.css';
-import { Tooltip } from 'react-tooltip';
 
-const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
+const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeUsers }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});
   const [selectedUser, setSelectedUser] = useState(null);
+  const [mentionDropdown, setMentionDropdown] = useState([]);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -81,6 +82,30 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    //activeUsers = getActiveUsers();
+    if (value.includes('@')) {
+      const mentionPart = value.split('@').pop().toLowerCase();
+      if (mentionPart) {
+        const filteredUsers = activeUsers.filter(user => user.username.toLowerCase().includes(mentionPart));
+        setMentionDropdown(filteredUsers);
+      } else {
+        setMentionDropdown([]);
+      }
+    } else {
+      setMentionDropdown([]);
+    }
+  };
+
+  const handleMentionClick = (username) => {
+    const inputParts = input.split('@');
+    inputParts.pop();
+    const newValue = `${inputParts.join('@')}@${username} `;
+    setInput(newValue);
+    setMentionDropdown([]);
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
@@ -95,7 +120,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
         {messages.map((message, index) => (
           <div
             key={index}
-            className="message"
+            className={`message ${message.text.toLowerCase().includes(`@${user.displayName.toLowerCase()}`) ? 'highlight' : ''}`}
           >
             <img src={message.authorPhotoURL || 'default-profile-pic-url'} alt="Profile" className="profile-pic" />
             <div className="message-info">
@@ -105,10 +130,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
                 <span className="timestamp">{formatTimestamp(message.timestamp)}</span>
               </div>
             </div>
-            <div
-              className="options-menu"
-              onClick={() => toggleOptions(index)}
-            >
+            <div className="options-menu" onClick={() => toggleOptions(index)}>
               <span className="three-dots">⋮</span>
               {showOptions[index] && (
                 <div className="options">
@@ -126,12 +148,21 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
         <div className="chat-input">
           <input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             placeholder="Type a message"
             className="chat-input-field"
           />
           <button type="submit" className="chat-input-button">Send</button>
         </div>
+        {mentionDropdown.length > 0 && (
+          <ul className="mention-dropdown">
+            {mentionDropdown.map((user, index) => (
+              <li key={index} onClick={() => handleMentionClick(user.username)}>
+                {user.username}
+              </li>
+            ))}
+          </ul>
+        )}
       </form>
       {selectedUser && (
         <div className="user-info-modal">
