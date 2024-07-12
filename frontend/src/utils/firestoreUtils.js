@@ -1,4 +1,4 @@
-import { db } from './firebaseConfig';
+import { db } from '../firebaseConfig';
 import { collection, query, orderBy, limit, where, onSnapshot, Timestamp, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
 
 // Function to add or update a user
@@ -47,7 +47,7 @@ export const getActiveUsers = async (videoId) => {
     const q = query(
       collection(db, 'livestreams', videoId, 'messages'),
       orderBy('timestamp', 'desc'),
-      limit(100)
+      limit(25)
     );
 
     const querySnapshot = await getDocs(q);
@@ -62,6 +62,7 @@ export const getActiveUsers = async (videoId) => {
         userIds.add(messageData.authorUid);
       }
     });
+    
 
     const activeUserPromises = Array.from(userIds).map(async (uid) => {
       const userRef = doc(db, 'users', uid);
@@ -77,5 +78,26 @@ export const getActiveUsers = async (videoId) => {
   } catch (error) {
     console.error("Error getting active users: ", error);
     return [];
+  }
+};
+
+export const fetchActiveStreams = async () => {
+  const q = query(collection(db, 'livestreams'), where('isActive', '==', true));
+  const querySnapshot = await getDocs(q);
+  const streams = [];
+  querySnapshot.forEach((doc) => {
+    streams.push({ id: doc.id, ...doc.data() });
+  });
+  return streams;
+};
+
+export const fetchVideoDetails = async (videoId) => {
+  const docRef = doc(db, 'videos', videoId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    console.error("No such document!");
+    return null;
   }
 };

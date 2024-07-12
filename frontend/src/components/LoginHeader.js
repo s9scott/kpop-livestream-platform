@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
-import { addUser } from '../firestoreUtils';
+import { addUser } from '../utils/firestoreUtils';
 import '../styles/pages.css';
 
 const LoginHeader = ({ user, setUser }) => {

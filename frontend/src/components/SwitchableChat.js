@@ -1,31 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DraggableResizable from './DraggableResizable';
 import NativeChat from './NativeChat';
-import { getActiveUsers } from '../firestoreUtils';
+import useActiveUsers from '../hooks/useActiveUsers';
 import '../styles/SwitchableChat.css';
 
 const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
   const [useNativeChat, setUseNativeChat] = useState(false);
-  const [activeUsers, setActiveUsers] = useState([]);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchActiveUsers = async () => {
-      const users = await getActiveUsers(videoId);
-      setActiveUsers(users);
-    };
-
-    fetchActiveUsers();
-    const interval = setInterval(fetchActiveUsers, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, [videoId]);
+  const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
 
   const toggleChat = () => {
     setUseNativeChat((prev) => !prev);
   };
 
   const toggleActiveUsersModal = () => {
+    fetchActiveUsers();
     setIsActiveUsersModalOpen((prev) => !prev);
   };
 
@@ -58,6 +47,7 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
               onDragStop={onDragStop}
               user={user} // Pass user to NativeChat
               activeUsers={activeUsers} // Pass active users to NativeChat
+              fetchActiveUsers={fetchActiveUsers} // Pass the function to fetch active users
             />
           ) : (
             <iframe

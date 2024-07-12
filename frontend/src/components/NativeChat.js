@@ -3,7 +3,7 @@ import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'fir
 import { db } from '../firebaseConfig';
 import '../styles/NativeChat.css';
 
-const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeUsers }) => {
+const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeUsers, fetchActiveUsers }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});

@@ -1,6 +1,6 @@
 import '../styles/pages.css';
 import '../styles/AccountPage.css';
-import { addUser } from '../firestoreUtils';
+import { addUser } from '../utils/firestoreUtils';
 import { useEffect, useState } from 'react';
 
 const AccountPage = ({ user, setUser }) => {

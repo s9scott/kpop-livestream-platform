@@ -4,7 +4,7 @@ import VideoPlayer from '../components/VideoPlayer';
 import SwitchableChat from '../components/SwitchableChat';
 import VideoHeader from '../components/VideoHeader';
 import '../styles/VideoPlayerPage.css';
-import { logWebsiteUsage } from '../firestoreUtils';
+import { logWebsiteUsage } from '../utils/firestoreUtils';
 
 const VideoPlayerPage = ({ user }) => {
   const defaultVideoPlayerSettings = { width: 750, height: 500, x: 30, y: 120 };
@@ -61,7 +61,7 @@ const VideoPlayerPage = ({ user }) => {
 
   return (
     <div className="app-container">
-      <VideoHeader setVideoId={setVideoId} videoId={videoId} />
+      <header> <VideoHeader setVideoId={setVideoId} videoId={videoId} /> </header>
       {videoId && (
         <>
           <VideoPlayer
