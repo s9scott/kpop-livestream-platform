@@ -81,6 +81,7 @@ export const getActiveUsers = async (videoId) => {
   }
 };
 
+// Fetch active livestreams
 export const fetchActiveStreams = async () => {
   const q = query(collection(db, 'livestreams'), where('isActive', '==', true));
   const querySnapshot = await getDocs(q);
@@ -91,6 +92,7 @@ export const fetchActiveStreams = async () => {
   return streams;
 };
 
+// Fetch video details
 export const fetchVideoDetails = async (videoId) => {
   const docRef = doc(db, 'videos', videoId);
   const docSnap = await getDoc(docRef);
@@ -100,4 +102,15 @@ export const fetchVideoDetails = async (videoId) => {
     console.error("No such document!");
     return null;
   }
+};
+
+// Add a new livestream
+export const addLiveStream = async (videoId, title, url) => {
+  const livestreamRef = doc(db, 'livestreams', videoId);
+  await setDoc(livestreamRef, {
+    title: title,
+    url: url,
+    isActive: true,
+    createdAt: serverTimestamp()
+  });
 };

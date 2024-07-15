@@ -1,4 +1,3 @@
-// VideoPlayerPage.js
 import React, { useState, useEffect } from 'react';
 import VideoPlayer from '../components/VideoPlayer';
 import SwitchableChat from '../components/SwitchableChat';
@@ -61,7 +60,7 @@ const VideoPlayerPage = ({ user }) => {
 
   return (
     <div className="app-container">
-      <header> <VideoHeader setVideoId={setVideoId} videoId={videoId} /> </header>
+      <VideoHeader setVideoId={setVideoId} videoId={videoId} />
       {videoId && (
         <>
           <VideoPlayer

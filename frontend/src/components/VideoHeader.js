@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/VideoHeader.css' 
+import { fetchActiveStreams, addLiveStream, fetchVideoDetails } from '../utils/firestoreUtils';
+import '../styles/VideoHeader.css';
 
 const VideoHeader = ({ setVideoId, videoId }) => {
   const [url, setUrl] = useState('');
-  const [isShowing, setShowing] = useState(true);
   const [history, setHistory] = useState([]);
   const [error, setError] = useState('');
+  const [activeStreams, setActiveStreams] = useState([]);
+  const [isHistoryOpen, setHistoryOpen] = useState(false);
+  const [isStreamsOpen, setStreamsOpen] = useState(false);
 
   useEffect(() => {
     const savedHistory = JSON.parse(localStorage.getItem('videoHistory')) || [];
     setHistory(savedHistory);
+    fetchActiveStreams().then(setActiveStreams);
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newVideoId = extractVideoId(url);
     if (newVideoId) {
+      const videoDetails = await fetchVideoDetails(newVideoId);
+      const title = videoDetails ? videoDetails.title : `Video ${newVideoId}`;
       setVideoId(newVideoId);
       localStorage.setItem('lastVideoId', newVideoId);
-      updateHistory(url);
+      updateHistory(title, url);
+      await addLiveStream(newVideoId, title, url);
+      fetchActiveStreams().then(setActiveStreams);
       setError('');
     } else {
       setError('Invalid YouTube URL');
@@ -35,14 +43,14 @@ const VideoHeader = ({ setVideoId, videoId }) => {
   const extractVideoId = (url) => {
     try {
       const urlParams = new URLSearchParams(new URL(url).search);
-      return urlParams.get('v'); // Extracts 'v' parameter from YouTube URL
+      return urlParams.get('v');
     } catch {
       return null;
     }
   };
 
-  const updateHistory = (url) => {
-    const newHistory = [url, ...history.filter((item) => item !== url)];
+  const updateHistory = (title, url) => {
+    const newHistory = [{ title, url }, ...history.filter((item) => item.url !== url)];
     setHistory(newHistory);
     localStorage.setItem('videoHistory', JSON.stringify(newHistory));
   };
@@ -59,30 +67,17 @@ const VideoHeader = ({ setVideoId, videoId }) => {
     localStorage.removeItem('videoHistory');
   };
 
-  const toggle = () => {
-    const header = document.getElementsByClassName("header")[0];
-    const toggleBtn = document.getElementsByClassName("toggle-btn")[0];
-    if (header) {
-      if (!isShowing) {
-        header.classList.remove('slide');
-        toggleBtn.classList.remove('slide');
-        header.classList.add('slideReverse');
-        toggleBtn.classList.add('slideReverse')
-        setShowing(true);
-      } else {
-        header.classList.add('slide');
-        toggleBtn.classList.add('slide');
-        header.classList.remove('slideReverse');
-        toggleBtn.classList.remove('slideReverse');
-        setShowing(false);
-      }
-    }
+  const handleActiveStreamClick = (videoId) => {
+    setVideoId(videoId);
+    localStorage.setItem('lastVideoId', videoId);
   };
-  
+
+  const toggleHistory = () => setHistoryOpen(!isHistoryOpen);
+  const toggleStreams = () => setStreamsOpen(!isStreamsOpen);
+
   return (
-    <div className="header-container">
-      <button type="button" className="toggle-btn" onClick={toggle}>↔</button>
-      <form onSubmit={handleSubmit} className='header'>
+    <header className="header-container">
+      <form onSubmit={handleSubmit} className="header">
         <input
           type="text"
           value={url}
@@ -95,17 +90,39 @@ const VideoHeader = ({ setVideoId, videoId }) => {
         <button type="button" onClick={clearHistory}>Clear History</button>
       </form>
       {error && <p className="error-message">{error}</p>}
-      <div className="video-history">
-        <h4>Video History</h4>
-        <ul>
-          {history.map((item, index) => (
-            <li key={index} onClick={() => handleHistoryClick(item)}>
-              {item}
-            </li>
-          ))}
-        </ul>
+      
+      <div className="dropdowns">
+        <div className="dropdown">
+          <button className="dropdown-toggle" onClick={toggleHistory}>Video History</button>
+          {isHistoryOpen && (
+            <div className="dropdown-content">
+              <ul>
+                {history.map((item, index) => (
+                  <li key={index} onClick={() => handleHistoryClick(item.url)}>
+                    {item.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="dropdown">
+          <button className="dropdown-toggle" onClick={toggleStreams}>Active Live Streams</button>
+          {isStreamsOpen && (
+            <div className="dropdown-content">
+              <ul>
+                {activeStreams.map((stream) => (
+                  <li key={stream.id} onClick={() => handleActiveStreamClick(stream.id)}>
+                    {stream.title || stream.id}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
 
