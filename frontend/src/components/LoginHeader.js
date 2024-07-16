@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
-import { addUser } from '../utils/firestoreUtils';
+import { addUser, fetchUserInfo } from '../utils/firestoreUtils';
+import pfp from '../assets/pfp-placeholder.jpg';
 import '../styles/pages.css';
 
 const LoginHeader = ({ user, setUser }) => {
@@ -9,23 +10,10 @@ const LoginHeader = ({ user, setUser }) => {
   useEffect(() => {
     if (curUser) {
       document.getElementById("login").textContent = "Sign Out";
-      document.getElementById("pfp-img").src = curUser.photoURL;
-      document.getElementById("pfp-img").alt = "Profile Photo";
-      document.getElementById("pfp-name").textContent = curUser.displayName;
     } else {
       document.getElementById("login").textContent = "Google Login";
     }
   }, [curUser]);
-
-  useEffect(() => {
-    const lastUserData = localStorage.getItem("lastUser");
-    if (lastUserData && !curUser) {
-      const lastUser = JSON.parse(lastUserData);
-      setCurUser(lastUser);
-      setUser(lastUser);  // Update the parent state
-      return;
-    }
-  }, [curUser, setUser]);
 
   async function handleSignIn() {
     const response = await GoogleUserSignIn();
@@ -34,18 +22,32 @@ const LoginHeader = ({ user, setUser }) => {
     } else {
       console.log("Success, user has signed in with Google...");
       const user = response.userInfo;
-      if (user) {
+      if (!user) {
+        console.log("")
         await addUser(user);
         const userInfo = {
+          username: user.username,
           displayName: user.displayName,
           photoURL: user.photoURL,
+          profilePicture: user.profilePicture,
           uid: user.uid
         };
         localStorage.setItem("lastUser", JSON.stringify(userInfo));
         setCurUser(userInfo);
         setUser(userInfo);  // Update the parent state
       } else {
-        console.log("Error fetching user information...");
+        const login = await fetchUserInfo(user.uid);
+        const userInfo = {
+          username: login.username,
+          displayName: login.displayName,
+          photoURL: login.photoURL,
+          profilePicture: login.profilePicture,
+          uid: user.uid
+        };
+        setCurUser(userInfo);
+        setUser(userInfo);
+        localStorage.setItem("lastUser", JSON.stringify(userInfo));
+        console.log("Fetching existing user...");
       }
     }
   }
@@ -70,15 +72,17 @@ const LoginHeader = ({ user, setUser }) => {
       </button>
       {curUser && (
         <div>
-          <img src="" alt="" id="pfp-img" className="pfp"/>
-          <p id="pfp-name"></p>
-          <button onClick={() => window.location.href="/account/"} >
-            <img src="../assets/pfp-placeholder.jpg"
-                alt = "Profile"  
-                id='account-btn' 
-                className='account-btn'
-            />
-          </button>
+          <img src={user.photoURL || user.profilePicture} alt="" id="pfp-img" className="pfp"/>
+          <p id="pfp-name">{user.displayName || user.username}</p>
+          <div className='account-btn'>
+            <button onClick={() => window.location.href="/account/"} >
+              <img src={pfp}
+                  alt = "Profile"  
+                  id='account-btn' 
+                  className='account-pic'
+              /> Account
+            </button>
+          </div>
         </div>
       )}
     </div>

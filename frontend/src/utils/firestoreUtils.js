@@ -28,6 +28,7 @@ export const logMessageSent = async (userId, message) => {
 
 // Function to log website usage
 export const logWebsiteUsage = async (userId, activity) => {
+  console.log(userId);
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
   const userDoc = await getDoc(userRef);
 
@@ -114,3 +115,11 @@ export const addLiveStream = async (videoId, title, url) => {
     createdAt: serverTimestamp()
   });
 };
+
+export const fetchUserInfo = async ( uid ) => {
+  const userRef = doc(db, 'users', uid); 
+
+  const info = await getDoc(userRef);
+  console.log("info: ", info.data());
+  return info.data();
+}; 

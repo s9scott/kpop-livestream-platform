@@ -22,7 +22,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeU
             const userSnap = await getDoc(userRef);
             if (userSnap.exists()) {
               const userData = userSnap.data();
-              return { ...message, authorPhotoURL: userData.profilePicture, userInfo: userData };
+              return { ...message, authorPhotoURL: userData.photoURL, userInfo: userData };
             }
           }
           return message;
@@ -120,7 +120,7 @@ const NativeChat = ({ videoId, settings, onResizeStop, onDragStop, user, activeU
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`message ${message.text.toLowerCase().includes(`@${user.displayName.toLowerCase()}`) ? 'highlight' : ''}`}
+            className={`message ${message.text.toLowerCase().includes(`@${user.displayName.toLowerCase()}` || `@${user.username.toLowerCase()}`) ? 'highlight' : ''}`}
           >
             <img src={message.authorPhotoURL || 'default-profile-pic-url'} alt="Profile" className="profile-pic" />
             <div className="message-info">

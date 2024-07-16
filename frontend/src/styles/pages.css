@@ -191,3 +191,16 @@
   text-decoration: none;
   color: #0073e6;
 }
+
+.account-btn {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.account-pic {
+  height: 20px;
+  width: 20px;
+  border-radius: 20px;
+}

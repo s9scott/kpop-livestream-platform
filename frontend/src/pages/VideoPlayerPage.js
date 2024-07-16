@@ -28,6 +28,7 @@ const VideoPlayerPage = ({ user }) => {
 
   useEffect(() => {
     if (user) {
+      console.log("User ID: ", user.uid);
       logWebsiteUsage(user.uid, 'Visited VideoPlayerPage');
     }
   }, [user]);
