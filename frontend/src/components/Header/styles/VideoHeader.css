@@ -1,0 +1,39 @@
+.video-header-container {
+  display: flex;
+  align-items: center;
+}
+
+.video-header-form-container {
+  flex: 1;
+}
+
+.video-form {
+  display: flex;
+  align-items: center;
+}
+
+.video-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  margin-right: 8px;
+}
+
+.video-button {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.video-button:hover {
+  background-color: #218838;
+}
+
+.error-message {
+  color: red;
+  margin-top: 8px;
+}

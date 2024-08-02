@@ -2,12 +2,9 @@
 
 ## To run
 - cd frontend
- - npm install 
- - npm start
-- In a new terminal, cd backend
- - npm install
- - node spotify.js
-
+    - npm install
+    - npm start
+    
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.

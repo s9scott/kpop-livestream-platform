@@ -1,71 +1,91 @@
-import '../styles/pages.css';
-import '../styles/AccountPage.css';
-import { addUser } from '../utils/firestoreUtils';
 import { useEffect, useState } from 'react';
+import { resetDisplayName, resetPfp, uploadUserProfilePhoto } from '../utils/firestoreUtils';
 
 const AccountPage = ({ user, setUser }) => {
     const [newPfp, setNewPfp] = useState(null);
     const [name, setName] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         if (user) {
-            document.getElementById("account-pfp-img").src = user.photoURL;
-            document.getElementById("account-pfp-img").alt = "Profile Photo";
-            document.getElementById("account-pfp-name").textContent = user.displayName;
-        } else {
-            document.getElementById("account-pfp-name").textContent = "Please login again...";
+            setName(user.displayName || user.username);
+            setNewPfp(user.photoURL || user.profilePicture);
         }
     }, [user]);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setNewPfp(reader.result);
             };
             reader.readAsDataURL(file);
+            setSelectedFile(file); // Store the selected file
         }
     };
 
-    const handleUploadClick = () => {
-        if (newPfp) {
-            document.getElementById("account-pfp-img").src = newPfp;
-            document.getElementById("pfp-img").src = newPfp;
-            user.photoURL = newPfp;
-            console.log(user);
-            setUser(user);
-            localStorage.setItem('lastUser', JSON.stringify(user));
+    const handleUploadClick = async () => {
+        try {
+            if (newPfp && selectedFile) {
+                user.photoURL = newPfp;
+                setUser(user);
+                localStorage.setItem('lastUser', JSON.stringify(user));
+
+                await uploadUserProfilePhoto(user.uid, selectedFile);
+            }
+        } catch (error) {
+            console.log("Error uploading new pfp...");
+            throw error;
         }
     };
 
-    const handleNameChange = (e) => {
-        e.preventDefault();
-        document.getElementById("account-pfp-name").textContent = name;
-        document.getElementById("pfp-name").textContent = name;
-        user.displayName = name
-        console.log(user);
+    const handleResetPfp = async () => {
+        user.photoURL = user.profilePicture;
+        setNewPfp(user.profilePicture);
         setUser(user);
         localStorage.setItem('lastUser', JSON.stringify(user));
+
+        await resetPfp(user.uid, user.profilePicture);
+    };
+
+    const handleResetName = async () => {
+        user.displayName = user.username;
+        setName(user.username);
+        setUser(user);
+        localStorage.setItem('lastUser', JSON.stringify(user));
+
+        await resetDisplayName(user.uid, user.username);
+    };
+
+    const handleNameChange = async (e) => {
+        e.preventDefault();
+        user.displayName = name;
+        setUser(user);
+        localStorage.setItem('lastUser', JSON.stringify(user));
+
+        await resetDisplayName(user.uid, user.displayName);
     };
 
     return (
         <div className='account-page'>
             <div className='account-header'>
-                <h1 id="account-pfp-name"></h1>
-                <img src="" alt="" id="account-pfp-img" className="account-pfp" />
+                <h1 id="account-pfp-name" className='text-3xl font-bold m-5'>{name}</h1>
+                <img src={newPfp} alt="" id="account-pfp-img" className="rounded-xl m-5 h-40 w-40" />
             </div>
             <div className='upload-section'>
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                <button onClick={handleUploadClick}>Upload New PFP</button>
+                <input type="file" accept="image/*" onChange={handleFileChange} className='name-input rounded-xl text-black bg-gray-300 p-2 m-5' />
+                <button onClick={handleUploadClick} className="text-black font-semibold bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2">Upload New PFP</button>
+                <button onClick={handleResetPfp} className="text-black font-semibold bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 p-2 ml-2">Reset PFP</button>
                 <form onSubmit={handleNameChange}>
-                    <input type="text" 
-                           value={name}
-                           onChange={(e) => setName(e.target.value)}
-                           placeholder="Enter new name"
-                           className='name-input'
-                    />       
-                    <button type="submit" >Change Profile Name</button>
+                    <input type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Enter new name"
+                        className='name-input rounded-xl bg-gray-300 text-black p-2 m-5 mt-0'
+                    />
+                    <button type="submit" className="text-black font-semibold bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2">Change Profile Name</button>
+                    <button onClick={handleResetName} className="text-black font-semibold bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 p-2 ml-2">Reset Profile Name</button>
                 </form>
             </div>
         </div>

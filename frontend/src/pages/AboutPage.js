@@ -3,9 +3,9 @@ import '../styles/pages.css';
 
 const AboutPage = () => {
   return (
-    <div className="about-page">
+    <div className="contact-page bg-base font-bold text-4xl space-y-5 text-center m-5">
       <h1>About Us</h1>
-      <p>Information about the website or organization.</p>
+      <p>A litte bit more about us...</p>
     </div>
   );
 };

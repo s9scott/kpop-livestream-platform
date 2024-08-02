@@ -1,0 +1,93 @@
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: move;
+}
+
+.rnd {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: absolute;
+}
+
+/* Resize handles */
+.resize-handle-top,
+.resize-handle-right,
+.resize-handle-bottom,
+.resize-handle-left,
+.resize-handle-top-right,
+.resize-handle-bottom-right,
+.resize-handle-bottom-left,
+.resize-handle-top-left {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.resize-handle-top,
+.resize-handle-bottom {
+  height: 8px;
+  left: 0;
+  right: 0;
+  cursor: ns-resize;
+}
+
+.resize-handle-top {
+  top: 0;
+}
+
+.resize-handle-bottom {
+  bottom: 0;
+}
+
+.resize-handle-left,
+.resize-handle-right {
+  width: 8px;
+  top: 0;
+  bottom: 0;
+  cursor: ew-resize;
+}
+
+.resize-handle-left {
+  left: 0;
+}
+
+.resize-handle-right {
+  right: 0;
+}
+
+.resize-handle-top-right,
+.resize-handle-bottom-right,
+.resize-handle-bottom-left,
+.resize-handle-top-left {
+  width: 8px;
+  height: 8px;
+}
+
+.resize-handle-top-right {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+
+.resize-handle-bottom-right {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.resize-handle-bottom-left {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
+
+.resize-handle-top-left {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}

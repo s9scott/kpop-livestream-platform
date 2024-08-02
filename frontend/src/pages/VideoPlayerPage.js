@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import VideoPlayer from '../components/VideoPlayer';
-import SwitchableChat from '../components/SwitchableChat';
-import VideoHeader from '../components/VideoHeader';
-import '../styles/VideoPlayerPage.css';
+import VideoPlayer from '../components/StreamPlayer/VideoPlayer';
+import SwitchableChat from '../components/StreamPlayer/SwitchableChat';
 import { logWebsiteUsage } from '../utils/firestoreUtils';
 
 const VideoPlayerPage = ({ user }) => {
-  const defaultVideoPlayerSettings = { width: 750, height: 500, x: 30, y: 120 };
-  const defaultChatSettings = { width: 300, height: 500, x: 850, y: 120 };
+  const calculateDefaultSettings = () => {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight - 150;
+    const videoPlayerWidth = screenWidth * 0.65;
+    const chatWidth = screenWidth * 0.35 - 50;
+
+    return {
+      videoPlayerSettings: { width: videoPlayerWidth, height: screenHeight, x: 20, y: 20 },
+      chatSettings: { width: chatWidth, height: screenHeight, x: videoPlayerWidth + 40, y: 20 }
+    };
+  };
+
+  const { videoPlayerSettings: defaultVideoPlayerSettings, chatSettings: defaultChatSettings } = calculateDefaultSettings();
 
   const [videoId, setVideoId] = useState('');
   const [videoPlayerSettings, setVideoPlayerSettings] = useState(defaultVideoPlayerSettings);
@@ -28,7 +37,6 @@ const VideoPlayerPage = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      console.log("User ID: ", user.uid);
       logWebsiteUsage(user.uid, 'Visited VideoPlayerPage');
     }
   }, [user]);
@@ -61,7 +69,6 @@ const VideoPlayerPage = ({ user }) => {
 
   return (
     <div className="app-container">
-      <VideoHeader setVideoId={setVideoId} videoId={videoId} />
       {videoId && (
         <>
           <VideoPlayer

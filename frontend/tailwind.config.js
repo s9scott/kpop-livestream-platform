@@ -1,13 +1,27 @@
+/** @type {import('tailwindcss').Config} */
+const { default: daisyui } = require('daisyui');
 
 module.exports = {
-  purge: [],
-  darkMode: false,
+  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Arial', 'sans-serif'],
+      },
+    },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
-};
-            
+  daisyui: {
+    themes: [
+      "dracula","lemonade"
+    ],
+  },
+  plugins: [
+    require('daisyui'),
+    require('tailwindcss')
+  ],
+}
+
+
