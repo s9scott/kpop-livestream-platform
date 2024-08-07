@@ -1,0 +1,78 @@
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #2d2d2d;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  position: relative; /* Added for absolute positioning of the dropdown */
+}
+
+.dropdown {
+  position: relative; /* Ensure dropdown is positioned relative to this element */
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-button:hover {
+  background-color: #444;
+}
+
+.hamburger-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  border: 1px solid #333;
+  border-radius: 4px;
+  margin-top: 8px;
+  padding: 8px 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  left: 0; /* Ensure the dropdown is aligned to the left */
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu li {
+  list-style: none;
+  padding: 8px 16px;
+}
+
+.dropdown-menu li a {
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #555;
+}
+
+.video-header {
+  flex: 2;
+  text-align: center;
+}
+
+.login-header {
+  flex: 1;
+  text-align: right;
+}
