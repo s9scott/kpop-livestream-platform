@@ -18,7 +18,10 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
     setIsActiveUsersModalOpen((prev) => !prev);
   };
 
-  const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`;
+  const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
+  const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
+
+
 
   return (
     <DraggableResizable
@@ -28,18 +31,18 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
       defaultY={settings.y}
       onResizeStop={onResizeStop}
       onDragStop={onDragStop}
-      useNativeChat={useNativeChat} toggleChat={toggleChat} 
+      useNativeChat={useNativeChat} toggleChat={toggleChat}
     >
       <div className="switchable-chat-container size-full fixed">
-        
-      <div className="chat-toggle flex justify-between items-center py-2 px-4 bg-neutral border-b border-secondary">
-        <button 
-          onClick={toggleChat} 
-          className="toggle-chat-button w-full px-2 center py-1 btn btn-secondary font-semibold hover:btn-accent text-lg font-light tracking-wide"
-        >
-          {useNativeChat ? 'Switch to YouTube Chat' : 'Switch to Native Chat'}
-        </button>
-      </div>
+
+        <div className="chat-toggle flex justify-between items-center py-2 px-4 bg-neutral border-b border-secondary">
+          <button
+            onClick={toggleChat}
+            className="toggle-chat-button w-full px-2 center py-1 btn btn-secondary font-semibold hover:btn-accent text-lg font-light tracking-wide"
+          >
+            {useNativeChat ? 'Switch to YouTube Chat' : 'Switch to Native Chat'}
+          </button>
+        </div>
         <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral" style={{ height: 'calc(100% - 6rem)' }}>
           {useNativeChat ? (
             <NativeChat
