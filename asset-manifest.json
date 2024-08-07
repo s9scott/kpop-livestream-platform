@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/kpop-livestream-platform/static/css/main.e1fd7cd9.css",
-    "main.js": "/kpop-livestream-platform/static/js/main.bad8c4b5.js",
+    "main.css": "/kpop-livestream-platform/static/css/main.8bde9e2b.css",
+    "main.js": "/kpop-livestream-platform/static/js/main.2d1ed5b9.js",
     "static/media/emoji-add.svg": "/kpop-livestream-platform/static/media/emoji-add.6fe2ad63c155a64b339aff45124bf49b.svg",
     "static/media/LightMode.svg": "/kpop-livestream-platform/static/media/LightMode.de14164754df6f8db3b9383f2b4f68ec.svg",
     "static/media/NightMode.svg": "/kpop-livestream-platform/static/media/NightMode.dc0ae8c8fdcb3127ab66b2abc71caa15.svg",
     "index.html": "/kpop-livestream-platform/index.html",
-    "main.e1fd7cd9.css.map": "/kpop-livestream-platform/static/css/main.e1fd7cd9.css.map",
-    "main.bad8c4b5.js.map": "/kpop-livestream-platform/static/js/main.bad8c4b5.js.map"
+    "main.8bde9e2b.css.map": "/kpop-livestream-platform/static/css/main.8bde9e2b.css.map",
+    "main.2d1ed5b9.js.map": "/kpop-livestream-platform/static/js/main.2d1ed5b9.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1fd7cd9.css",
-    "static/js/main.bad8c4b5.js"
+    "static/css/main.8bde9e2b.css",
+    "static/js/main.2d1ed5b9.js"
   ]
 }
