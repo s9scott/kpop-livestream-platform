@@ -1,7 +1,7 @@
 {
   "name": "kpop-streaming-site",
   "version": "1.0.0",
-  "homepage": "https://sscott15.github.io/kpop-livestream-platform/",
+  "homepage": "https://s9scott.github.io/kpop-livestream-platform/",
   "private": true,
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
