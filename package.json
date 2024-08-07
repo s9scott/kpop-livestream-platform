@@ -1,6 +1,7 @@
 {
   "name": "kpop-streaming-site",
   "version": "1.0.0",
+  "homepage": "https://sscott15.github.io/kpop-livestream-platform/",
   "private": true,
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
@@ -42,6 +43,8 @@
     "util": "^0.12.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -67,6 +70,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "gh-pages": "^6.1.1",
     "tailwindcss": "^3.4.6"
   }
 }
