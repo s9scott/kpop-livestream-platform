@@ -18,12 +18,38 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
 
   const extractVideoId = (url) => {
     try {
+      const parsedUrl = new URL(url);
       const urlParams = new URLSearchParams(new URL(url).search);
-      return urlParams.get('v');
+      let id;
+      // Case 1: Standard YouTube URL with 'v' query parameter
+      if ((id = urlParams.get('v'))) {
+        return id;
+      }
+      // Case 2: YouTube Shorts URL
+      if (parsedUrl.pathname.startsWith('/shorts/')) {
+        id = parsedUrl.pathname.split('/shorts/')[1];
+        return id;
+      }
+      // Case 3: YouTube Live URL with 'live' query parameter
+      if ((id = urlParams.get('live'))) {
+        return id;
+      }
+      // Case 4: YouTube Live or other path-based URLs
+      if (parsedUrl.pathname.startsWith('/live/')) {
+        id = parsedUrl.pathname.split('/live/')[1];
+        return id;
+      }
+      // Case 5: YouTube URL with shortened format
+      if (parsedUrl.hostname === 'youtu.be') {
+        id = parsedUrl.pathname.slice(1);
+        return id;
+      }
     } catch {
+      console.log("Error with video id extraction!")
       return null;
     }
   };
+
 
   return (
     <Menu as="div" className="relative inline-block text-left z-[1001]">

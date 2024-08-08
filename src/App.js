@@ -27,13 +27,13 @@ const App = () => {
         <Header user={user} setUser={setUser} videoId={videoId} setVideoId={setVideoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
         <div className="content">
           <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            <Route path="/artists" element={<ArtistPage />} />
-            <Route path="/load-live" element={<VideoPlayerPage user={user} videoId={videoId} />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
-            <Route path="/test-private-chat" element={<TestPrivateChatPage />} />
+            <Route exact path="/kpop-livestream-platform/" element={<HomePage />} />
+            <Route path="/kpop-livestream-platform/artists" element={<ArtistPage />} />
+            <Route path="/kpop-livestream-platform/load-live" element={<VideoPlayerPage user={user} videoId={videoId} />} />
+            <Route path="/kpop-livestream-platform/about" element={<AboutPage />} />
+            <Route path="/kpop-livestream-platform/contact" element={<ContactPage />} />
+            <Route path="/kpop-livestream-platform/account" element={<AccountPage user={user} setUser={setUser} />} />
+            <Route path="/kpop-livestream-platform/test-private-chat" element={<TestPrivateChatPage />} />
           </Routes>
         </div>
       </div>
