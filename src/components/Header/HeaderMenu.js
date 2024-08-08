@@ -13,7 +13,7 @@ export default function HeaderMenu() {
       <ul className="dropdown-content menu bg-primary text-primary-content rounded-lg z-[1] w-52 p-2 mt-2 shadow">
         <li>
           <NavLink
-            to="/kpop-livestream-platform/"
+            to="/"
             className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200 Active:bg-accent"
           >
             Home
@@ -21,7 +21,7 @@ export default function HeaderMenu() {
         </li>
         <li>
           <NavLink
-            to="kpop-livestream-platform/artists"
+            to="/artists"
             className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200"
           >
             Artists
@@ -29,7 +29,7 @@ export default function HeaderMenu() {
         </li>
         <li>
           <NavLink
-            to="kpop-livestream-platform/load-live"
+            to="/load-live"
             className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200"
           >
             Load Live
@@ -37,7 +37,7 @@ export default function HeaderMenu() {
         </li>
         <li>
           <NavLink
-            to="kpop-livestream-platform/about"
+            to="/about"
             className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200"
           >
             About
@@ -45,7 +45,7 @@ export default function HeaderMenu() {
         </li>
         <li>
           <NavLink
-            to="kpop-livestream-platform/contact"
+            to="/contact"
             className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200"
           >
             Contact

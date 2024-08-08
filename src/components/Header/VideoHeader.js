@@ -32,10 +32,10 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
       await addLiveStream(newVideoId, title, url);
       fetchActiveStreams().then(setHistory);
       setError('');
-      if (location.pathname === '/kpop-livestream-platform/load-live') {
-        window.location.reload();
+      if (window.location.hash !== '#/load-live') {
+        navigate('/load-live');
       } else {
-        navigate('/kpop-livestream-platform/load-live');
+        window.location.reload();
       }
     } else {
       setError('Invalid YouTube URL');

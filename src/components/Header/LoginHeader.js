@@ -96,7 +96,7 @@ const LoginHeader = ({ user, setUser }) => {
               <MenuItem>
                 {({ active }) => (
                   <NavLink
-                    to="kpop-livestream-platform/account/"
+                    to="/account"
                     className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
                   >
                     Profile
@@ -106,7 +106,7 @@ const LoginHeader = ({ user, setUser }) => {
               <MenuItem>
                 {({ active }) => (
                   <NavLink
-                    to="kpop-livestream-platform/settings"
+                    to="/settings"
                     className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
                   >
                     Settings
