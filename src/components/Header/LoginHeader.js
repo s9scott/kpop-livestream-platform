@@ -24,32 +24,40 @@ const LoginHeader = ({ user, setUser }) => {
       console.log("An error occurred while signing in...");
     } else {
       const user = response.userInfo;
-      if (!user) {
-        console.log("Creating new user...");
-        await addUser(user);
-        const userInfo = {
-          username: user.username,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          profilePicture: user.profilePicture,
-          uid: user.uid
-        };
-        localStorage.setItem("lastUser", JSON.stringify(userInfo));
-        setCurUser(userInfo);
-        setUser(userInfo);
-      } else {
-        console.log("Fetching existing user...");
-        const login = await fetchUserInfo(user.uid);
-        const userInfo = {
-          username: login.username,
-          displayName: login.displayName,
-          photoURL: login.photoURL,
-          profilePicture: login.profilePicture,
-          uid: user.uid
-        };
-        setCurUser(userInfo);
-        setUser(userInfo);
-        localStorage.setItem("lastUser", JSON.stringify(userInfo));
+      if (user) {
+        try {
+          console.log("Fetching user...");
+          const login = await fetchUserInfo(user.uid);
+          if (login) {
+            const userInfo = {
+              username: login.username,
+              displayName: login.displayName,
+              photoURL: login.photoURL,
+              profilePicture: login.profilePicture,
+              uid: user.uid,
+              email: user.email
+            };
+            setCurUser(userInfo);
+            setUser(userInfo);
+            localStorage.setItem("lastUser", JSON.stringify(userInfo));
+          } else {
+            console.log("No user info to fetch, creating new user...");
+            const userInfo = {
+              username: user.displayName,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              profilePicture: user.photoURL,
+              uid: user.uid,
+              email: user.email
+            };
+            await addUser(userInfo);
+            localStorage.setItem("lastUser", JSON.stringify(userInfo));
+            setCurUser(userInfo);
+            setUser(userInfo);
+          }
+        } catch (error) {
+          console.log("An error occured, trying to fetch user info: ", error);
+        }
       }
     }
   }
