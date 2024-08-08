@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import Message from './Message';
+import PrivateMessage from './PrivateMessage';
 import info from '../../assets/info.svg';
 
-const Messages = ({ videoId, messages, user, formatTimestamp, toggleOptions, showOptions, handleSeeAccountInfo, handleRemoveMessage, isPopupOpen, setIsPopupOpen }) => {
+const PrivateMessages = ({ videoId, privateChatId, messages, user, formatTimestamp, toggleOptions, showOptions, handleSeeAccountInfo, handleRemoveMessage, isPopupOpen, setIsPopupOpen }) => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -18,10 +18,10 @@ const Messages = ({ videoId, messages, user, formatTimestamp, toggleOptions, sho
         <img src={info} alt="info" className="w-4 h-4" />
       </button>
       )}
-      <div className="flex-grow overflow-y-auto p-4 bg-base-200 rounded-xl mb-5 no-scrollbar">
+      <div className="flex-grow overflow-y-auto p-4 bg-base-200 rounded-lg mb-5 no-scrollbar">
         {messages.map((message, index) => (
-          <Message
-            videoId={videoId}
+          <PrivateMessage
+            privateChatId={privateChatId}
             key={index}
             message={message}
             user={user}
@@ -39,4 +39,4 @@ const Messages = ({ videoId, messages, user, formatTimestamp, toggleOptions, sho
   );
 };
 
-export default Messages;
+export default PrivateMessages;

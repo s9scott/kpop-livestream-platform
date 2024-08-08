@@ -234,6 +234,24 @@ export const resetDisplayName = async (uid, name) => {
   });
 };
 
+export const fetchYoutubeVideoNameFromUrl = async (url) => {
+  if(url) {
+    try {
+      const videoId = url.split('v=')[1];
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
+      const data = await response.json();
+      if (data.items && data.items.length > 0) {
+        return data.items[0].snippet.title;
+      } else {
+        throw new Error('Video not found');
+      }
+    } catch (error) {
+      console.error('Error fetching video details:', error);
+      return 'No video just chatting :)';
+    }
+  }
+};
+
 export const addReaction = async (videoId, text, timestamp, reaction) => {
   const messagesCollectionRef = collection(db, 'livestreams', videoId, 'messages');
   const q = query(messagesCollectionRef, where('text', '==', text), where('timestamp', '==', timestamp));

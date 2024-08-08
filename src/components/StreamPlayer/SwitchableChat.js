@@ -1,14 +1,50 @@
-import React, { useState } from 'react';
-import DraggableResizable from './DraggableResizable';
+import React, { useState, useEffect } from 'react';
 import NativeChat from './NativeChat';
+import PrivateChat from '../PrivateChat/PrivateChat';
+import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
+import { fetchPrivateChatName, fetchPrivateChatVideoUrl } from '../../utils/privateChatUtils';
+import DraggableResizable from '../StreamPlayer/DraggableResizable';
 import useActiveUsers from '../../hooks/useActiveUsers';
-import ChatInputForm from './ChatInputForm';
 
-const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) => {
+
+const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose, onResizeStop, onDragStop, settings }) => {
+  const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default to YouTube chat
+  const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
+
+
+  const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
+  const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
+
+  useEffect(() => {
+    const fetchAndSetVideoId = async () => {
+      if (selectedTab === 'nativeChat') {
+        toggleChat();
+      }
+      if (selectedTab !== 'youtubeChat' && selectedTab !== 'nativeChat') {
+        try {
+          const url = await fetchPrivateChatVideoUrl(selectedTab);
+          console.log('Fetched video URL:', url);
+          const newVideoId = extractVideoId(url);
+          setPrivateChatVideoId(newVideoId);
+          console.log('Fetched video ID:', newVideoId, 'privateChatVideoId:', privateChatVideoId);
+
+        } catch (error) {
+          console.error('Error fetching video ID:', error);
+        }
+      }
+    };
+
+    fetchAndSetVideoId();
+
+    console.log('Selected Tab:', selectedTab);
+    console.log('Current Video ID:', videoId);
+    console.log('Private Chat Video ID:', privateChatVideoId);
+  }, [selectedTab, videoId, privateChatVideoId]);
+
 
   const toggleChat = () => {
     const lastUserData = localStorage.getItem("lastUser");
@@ -24,10 +60,66 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
     setIsActiveUsersModalOpen((prev) => !prev);
   };
 
-  const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
-  const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
+  const extractVideoId = (url) => {
+    console.log('Extracting video ID from:', url);
+    try {
+      if (!url) {
+        console.error('URL is empty or null');
+        return null;
+      }
+  
+      const parsedUrl = new URL(url);
+      const urlParams = new URLSearchParams(parsedUrl.search);
+      const videoId = urlParams.get('v');
+  
+      if (videoId) {
+        return videoId;
+      }
+  
+      // Handle URLs like https://youtu.be/VIDEO_ID
+      const pathname = parsedUrl.pathname;
+      if (pathname.startsWith('/')) {
+        const potentialId = pathname.split('/')[1];
+        if (potentialId) {
+          return potentialId;
+        }
+      }
+  
+      console.error('No video ID found in URL');
+      return null;
+    } catch (error) {
+      //console.error('Error extracting video ID:', error);
+      return null;
+    }
+  };
 
+  const updateVideoId = async (tabId) => {
+    if (tabId === 'youtubeChat' || tabId === 'nativeChat') {
+      console.log(`Switching to ${tabId} tab.`);
+    } else {
+      try {
+        const url = await fetchPrivateChatVideoUrl(tabId);
+        if (url) {
+          const newVideoId = extractVideoId(url);
+          if (newVideoId) {
+            setVideoId(newVideoId);
+            console.log('Video ID updated to:', newVideoId);
+          } else {
+            console.error('Extracted video ID is invalid.');
+          }
+        } else {
+          console.log('Video URL is not available');
+        }
+      } catch (error) {
+        console.error('Error updating video ID:', error);
+      }
+    }
+  };
 
+  const mainTabs = [
+    { id: 'youtubeChat', name: 'YouTube Chat' },
+    { id: 'nativeChat', name: 'Native Chat' },
+  ];
 
   return (
     <DraggableResizable
@@ -40,38 +132,43 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
       useNativeChat={useNativeChat} toggleChat={toggleChat}
     >
       <div className="switchable-chat-container size-full fixed">
-
-        <div className="chat-toggle flex justify-between items-center py-4 px-4 bg-neutral border-b border-secondary">
-          <button
-            onClick={toggleChat}
-            className="toggle-chat-button w-full px-2 center py-1 btn btn-secondary font-semibold hover:btn-accent text-lg font-light tracking-wide"
-          >
-            {useNativeChat ? 'Switch to YouTube Chat' : 'Switch to Native Chat'}
-          </button>
-        </div>
+        <PrivateChatTabs
+          chats={mainTabs}
+          selectedChat={selectedTab}
+          onSelectChat={setSelectedTab}
+        />
+        <PrivateChatTabs
+          chats={selectedChats}
+          selectedChat={selectedTab}
+          onSelectChat={setSelectedTab}
+          onCloseChat={handleTabClose}
+        />
         <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral" style={{ height: 'calc(100% - 6rem)' }}>
-          {useNativeChat ? (
-            <NativeChat
-              videoId={videoId}
-              settings={settings}
-              onResizeStop={onResizeStop}
-              onDragStop={onDragStop}
-              user={user}
-              activeUsers={activeUsers}
-              fetchActiveUsers={fetchActiveUsers}
-              toggleActiveUsersModal={toggleActiveUsersModal}
-            />
-          ) : (
+          {selectedTab === 'youtubeChat' ? (
             <iframe
               className="rounded-badge"
               width="100%"
               height="95%"
-              src={chatSrc}
+              src={`https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`}
               frameBorder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="Live Chat"
             ></iframe>
+          ) : selectedTab === 'nativeChat' ? (
+            <NativeChat
+              videoId={videoId}
+              user={user}
+              activeUsers={activeUsers}
+              toggleActiveUsersModal={toggleActiveUsersModal}
+            />
+          ) : (
+            <PrivateChat
+              privateChatId={selectedTab}
+              user={user}
+              updateVideoId={updateVideoId}
+              videoId={videoId}
+            />
           )}
         </div>
 
@@ -79,12 +176,11 @@ const SwitchableChat = ({ videoId, settings, onResizeStop, onDragStop, user }) =
           <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
             <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
               <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={() => { setShowLoginAlert(!showLoginAlert) }}>&times;</span>
-              <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to access the Native Chat!</h2>
+              <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to chat in the Native Chat!</h2>
             </div>
           </div>
         )}
-
-        {isActiveUsersModalOpen && (
+         {isActiveUsersModalOpen && (
           <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
             <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
               <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>

@@ -130,17 +130,19 @@ return (
             ></path>
           </svg>
         </button>
-        <input
-          id="chat"
-          rows="1"
-          className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300"
-          placeholder="Your message..."
-          value={input}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
-          autoComplete="off"
-        />
+        
+          <input
+            id="chat"
+            rows="1"
+            className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300"
+            placeholder="Your message..."
+            value={input}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+            autoComplete="off"
+          />
+        
         <button
           type="submit"
           className="inline-flex justify-center p-2 text-primary cursor-pointer hover:text-gray-900"

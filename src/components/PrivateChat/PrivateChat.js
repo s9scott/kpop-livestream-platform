@@ -1,90 +1,59 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../../src/firebaseConfig';
-import Messages from './Messages';
-import ChatInputForm from './ChatInputForm';
-import UserInfoModal from './UserInfoModal';
-import { fetchYoutubeDetails } from '../../utils/firestoreUtils';
-import data from '@emoji-mart/data';
+import { db } from '../../firebaseConfig';
+import PrivateMessages from './PrivateMessages';
+import PrivateChatInputForm from './PrivateChatInputForm';
+import UserInfoModal from '../StreamPlayer/UserInfoModal';
+import Popup from './Popup';
+import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 
-const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
+const PrivateChat = ({ privateChatId, user, updateVideoId, videoId}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});
   const [selectedUser, setSelectedUser] = useState(null);
   const [mentionDropdown, setMentionDropdown] = useState([]);
-  const [videoTitle, setVideoTitle] = useState('');
+  const [activeUsers, setActiveUsers] = useState([]);
   const messagesEndRef = useRef(null);
+  const [videoTitle, setVideoTitle] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(true); 
+  const [privateChatVideoId, setPrivateChatVideoId] = useState(null);
 
   useEffect(() => {
-    if (videoId) {
-      const q = query(collection(db, 'livestreams', videoId, 'messages'), orderBy('timestamp', 'asc'));
-      const unsubscribe = onSnapshot(q, async (snapshot) => {
-        const messagesData = await Promise.all(snapshot.docs.map(async (docSnapshot) => {
-          const message = docSnapshot.data();
-          if (message.authorUid) {
-            const userRef = doc(db, 'users', message.authorUid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-              const userData = userSnap.data();
-              return { ...message, authorPhotoURL: userData.photoURL || userData.profilePicture, userInfo: userData };
-            }
-          }
-          return message;
-        }));
-
-        setMessages(messagesData);
-      });
-
-      const fetchVideoTitle = async () => {
-        const videoDetails = await fetchYoutubeDetails(videoId);
-        if (videoDetails) {
-          setVideoTitle(videoDetails.title);
-        }
-      };
-
-      fetchVideoTitle();
-
-      return () => unsubscribe();
-    }
-  }, [videoId]);
-
-  useEffect(() => {
-    const welcomeMessage = {
-      text: `Welcome to the chat! Watching: ${videoTitle}. Active Users: ${activeUsers.length}`,
-      authorName: 'System',
-      authorUid: 'system',
-      timestamp: new Date().toISOString(),
-      isSystemMessage: true,
+    const fetchVideoId = async () => {
+      if (privateChatId) {
+        const videoId = await fetchPrivateChatVideoId(privateChatId);
+        console.log('Fetched Video ID:', videoId);
+        setPrivateChatVideoId(videoId);
+      }
     };
 
-    setMessages((prevMessages) => [...prevMessages]);
-  }, [videoTitle, activeUsers]);
+    if (privateChatId) {
+      const unsubscribeMessages = fetchMessages(privateChatId, setMessages);
+      const unsubscribeVideoTitle = fetchPrivateChatVideoTitle(privateChatId, setVideoTitle);
+      fetchVideoId();
+
+      return () => {
+        unsubscribeMessages();
+        unsubscribeVideoTitle();
+      };
+    }
+  }, [privateChatId]);
+
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      await fetchActiveUsers(setActiveUsers);
+    };
+
+    fetchUsers();
+    const interval = setInterval(fetchUsers, 30000); // Refresh active users every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSendClick = async (e) => {
     e.preventDefault();
-    if (input.trim() && videoId && user) {
-      const convertedText = convertEmojiCodes(input);
-      const messageData = {
-        text: convertedText,
-        authorName: user.displayName,
-        authorUid: user.uid,
-        timestamp: new Date().toISOString(),
-      };
-      await addDoc(collection(db, 'livestreams', videoId, 'messages'), messageData);
-      setInput('');
-    }
-  };
-
-  const convertEmojiCodes = (text) => {
-    const emojiMap = data.emojis;
-    let result = text;
-    Object.keys(emojiMap).forEach((code) => {
-      const emoji = emojiMap[code];
-      if (result.includes(`:${code}:`)) result = result.replace(`:${code}:`, emoji.skins[0].native);
-    });
-    return result;
+    await sendMessage(privateChatId, user, input, setInput);
   };
 
   const formatTimestamp = (timestamp) => {
@@ -116,7 +85,7 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
   };
 
   const handleRemoveMessage = (index) => {
-    console.log(`Remove message at index: ${index}`);
+    setMessages(prevMessages => prevMessages.filter((_, i) => i !== index));
   };
 
   const handleInputChange = (e) => {
@@ -126,7 +95,7 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
     if (value.includes('@')) {
       const mentionPart = value.split('@').pop().toLowerCase();
       if (mentionPart) {
-        const filteredUsers = activeUsers.filter(user => user.displayName.toLowerCase().includes(mentionPart));
+        const filteredUsers = activeUsers.filter(user => user.username.toLowerCase().includes(mentionPart));
         setMentionDropdown(filteredUsers);
       } else {
         setMentionDropdown([]);
@@ -136,10 +105,10 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
     }
   };
 
-  const handleMentionClick = (displayName) => {
+  const handleMentionClick = (username) => {
     const inputParts = input.split('@');
     inputParts.pop();
-    const newValue = `${inputParts.join('@')}@${displayName} `;
+    const newValue = `${inputParts.join('@')}@${username} `;
     setInput(newValue);
     setMentionDropdown([]);
   };
@@ -153,18 +122,24 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex-grow overflow-y-auto">
       {isPopupOpen && (
         <div className="absolute top-24 left-5 right-5 bg-base-100 bg-secondary p-6 rounded-lg shadow-lg z-50">
           <button onClick={() => setIsPopupOpen(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">✕</button>
           <h2 className="text-lg font-semibold text-base">Welcome to the private chat!</h2>
           <p className="text-sm text-neutral">Watching: {videoTitle}</p>
-          <p className="text-sm dark:text-gray-300">Active Users: {activeUsers.length}</p>
+          {(videoId !== privateChatVideoId && privateChatVideoId !== null) && (
+            <button onClick={() => updateVideoId(privateChatId)} className="mt-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+              Update Video
+            </button>
+          )}
         </div>
       )}
-
-        <Messages
+     
+    
+      <div className="flex-grow overflow-y-auto">
+        <PrivateMessages
           videoId={videoId}
+          privateChatId={privateChatId}
           messages={messages}
           user={user}
           formatTimestamp={formatTimestamp}
@@ -177,13 +152,12 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
         />
         <div ref={messagesEndRef} />
       </div>
-      <ChatInputForm
+      <PrivateChatInputForm
         input={input}
         handleInputChange={handleInputChange}
         handleSendClick={handleSendClick}
         mentionDropdown={mentionDropdown}
         handleMentionClick={handleMentionClick}
-        toggleActiveUsersModal={toggleActiveUsersModal}
       />
       <UserInfoModal
         selectedUser={selectedUser}
@@ -193,4 +167,4 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
   );
 };
 
-export default NativeChat;
+export default PrivateChat;

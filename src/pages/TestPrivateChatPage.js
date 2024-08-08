@@ -1,21 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { collection, addDoc, query, getDocs, onSnapshot, where, doc, updateDoc, getDoc } from 'firebase/firestore';
+/*import React, { useState, useEffect } from 'react';
+import { collection, query, onSnapshot, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { createChat, simulateInvite, handleAcceptInvitation, handleRejectInvitation, fetchActiveUsers } from '../utils/privateChatUtils';
-import NativeChat from '../components/StreamPlayer/NativeChat';
-import PrivateChat from '../components/PrivateChat/Chat/PrivateChat';
+import {
+  createChat,
+  simulateInvite,
+  handleAcceptInvitation,
+  handleRejectInvitation,
+  fetchActiveUsers,
+  fetchPrivateChatName
+} from '../utils/privateChatUtils';
+import PrivateChat from '../components/PrivateChat/PrivateChat';
 import ChatCreationMenu from '../components/PrivateChat/ChatCreationMenu';
 import InvitationPopup from '../components/PrivateChat/InvitationPopup';
 import { GoogleUserSignIn, signOutUser } from '../auth/googleAuth';
 import LoginHeader from '../components/Header/LoginHeader';
-import ChatTabs from '../components/PrivateChat/Chat/PrivateChatTabs';
+import ChatTabs from '../components/PrivateChat/PrivateChatTabs';
+import VideoHeader from '../components/PrivateChat/VideoHeader';
+import SwitchableChat from '../components/PrivateChat/SwitchableChat';
 
-const MAX_PRIVATE_CHATS = 5;
+const MAX_PRIVATE_CHATS = 10;
 
 const TestPrivateChatPage = () => {
   const [user, setUser] = useState(null);
   const [activeUsers, setActiveUsers] = useState([]);
-  const [videoId, setVideoId] = useState('testVideo1');
+  const [videoId, setVideoId] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
   const [invitations, setInvitations] = useState([]);
   const [selectedChats, setSelectedChats] = useState([]);
@@ -31,21 +40,36 @@ const TestPrivateChatPage = () => {
     fetchUsers();
 
     if (user) {
-      const q = query(collection(db, 'users', user.uid, 'invitations'), where('status', '==', 'pending'));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchChats = async () => {
+        // Query for chats where the user is an invited user
+        const invitedQuery = query(collection(db, 'privateChats'), where('invitedUsers', 'array-contains', user.uid));
+        const ownerQuery = query(collection(db, 'privateChats'), where('creator', '==', user.uid));
+
+        const invitedSnapshot = await getDocs(invitedQuery);
+        const ownerSnapshot = await getDocs(ownerQuery);
+
+        const combinedSnapshots = [...invitedSnapshot.docs, ...ownerSnapshot.docs];
+
+        const fetchChatNames = async () => {
+          const chats = await Promise.all(combinedSnapshots.map(async (doc) => {
+            const chatData = doc.data();
+            const chatName = await fetchPrivateChatName(doc.id);
+            return { id: doc.id, ...chatData, name: chatName };
+          }));
+          setPrivateChats(chats);
+        };
+        fetchChatNames();
+      };
+
+      fetchChats();
+
+      const unsubscribeInvited = onSnapshot(query(collection(db, 'users', user.uid, 'invitations'), where('status', '==', 'pending')), (snapshot) => {
         const invites = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         setInvitations(invites);
       });
 
-      const chatQuery = query(collection(db, 'privateChats'), where('invitedUsers', 'array-contains', user.uid));
-      const chatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
-        const chats = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setPrivateChats(chats);
-      });
-
       return () => {
-        unsubscribe();
-        chatUnsubscribe();
+        unsubscribeInvited();
       };
     }
   }, [user]);
@@ -83,12 +107,18 @@ const TestPrivateChatPage = () => {
     }
   };
 
+  const handleTabOpen = (chatId) => {
+    setSelectedChats([...selectedChats, chatId]);
+    setSelectedChatId(chatId);
+  };
+
   const handleTabSelect = (chatId) => {
     setSelectedChatId(chatId);
   };
 
   return (
     <div className="p-6">
+      <VideoHeader videoId={videoId} setVideoId={setVideoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
       <LoginHeader user={user} setUser={setUser} />
       {notification && <div className="notification">{notification}</div>}
       <h1 className="text-2xl font-bold mb-4">Test Private Chat Page</h1>
@@ -119,39 +149,32 @@ const TestPrivateChatPage = () => {
                 <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
               </svg>
             </button>
-            <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="chat-menu-button" tabIndex="-1">
+            <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md text-black bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="chat-menu-button" tabIndex="-1">
               <div className="py-1" role="none">
                 {privateChats.map(chat => (
                   <a
                     key={chat.id}
                     href="#"
-                    onClick={() => setSelectedChats([...selectedChats, chat.id])}
+                    onClick={() => handleTabOpen(chat.id)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     tabIndex="-1"
                     id={`chat-${chat.id}`}
                   >
-                    {chat.name || chat.url}
+                    {chat.name}
                   </a>
                 ))}
               </div>
             </div>
           </div>
-          <ChatTabs
-            chats={privateChats.filter(chat => selectedChats.includes(chat.id))}
-            selectedChat={selectedChatId}
-            onSelectChat={handleTabSelect}
-            onCloseChat={handleTabClose}
+          <SwitchableChat
+          user={user}
+          videoId={videoId}
+          setVideoId={setVideoId}
+          selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
+          setSelectedChats={setSelectedChats}
+          handleTabClose={handleTabClose}
           />
-          {selectedChatId ? (
-            <PrivateChat
-              user={user}
-              privateChatId={selectedChatId}
-              handleInviteNotification={handleInviteNotification}
-            />
-          ) : (
-            <p>Select a chat to start messaging.</p>
-          )}
           {showChatCreationMenu && (
             <ChatCreationMenu
               activeUsers={activeUsers}
@@ -177,3 +200,18 @@ const TestPrivateChatPage = () => {
 };
 
 export default TestPrivateChatPage;
+
+
+/**
+ * 
+ * <PrivateChat
+              user={user}
+              privateChatId={selectedChatId}
+              handleInviteNotification={handleInviteNotification}
+              selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
+              onSelectChat={handleTabSelect}
+              onCloseChat={handleTabClose}
+            />
+ 
+
+            */

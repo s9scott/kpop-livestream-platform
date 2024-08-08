@@ -1,5 +1,6 @@
-import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, where, getDoc, updateDoc, getDocs, increment } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { fetchYoutubeVideoNameFromUrl } from './firestoreUtils';
 
 export const fetchMessages = (privateChatId, setMessages) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
@@ -11,7 +12,7 @@ export const fetchMessages = (privateChatId, setMessages) => {
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          return { ...message, authorPhotoURL: userData.profilePicture, userInfo: userData };
+          return { ...message, authorPhotoURL: userData.photoURL || userData.profilePicture, userInfo: userData };
         }
       }
       return message;
@@ -32,6 +33,17 @@ export const sendMessage = async (privateChatId, user, input, setInput) => {
     await addDoc(collection(db, 'privateChats', privateChatId, 'messages'), messageData);
     setInput('');
   }
+};
+
+export const deletePrivateMessage = async (privateChatId, text, timestamp) => {
+  const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
+  const snapshot = await getDocs(q);
+  snapshot.forEach(async (doc) => {
+    const message = doc.data();
+    if (message.text === text && message.timestamp === timestamp) {
+      await doc.ref.delete();
+    }
+  });
 };
 
 export const fetchActiveUsers = async (setActiveUsers) => {
@@ -63,6 +75,7 @@ export const handleRejectInvitation = async (invitationId, user) => {
 
 export const createChat = async (chatSettings, user) => {
   const chatData = {
+    name: chatSettings.name,
     creator: user.uid,
     invitedUsers: chatSettings.invitedUsers.map(u => u.uid),
     url: chatSettings.url,
@@ -89,4 +102,83 @@ export const simulateInvite = async (user) => {
     status: 'pending',
   };
   await addDoc(collection(db, 'users', user.uid, 'invitations'), invitationData);
+};
+
+export const fetchPrivateChatName = async (chatId) => {
+  const chatRef = doc(db, 'privateChats', chatId);
+  const chatSnap = await getDoc(chatRef);
+  if (chatSnap.exists()) {
+    return chatSnap.data().name || chatSnap.data().url || 'Unnamed Chat';
+  } else {
+    console.error('Chat document does not exist.');
+    return 'Unnamed Chat';
+  }
+};
+
+export const fetchPrivateChatVideoTitle = (chatId, setVideoTitle) => {
+  const chatRef = doc(db, 'privateChats', chatId);
+  const unsubscribe = onSnapshot(chatRef, async (doc) => {
+    if (doc.exists()) {
+      const videoTitle = await fetchYoutubeVideoNameFromUrl(doc.data().url);
+      setVideoTitle(videoTitle || 'no video');
+    } else {
+      console.error('Chat document does not exist.');
+      setVideoTitle('');
+    }
+  });
+  return unsubscribe;
+};
+
+export const fetchPrivateChatVideoUrl = async (chatId) => {
+  try {
+    const chatRef = doc(db, 'privateChats', chatId);
+    const chatSnap = await getDoc(chatRef);
+    if (chatSnap.exists()) {
+      console.log('chatSnap.data().url:', chatSnap.data().url);
+      return chatSnap.data().url || '';
+    } else {
+      console.error('Chat document does not exist.');
+      return '';
+    }
+  } catch (error) {
+    console.error('Error fetching chat URL:', error);
+    return '';
+  }
+};
+
+export const fetchPrivateChatVideoId = async (chatId) => {
+  try {
+    const chatRef = doc(db, 'privateChats', chatId);
+    const chatSnap = await getDoc(chatRef);
+    if (chatSnap.exists()) {
+      const url = chatSnap.data().url;
+      if (url) {
+        const videoId = new URL(url).searchParams.get('v');
+        return videoId || null;
+      }
+      return null;
+    } else {
+      console.error('Chat document does not exist.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching chat URL:', error);
+    return null;
+  }
+};
+
+
+
+export const addPrivateReaction = async (privateChatId, text, timestamp, reaction) => {
+  const q = query(collection(db, 'privateChats', privateChatId, 'messages'), where('timestamp', '==', timestamp));
+  try {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      updateDoc(doc.ref, {
+        [`reactions.${reaction}`]: increment(1)
+      });
+    });
+  } catch (error) {
+    throw error;
+  }
 };

@@ -28,7 +28,7 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<HomePage />} />
           <Route path="/artists" element={<ArtistPage />} />
-          <Route path="/load-live" element={<VideoPlayerPage user={user} videoId={videoId} />} />
+          <Route path="/load-live" element={<VideoPlayerPage user={user} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
