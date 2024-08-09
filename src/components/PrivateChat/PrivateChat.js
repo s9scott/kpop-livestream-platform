@@ -7,7 +7,7 @@ import UserInfoModal from '../StreamPlayer/UserInfoModal';
 import Popup from './Popup';
 import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 
-const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateChatUsersModal}) => {
+const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});
@@ -158,6 +158,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
         handleSendClick={handleSendClick}
         mentionDropdown={mentionDropdown}
         handleMentionClick={handleMentionClick}
+        togglePrivateUsersModal={togglePrivateUsersModal}
       />
       <UserInfoModal
         selectedUser={selectedUser}

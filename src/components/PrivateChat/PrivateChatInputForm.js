@@ -8,7 +8,7 @@ const PrivateChatInputForm = ({
   handleSendClick,
   mentionDropdown,
   handleMentionClick,
-  togglePrivateChatUsersModal,
+  togglePrivateUsersModal,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredMentions, setFilteredMentions] = useState([]);
@@ -95,7 +95,7 @@ const PrivateChatInputForm = ({
           <button
             type="button"
             className="inline-flex justify-center p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            onClick={togglePrivateChatUsersModal}  // Connect the button to the active users modal
+            onClick={togglePrivateUsersModal}  // Connect the button to the active users modal
           >
             <svg
             xmlns="http://www.w3.org/2000/svg"

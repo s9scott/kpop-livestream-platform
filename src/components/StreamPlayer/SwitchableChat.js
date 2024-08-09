@@ -15,7 +15,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   const [isPrivateChatUsersModalOpen, setIsPrivateChatUsersModalOpen] = useState(false);
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
-  const {privateChatMembers, setPrivateChatMembers} = fetchPrivateChatMembers(selectedTab);;
+  const [privateChatMembers, setPrivateChatMembers] = useState([]);
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
@@ -61,8 +61,14 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
     setIsActiveUsersModalOpen((prev) => !prev);
   };
 
-  const togglePrivateUsersModal = () => {
-    setPrivateChatMembers();
+  const togglePrivateUsersModal = async () => {
+    try {
+      const members = await fetchPrivateChatMembers(selectedTab);
+      setPrivateChatMembers(members || []);
+    } catch (error) {
+      console.error('Error fetching private chat members:', error);
+      setPrivateChatMembers([]); // Set an empty array if there's an error
+    }
     setIsPrivateChatUsersModalOpen((prev) => !prev);
   };
 
@@ -213,9 +219,9 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
         )}
         {isPrivateChatUsersModalOpen && (
           <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
-              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>
-              <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
+            <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-secondary">
+              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={togglePrivateUsersModal}>&times;</span>
+              <h2 className="text-current text-xl font-semibold mb-4">Private Chat Members</h2>
               <ul className="max-h-64 overflow-y-auto">
                 {privateChatMembers.length > 0 ? (
                   privateChatMembers.map((activeUser, index) => (

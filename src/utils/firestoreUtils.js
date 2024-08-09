@@ -66,7 +66,7 @@ export const getActiveUsers = async (videoId) => {
     const querySnapshot = await getDocs(q);
     const userIds = new Set();
     const now = new Date();
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 3000);
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 15000);
 
     querySnapshot.forEach((doc) => {
       const messageData = doc.data();

@@ -170,12 +170,19 @@ export const fetchPrivateChatVideoId = async (chatId) => {
 export const fetchPrivateChatMembers = async (chatId) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const chatSnap = await getDoc(chatRef);
+  
   if (chatSnap.exists()) {
-    //add owner to invited users
+    // Get the owner's data
     const owner = await fetchUser(chatSnap.data().creator);
-    const invitedUsers = chatSnap.data().invitedUsers || [];
-    invitedUsers.push(owner);
-    return invitedUsers;
+
+    // Get the invited users' data
+    const invitedUserIds = chatSnap.data().invitedUsers || [];
+    const invitedUsers = await Promise.all(invitedUserIds.map((userId) => fetchUser(userId)));
+
+    // Combine the owner with the invited users
+    const allMembers = [owner, ...invitedUsers.filter(user => user !== null)];
+
+    return allMembers;
   } else {
     console.error('Chat document does not exist.');
     return [];
@@ -185,6 +192,7 @@ export const fetchPrivateChatMembers = async (chatId) => {
 const fetchUser = async (userId) => {
   const userRef = doc(db, 'users', userId);
   const userSnap = await getDoc(userRef);
+  
   if (userSnap.exists()) {
     return { ...userSnap.data(), uid: userSnap.id };
   } else {
