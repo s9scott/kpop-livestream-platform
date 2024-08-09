@@ -2,73 +2,73 @@ import React, { useState } from 'react';
 import ChatCreationMenu from '../PrivateChat/ChatCreationMenu';
 import InvitationPopup from '../PrivateChat/InvitationPopup';
 import {
-    createChat,
-    simulateInvite,
-    handleAcceptInvitation,
-    handleRejectInvitation,
-    fetchActiveUsers,
-    fetchPrivateChatName,
-    fetchMessages,
-    sendMessage,
-    fetchPrivateChatVideoTitle,
-    fetchPrivateChatVideoId
-  } from '../../utils/privateChatUtils';
-  import { fetchUsers } from '../../utils/firestoreUtils';
+  createChat,
+  simulateInvite,
+  handleAcceptInvitation,
+  handleRejectInvitation,
+  fetchActiveUsers,
+  fetchPrivateChatName,
+  fetchMessages,
+  sendMessage,
+  fetchPrivateChatVideoTitle,
+  fetchPrivateChatVideoId
+} from '../../utils/privateChatUtils';
+import { fetchUsers } from '../../utils/firestoreUtils';
 
-  const MAX_PRIVATE_CHATS = 5;
+const MAX_PRIVATE_CHATS = 5;
 
 const PrivateChatHeader = ({
-    user,
-    privateChats,
-    invitations,
-    selectedChats,
-    setSelectedChats,
-    selectedChatId,
-    setSelectedChatId,
-    setNotification,
+  user,
+  privateChats,
+  invitations,
+  selectedChats,
+  setSelectedChats,
+  selectedChatId,
+  setSelectedChatId,
+  setNotification,
   // handleSimulateInvite, // Commented out
 }) => {
-    
 
-    const handleCreateChat = async (chatSettings) => {
-        if (privateChats.length < MAX_PRIVATE_CHATS) {
-          
-          await createChat(chatSettings, user);
-          setShowChatCreationMenu(false);
-        } else {
-          alert(`You can only create up to ${MAX_PRIVATE_CHATS} private chats.`);
-        }
-      };
-    
-      const handleAcceptInvite = async (invitationId, chatId) => {
-        await handleAcceptInvitation(invitationId, chatId, user, setSelectedChats);
-      };
-    
-      const handleRejectInvite = async (invitationId) => {
-        await handleRejectInvitation(invitationId, user);
-      };
-    
-      const handleSimulateInvite = async () => {
-        await simulateInvite(user);
-      };
-    
-      const handleInviteNotification = (message) => {
-        setNotification(message);
-        setTimeout(() => setNotification(''), 5000);
-      };
-    
-      const handleTabClose = (chatId) => {
-        setSelectedChats(selectedChats.filter(id => id !== chatId));
-        if (selectedChatId === chatId) {
-          setSelectedChatId(selectedChats.length > 1 ? selectedChats[0] : null);
-        }
-      };
-    
-      const handleTabOpen = (chatId) => {
-        setSelectedChats([...selectedChats, chatId]);
-        setSelectedChatId(chatId);
-      };
-    
+
+  const handleCreateChat = async (chatSettings) => {
+    if (privateChats.length < MAX_PRIVATE_CHATS) {
+
+      await createChat(chatSettings, user);
+      setShowChatCreationMenu(false);
+    } else {
+      alert(`You can only create up to ${MAX_PRIVATE_CHATS} private chats.`);
+    }
+  };
+
+  const handleAcceptInvite = async (invitationId, chatId) => {
+    await handleAcceptInvitation(invitationId, chatId, user, setSelectedChats);
+  };
+
+  const handleRejectInvite = async (invitationId) => {
+    await handleRejectInvitation(invitationId, user);
+  };
+
+  const handleSimulateInvite = async () => {
+    await simulateInvite(user);
+  };
+
+  const handleInviteNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(''), 5000);
+  };
+
+  const handleTabClose = (chatId) => {
+    setSelectedChats(selectedChats.filter(id => id !== chatId));
+    if (selectedChatId === chatId) {
+      setSelectedChatId(selectedChats.length > 1 ? selectedChats[0] : null);
+    }
+  };
+
+  const handleTabOpen = (chatId) => {
+    setSelectedChats([...selectedChats, chatId]);
+    setSelectedChatId(chatId);
+  };
+
   const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
 
   return (
@@ -86,7 +86,7 @@ const PrivateChatHeader = ({
         <div
           tabIndex={1}
           role="button"
-          className="btn btn-secondary text-xl hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200"
+          className="btn btn-secondary text-lg whitespace-nowrap hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 mr-1"
         >
           Select Chat
         </div>

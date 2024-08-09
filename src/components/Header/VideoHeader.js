@@ -110,10 +110,10 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
           placeholder="Enter YouTube URL"
           className="flex-grow w-fit p-2 text-sm text-left border border-gray-300 text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button type="submit" className="px-4 py-2 text-black font-semibold bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" className="px-4 py-2 text-black whitespace-nowrap font-semibold bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
           Load Video
         </button>
-        <button type="button" onClick={handleReset} className="px-4 py-2 text-black font-semibold bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+        <button type="button" onClick={handleReset} className="px-4 py-2 text-black whitespace-nowrap font-semibold bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
           Reset Settings
         </button>
         <VideoHistoryDropdown setVideoUrl={setVideoUrl} />

@@ -15,7 +15,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   const [isPrivateChatUsersModalOpen, setIsPrivateChatUsersModalOpen] = useState(false);
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
-  const {privateChatMembers, setPrivateChatMembers} = fetchPrivateChatMembers(selectedTab);;
+  const [privateChatMembers, setPrivateChatMembers] = useState(fetchPrivateChatMembers(selectedTab));
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
@@ -62,8 +62,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   };
 
   const togglePrivateUsersModal = () => {
-    setPrivateChatMembers();
-    setIsPrivateChatUsersModalOpen((prev) => !prev);
+    setPrivateChatMembers(fetchPrivateChatMembers(selectedTab));
+    setIsPrivateChatUsersModalOpen(!isPrivateChatUsersModalOpen);
   };
 
   const extractVideoId = (url) => {
@@ -174,7 +174,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               user={user}
               updateVideoId={updateVideoId}
               videoId={videoId}
-              togglePrivateUsersModal={togglePrivateUsersModal}
+              togglePrivateChatUsersModal={togglePrivateUsersModal}
             />
           )}
         </div>
@@ -214,7 +214,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
         {isPrivateChatUsersModalOpen && (
           <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
             <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
-              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>
+              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={togglePrivateUsersModal}>&times;</span>
               <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
               <ul className="max-h-64 overflow-y-auto">
                 {privateChatMembers.length > 0 ? (

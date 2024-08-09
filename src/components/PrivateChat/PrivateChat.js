@@ -7,7 +7,7 @@ import UserInfoModal from '../StreamPlayer/UserInfoModal';
 import Popup from './Popup';
 import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 
-const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateChatUsersModal}) => {
+const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateChatUsersModal }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});
@@ -16,7 +16,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
   const [activeUsers, setActiveUsers] = useState([]);
   const messagesEndRef = useRef(null);
   const [videoTitle, setVideoTitle] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(true); 
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [privateChatVideoId, setPrivateChatVideoId] = useState(null);
 
   useEffect(() => {
@@ -134,8 +134,8 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
           )}
         </div>
       )}
-     
-    
+
+
       <div className="flex-grow overflow-y-auto">
         <PrivateMessages
           videoId={videoId}
@@ -158,6 +158,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
         handleSendClick={handleSendClick}
         mentionDropdown={mentionDropdown}
         handleMentionClick={handleMentionClick}
+        togglePrivateChatUsersModal={togglePrivateChatUsersModal}
       />
       <UserInfoModal
         selectedUser={selectedUser}

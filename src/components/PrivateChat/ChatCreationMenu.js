@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchUsers } from '../../utils/firestoreUtils';
 
-const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
+const ChatCreationMenu = ({ onCreateChat, onClose, currentUser }) => {
   const [chatName, setChatName] = useState('');
   const [chatUrl, setChatUrl] = useState('');
   const [invitedUsers, setInvitedUsers] = useState([]);
@@ -13,7 +13,7 @@ const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
       setUsers(users);
     };
     loadUsers();
-  }, []); 
+  }, []);
 
   const handleUserSelect = (user) => {
     if (user.uid !== currentUser.uid) {
@@ -31,7 +31,7 @@ const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
       url: chatUrl,
       invitedUsers,
     };
-    
+
     try {
       await onCreateChat(chatSettings);
       onClose(); // Close the menu after creating the chat
@@ -42,21 +42,21 @@ const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[1005]">
-      <div className="bg-white p-6 rounded-lg">
+      <div className="bg-secondary p-6 rounded-lg text-black">
         <h2 className="text-lg font-bold mb-4">Create Private Chat</h2>
         <input
           type="text"
           placeholder="Chat Name"
           value={chatName}
           onChange={(e) => setChatName(e.target.value)}
-          className="mb-4 p-2 border rounded w-full"
+          className="mb-4 p-2 border rounded w-full text-white"
         />
         <input
           type="text"
           placeholder="Live URL"
           value={chatUrl}
           onChange={(e) => setChatUrl(e.target.value)}
-          className="mb-4 p-2 border rounded w-full"
+          className="mb-4 p-2 border rounded w-full text-white"
         />
         <h3 className="font-semibold mb-2">Invite Users</h3>
         <div className="mb-4 max-h-40 overflow-y-auto">
@@ -72,8 +72,8 @@ const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
           ))}
         </div>
         <div className="flex justify-end space-x-2">
-          <button onClick={onClose} className="btn-neutral px-4 py-2 rounded">Cancel</button>
-          <button onClick={handleCreateChat} className="btn-primary px-4 py-2 text-white rounded">Create</button>
+          <button onClick={onClose} className="btn btn-neutral px-4 py-2 btn-sm">Cancel</button>
+          <button onClick={handleCreateChat} className="btn btn-primary px-4 py-2 btn-sm">Create</button>
         </div>
       </div>
     </div>
