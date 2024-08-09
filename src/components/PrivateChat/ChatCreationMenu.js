@@ -41,7 +41,7 @@ const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[1005]">
       <div className="bg-white p-6 rounded-lg">
         <h2 className="text-lg font-bold mb-4">Create Private Chat</h2>
         <input
