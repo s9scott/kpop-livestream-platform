@@ -17,6 +17,14 @@ export const addUser = async (user) => {
   }, { merge: true });
 };
 
+export const fetchUsers = async () => {
+  const usersSnapshot = await getDocs(collection(db, 'users'));
+  const users = usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id }));
+
+  return users;
+};
+
+
 // Function to log a message sent
 export const logMessageSent = async (userId, message) => {
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID

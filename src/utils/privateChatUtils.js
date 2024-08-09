@@ -167,6 +167,33 @@ export const fetchPrivateChatVideoId = async (chatId) => {
   }
 };
 
+export const fetchPrivateChatMembers = async (chatId) => {
+  const chatRef = doc(db, 'privateChats', chatId);
+  const chatSnap = await getDoc(chatRef);
+  if (chatSnap.exists()) {
+    //add owner to invited users
+    const owner = await fetchUser(chatSnap.data().creator);
+    const invitedUsers = chatSnap.data().invitedUsers || [];
+    invitedUsers.push(owner);
+    return invitedUsers;
+  } else {
+    console.error('Chat document does not exist.');
+    return [];
+  }
+};
+
+const fetchUser = async (userId) => {
+  const userRef = doc(db, 'users', userId);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    return { ...userSnap.data(), uid: userSnap.id };
+  } else {
+    console.error('User document does not exist.');
+    return null;
+  }
+};
+
+
 
 
 export const addPrivateReaction = async (privateChatId, text, timestamp, reaction) => {

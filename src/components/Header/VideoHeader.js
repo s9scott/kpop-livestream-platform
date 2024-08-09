@@ -35,7 +35,6 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
       if (window.location.hash !== '#/load-live') {
         navigate('/load-live');
       } else {
-        window.location.reload();
       }
     } else {
       setError('Invalid YouTube URL');

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NativeChat from './NativeChat';
 import PrivateChat from '../PrivateChat/PrivateChat';
 import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
-import { fetchPrivateChatName, fetchPrivateChatVideoUrl } from '../../utils/privateChatUtils';
+import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers } from '../../utils/privateChatUtils';
 import DraggableResizable from '../StreamPlayer/DraggableResizable';
 import useActiveUsers from '../../hooks/useActiveUsers';
 
@@ -12,9 +12,10 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
+  const [isPrivateChatUsersModalOpen, setIsPrivateChatUsersModalOpen] = useState(false);
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
-
+  const {privateChatMembers, setPrivateChatMembers} = fetchPrivateChatMembers(selectedTab);;
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
@@ -58,6 +59,11 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   const toggleActiveUsersModal = () => {
     fetchActiveUsers();
     setIsActiveUsersModalOpen((prev) => !prev);
+  };
+
+  const togglePrivateUsersModal = () => {
+    setPrivateChatMembers();
+    setIsPrivateChatUsersModalOpen((prev) => !prev);
   };
 
   const extractVideoId = (url) => {
@@ -168,6 +174,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               user={user}
               updateVideoId={updateVideoId}
               videoId={videoId}
+              togglePrivateUsersModal={togglePrivateUsersModal}
             />
           )}
         </div>
@@ -188,6 +195,30 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               <ul className="max-h-64 overflow-y-auto">
                 {activeUsers.length > 0 ? (
                   activeUsers.map((activeUser, index) => (
+                    <li key={index} className="flex items-center mb-2">
+                      <img
+                        src={activeUser.photoURL || activeUser.profilePicture}
+                        alt="Profile"
+                        className="profile-pic w-12 h-12 rounded-full mr-2"
+                      />
+                      <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-gray-700 dark:text-gray-200">No active users</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        )}
+        {isPrivateChatUsersModalOpen && (
+          <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
+              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>
+              <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
+              <ul className="max-h-64 overflow-y-auto">
+                {privateChatMembers.length > 0 ? (
+                  privateChatMembers.map((activeUser, index) => (
                     <li key={index} className="flex items-center mb-2">
                       <img
                         src={activeUser.photoURL || activeUser.profilePicture}

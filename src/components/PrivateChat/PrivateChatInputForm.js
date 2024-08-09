@@ -7,7 +7,8 @@ const PrivateChatInputForm = ({
   handleInputChange,
   handleSendClick,
   mentionDropdown,
-  handleMentionClick
+  handleMentionClick,
+  togglePrivateChatUsersModal,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredMentions, setFilteredMentions] = useState([]);
@@ -93,19 +94,20 @@ const PrivateChatInputForm = ({
           </button>
           <button
             type="button"
-            className="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            className="inline-flex justify-center p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            onClick={togglePrivateChatUsersModal}  // Connect the button to the active users modal
           >
             <svg
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="2 2 20 20"
+            stroke="currentColor">
               <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
-                clipRule="evenodd"
-              ></path>
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </button>
           <button

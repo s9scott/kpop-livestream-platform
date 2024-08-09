@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchUsers } from '../../utils/firestoreUtils';
 
-const ChatCreationMenu = ({ activeUsers, onCreateChat, onClose, currentUser }) => {
+const ChatCreationMenu = ({onCreateChat, onClose, currentUser }) => {
   const [chatName, setChatName] = useState('');
   const [chatUrl, setChatUrl] = useState('');
   const [invitedUsers, setInvitedUsers] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const users = await fetchUsers();
+      setUsers(users);
+    };
+    loadUsers();
+  }, []); 
 
   const handleUserSelect = (user) => {
     if (user.uid !== currentUser.uid) {
@@ -15,13 +25,19 @@ const ChatCreationMenu = ({ activeUsers, onCreateChat, onClose, currentUser }) =
     setInvitedUsers((prev) => prev.filter((u) => u.uid !== user.uid));
   };
 
-  const handleCreateChat = () => {
+  const handleCreateChat = async () => {
     const chatSettings = {
       name: chatName,
       url: chatUrl,
       invitedUsers,
     };
-    onCreateChat(chatSettings);
+    
+    try {
+      await onCreateChat(chatSettings);
+      onClose(); // Close the menu after creating the chat
+    } catch (error) {
+      console.error('Failed to create chat:', error);
+    }
   };
 
   return (
@@ -44,7 +60,7 @@ const ChatCreationMenu = ({ activeUsers, onCreateChat, onClose, currentUser }) =
         />
         <h3 className="font-semibold mb-2">Invite Users</h3>
         <div className="mb-4 max-h-40 overflow-y-auto">
-          {activeUsers.map((user) => (
+          {users.map((user) => (
             <div key={user.uid} className="flex items-center justify-between">
               <span>{user.username}</span>
               {invitedUsers.some((u) => u.uid === user.uid) ? (

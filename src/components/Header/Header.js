@@ -4,9 +4,24 @@ import NightMode from '../../assets/NightMode.svg';
 import LoginHeader from './LoginHeader';
 import VideoHeader from './VideoHeader';
 import HeaderMenu from './HeaderMenu';
+import PrivateChatHeader from './PrivateChatHeader';
 import './styles/Header.css';
 
-const Header = ({ user, setUser, videoId, setVideoId, videoUrl, setVideoUrl  }) => {
+const Header = ({ 
+  user, 
+  setUser, 
+  videoId, 
+  setVideoId, 
+  videoUrl, 
+  setVideoUrl, 
+  activeUsers, 
+  privateChats, 
+  invitations, 
+  selectedChats,
+  setSelectedChats,
+  selectedChatId,
+  setSelectedChatId,
+  }) => {
 
   const handleThemeToggle = (e) => {
     if (e.target.checked) {
@@ -23,6 +38,9 @@ const Header = ({ user, setUser, videoId, setVideoId, videoUrl, setVideoUrl  }) 
       </div>
       <div className="w-9/12 z-40 flex justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+      </div>
+      <div className="flex items-center">
+        <PrivateChatHeader user={user} privateChats={privateChats} invitations={invitations} selectedChats={selectedChats} setSelectedChats={setSelectedChats} selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
       </div>
       <label className="swap swap-rotate">
         <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} />
