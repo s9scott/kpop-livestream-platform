@@ -77,6 +77,24 @@ const PrivateChatInputForm = ({
         <div className="flex items-center py-2 px-3 bg-accent rounded-xl mb-5 relative">
           <button
             type="button"
+            className="inline-flex justify-center p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            onClick={() => togglePrivateChatUsersModal()}  // Connect the button to the active users modal
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="2 2 20 20"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+          <button
+            type="button"
             className="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
           >
             <svg
@@ -113,7 +131,7 @@ const PrivateChatInputForm = ({
           <button
             type="button"
             className="p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            onClick={() => {setShowEmojiDropdown(!showEmojiDropdown)}}
+            onClick={() => { setShowEmojiDropdown(!showEmojiDropdown) }}
           >
             <svg
               className="w-6 h-6"

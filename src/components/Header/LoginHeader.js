@@ -77,16 +77,16 @@ const LoginHeader = ({ user, setUser }) => {
     <div className="relative">
       {curUser ? (
         <Menu as="div" className="relative inline-block text-left z-[1001]">
-          <div>
-            <MenuButton className="btn btn-secondary inline-flex w-full btn-lg justify-center gap-x-1.5 rounded-md bg-secondary text-sm font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
+          <MenuButton className="btn btn-secondary btn-lg rounded-md bg-secondary font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
+            <div className='flex items-center'>
+              <ChevronDownIcon aria-hidden="true" className="h-5 w-5 mr-2" />
               <img
                 alt="User Avatar"
                 src={curUser.photoURL || curUser.profilePicture}
                 className="rounded-full w-12 h-12"
               />
-              <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-black" />
-            </MenuButton>
-          </div>
+            </div>
+          </MenuButton>
 
           <MenuItems
             transition
@@ -127,7 +127,7 @@ const LoginHeader = ({ user, setUser }) => {
           </MenuItems>
         </Menu>
       ) : (
-        <button onClick={handleSignIn} id="login" className="btn btn-secondary text-xl hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 px-4 py-2">
+        <button onClick={handleSignIn} id="login" className="whitespace-nopwrap truncate mr-2 btn btn-secondary text-lg hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 px-4 py-2">
           Google Login
         </button>
       )}

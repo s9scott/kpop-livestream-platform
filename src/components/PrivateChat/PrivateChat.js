@@ -16,7 +16,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
   const [activeUsers, setActiveUsers] = useState([]);
   const messagesEndRef = useRef(null);
   const [videoTitle, setVideoTitle] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(true); 
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [privateChatVideoId, setPrivateChatVideoId] = useState(null);
 
   useEffect(() => {
@@ -134,8 +134,8 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
           )}
         </div>
       )}
-     
-    
+
+
       <div className="flex-grow overflow-y-auto">
         <PrivateMessages
           videoId={videoId}
