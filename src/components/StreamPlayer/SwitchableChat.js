@@ -67,15 +67,15 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
         console.error('URL is empty or null');
         return null;
       }
-  
+
       const parsedUrl = new URL(url);
       const urlParams = new URLSearchParams(parsedUrl.search);
       const videoId = urlParams.get('v');
-  
+
       if (videoId) {
         return videoId;
       }
-  
+
       // Handle URLs like https://youtu.be/VIDEO_ID
       const pathname = parsedUrl.pathname;
       if (pathname.startsWith('/')) {
@@ -84,7 +84,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
           return potentialId;
         }
       }
-  
+
       console.error('No video ID found in URL');
       return null;
     } catch (error) {
@@ -149,7 +149,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               className="rounded-badge"
               width="100%"
               height="95%"
-              src={`https://www.youtube.com/live_chat?v=${videoId}&embed_domain=localhost`}
+              src={chatSrc}
               frameBorder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -180,7 +180,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
             </div>
           </div>
         )}
-         {isActiveUsersModalOpen && (
+        {isActiveUsersModalOpen && (
           <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
             <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
               <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>
