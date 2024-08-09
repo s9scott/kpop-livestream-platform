@@ -180,7 +180,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               user={user}
               updateVideoId={updateVideoId}
               videoId={videoId}
-              togglePrivateChatUsersModal={togglePrivateUsersModal}
+              togglePrivateUsersModal={togglePrivateUsersModal}
             />
           )}
         </div>
