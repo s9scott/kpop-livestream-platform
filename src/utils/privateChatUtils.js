@@ -189,7 +189,7 @@ export const fetchPrivateChatMembers = async (chatId) => {
   }
 };
 
-const fetchUser = async (userId) => {
+export const fetchUser = async (userId) => {
   const userRef = doc(db, 'users', userId);
   const userSnap = await getDoc(userRef);
   
@@ -200,6 +200,20 @@ const fetchUser = async (userId) => {
     return null;
   }
 };
+
+export const addUserToPrivateChat = async (chatId, user) => {
+  //not using arrayunion because it doesn't work with the emulator
+  const chatRef = doc(db, 'privateChats', chatId);
+  const chatSnap = await getDoc(chatRef);
+  if (chatSnap.exists()) {
+    const invitedUsers = chatSnap.data().invitedUsers || [];
+    if (!invitedUsers.includes(user.uid)) {
+      invitedUsers.push(user.uid);
+      await updateDoc(chatRef, { invitedUsers });
+    }
+  }
+};
+
 
 
 

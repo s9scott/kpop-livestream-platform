@@ -52,22 +52,22 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
 
 
   return (
-    <Menu as="div" className="relative inline-block text-left z-[1001]">
-      <MenuButton className="flex items-center justify-between w-full text-lg btn btn-secondary hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 font-semibold">
+    <Menu as="div" className="relative inline-block text-left z-[1001] border-radius-0">
+      <MenuButton className="flex items-center justify-between w-full text-sm btn btn-secondary hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 font-semibold">
         <span className="flex items-center space-x-2">
           <span className="truncate">Video History</span>
           <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
         </span>
       </MenuButton>
 
-      <MenuItems className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-80 overflow-y-auto no-scrollbar">
+      <MenuItems className="absolute text-sm left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-80 overflow-y-auto no-scrollbar">
         <div className="py-1">
           {history.map((item, index) => (
             <MenuItem key={index}>
               {({ active }) => (
                 <div
                   onClick={() => handleHistoryClick(item.url)}
-                  className={`block px-4 py-2 text-sm rounded-md m-1 cursor-pointer ${active ? 'bg-accent text-black' : 'text-white'}`}
+                  className={`block px-4 py-2 text-xsm rounded-md m-1 cursor-pointer ${active ? 'bg-accent text-black' : 'text-white'}`}
                 >
                   {item.title}
                 </div>

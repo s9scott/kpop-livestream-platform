@@ -86,7 +86,7 @@ const PrivateChatHeader = ({
         <div
           tabIndex={1}
           role="button"
-          className="btn btn-secondary text-lg whitespace-nowrap hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 mr-1"
+          className="btn btn-secondary text-sm whitespace-nowrap hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 mr-1"
         >
           Select Chat
         </div>
@@ -95,7 +95,7 @@ const PrivateChatHeader = ({
             <li key={chat.id}>
               <button
                 onClick={() => handleTabOpen(chat.id)}
-                className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200 w-full text-left"
+                className="block px-4 py-2 text-base text-xsm font-semibold hover:bg-accent hover:text-m transition-colors duration-200 w-full text-left"
               >
                 {chat.name}
               </button>
@@ -104,7 +104,7 @@ const PrivateChatHeader = ({
           <li>
             <button
               onClick={() => setShowChatCreationMenu(true)}
-              className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200 w-full text-left"
+              className="block text-align-center text-xsm text-base-content font-bold hover:bg-accent hover:text-m bg-neutral duration-200 w-full text-left"
             >
               Create Private Chat
             </button>

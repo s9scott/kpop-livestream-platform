@@ -23,11 +23,12 @@ const Header = ({
   setSelectedChatId,
 }) => {
 
+  
   const handleThemeToggle = (e) => {
     if (e.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'lemonade');
+      document.documentElement.setAttribute('data-theme', 'kpop_light');
     } else {
-      document.documentElement.setAttribute('data-theme', 'dracula');
+      document.documentElement.setAttribute('data-theme', 'kpop_dark');
     }
   };
 
@@ -40,10 +41,16 @@ const Header = ({
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
       </div>
       <label className="swap swap-rotate mr-1">
-        <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} />
-        <img src={LightMode} alt="Day Mode" className="swap-off h-12 w-12" />
-        <img src={NightMode} alt="Night Mode" className="swap-on h-12 w-12" />
+        <input
+          type="checkbox"
+          className="theme-controller"
+          onClick={handleThemeToggle}
+          defaultChecked={true}
+        />
+        <img src={LightMode} alt="Day Mode" className="swap-off h-10 w-10" />
+        <img src={NightMode} alt="Night Mode" className="swap-on h-10 w-10" />
       </label>
+
       <div className="flex items-center">
         <PrivateChatHeader user={user} privateChats={privateChats} invitations={invitations} selectedChats={selectedChats} setSelectedChats={setSelectedChats} selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
       </div>
