@@ -5,6 +5,7 @@ import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
 import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat } from '../../utils/privateChatUtils';
 import DraggableResizable from '../StreamPlayer/DraggableResizable';
 import useActiveUsers from '../../hooks/useActiveUsers';
+import Split from 'react-split';
 
 
 const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose, onResizeStop, onDragStop, settings }) => {
@@ -145,16 +146,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   ];
 
   return (
-    <DraggableResizable
-      defaultWidth={settings.width}
-      defaultHeight={settings.height}
-      defaultX={settings.x}
-      defaultY={settings.y}
-      onResizeStop={onResizeStop}
-      onDragStop={onDragStop}
-      useNativeChat={useNativeChat} toggleChat={toggleChat}
-    >
-      <div className="switchable-chat-container size-full fixed">
+      <div className="switchable-chat-container w-[30%] h-full fixed">
         <PrivateChatTabs
           chats={mainTabs}
           selectedChat={selectedTab}
@@ -166,8 +158,9 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
           onSelectChat={setSelectedTab}
           onCloseChat={handleTabClose}
         />
-        <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral" style={{ height: 'calc(100% - 6rem)' }}>
+        <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral" style={{ height: 'calc(100% - 8.5rem)'}}>
           {selectedTab === 'youtubeChat' ? (
+            <div className="w-full h-full">
             <iframe
               className="rounded-badge"
               width="100%"
@@ -177,14 +170,17 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="Live Chat"
-            ></iframe>
+            />
+            </div>
           ) : selectedTab === 'nativeChat' ? (
+            <div className="w-full h-full">
             <NativeChat
               videoId={videoId}
               user={user}
               activeUsers={activeUsers}
               toggleActiveUsersModal={toggleActiveUsersModal}
             />
+            </div>
           ) : (
             <PrivateChat
               privateChatId={selectedTab}
@@ -262,7 +258,6 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
           </div>
         )}
       </div>
-    </DraggableResizable>
   );
 };
 

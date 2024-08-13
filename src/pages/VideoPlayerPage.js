@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import Split from 'react-split';
 import {
   createChat,
   simulateInvite,
@@ -187,30 +188,39 @@ const VideoPlayerPage = ({
   };
 
   return (
-    <div className="app-container">
-      {notification && <div className="notification">{notification}</div>}
-      {videoId && (
-        <>
-          <VideoPlayer
-            videoId={videoId}
-            settings={videoPlayerSettings}
-            onResizeStop={(data) => handleResizeStop('video', data)}
-            onDragStop={(data) => handleDragStop('video', data)}
-          />
-          <SwitchableChat
-            user={user}
-            videoId={videoId}
-            setVideoId={setVideoId}
-            selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
-            setSelectedChats={setSelectedChats}
-            handleTabClose={handleTabClose}
-            onResizeStop={(data) => handleResizeStop('video', data)}
-            onDragStop={(data) => handleDragStop('video', data)}
-            settings={chatSettings}
-          />
-        </>
-      )}
-    </div>
+    
+    <div className="app-container flex flex-col">
+  {notification && <div className="notification">{notification}</div>}
+  {videoId && (
+    <>
+    <div className="flex-grow flex overflow-hidden">
+      <div className='"video-player-container w-[70%] h-[90%] border-2 border-accent flex-shrink-0"'>
+        <VideoPlayer
+          videoId={videoId}
+          settings={videoPlayerSettings}
+          onResizeStop={(data) => handleResizeStop('video', data)}
+          onDragStop={(data) => handleDragStop('video', data)}
+        />
+      </div>
+      <div className="switchable-chat-container w-[30%] h-[90%] border-2 border-accent flex-shrink-0">
+        <SwitchableChat
+          user={user}
+          videoId={videoId}
+          setVideoId={setVideoId}
+          selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
+          setSelectedChats={setSelectedChats}
+          handleTabClose={handleTabClose}
+          onResizeStop={(data) => handleResizeStop('video', data)}
+          onDragStop={(data) => handleDragStop('video', data)}
+          settings={chatSettings}
+        />
+      </div>
+      </div>
+      </>
+  )}
+</div>
+
+    
   );
 };
 

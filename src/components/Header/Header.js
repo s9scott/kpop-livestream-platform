@@ -34,7 +34,7 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between p-1 bg-neutral text-base-content">
+    <header className="navbar fixed top-0 left-0 w-full justify-between p-1 bg-neutral text-base-content">
       <div className="flex items-center">
         <HeaderMenu />
       </div>
