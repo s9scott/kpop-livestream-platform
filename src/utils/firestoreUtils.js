@@ -93,6 +93,12 @@ export const getActiveUsers = async (videoId) => {
   }
 };
 
+export const getNumberOfActiveUsers = async (videoId) => {
+  const activeUsers = await getActiveUsers(videoId);
+  return activeUsers.length;
+};
+
+
 export const fetchYoutubeDetails = async (videoId) => {
   try {
     const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
@@ -273,5 +279,40 @@ export const addReaction = async (videoId, text, timestamp, reaction) => {
     });
   } catch (error) {
     throw error;
+  }
+};
+
+export const fetchVideoName = async (streamId) => {
+  try {
+    const liveStreamRef = doc(db, 'livestreams', streamId);
+    const liveStreamSnap = await getDoc(liveStreamRef);
+
+    if (liveStreamSnap.exists()) {
+      return liveStreamSnap.data().title;
+    } else {
+      console.error('Live stream document does not exist.');
+      return 'Error fetching title';
+    }
+  } catch (error) {
+    console.error('Error fetching video name:', error);
+    return 'Error fetching title';
+  }
+};
+
+
+export const getLiveStreams = async () => {
+  const liveStreamsSnapshot = await getDocs(collection(db, 'livestreams'));
+  return liveStreamsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const fetchActiveUsersCount = async (liveStreamId) => {
+  const liveStreamRef = doc(db, 'livestreams', liveStreamId);
+  const liveStreamSnap = await getDoc(liveStreamRef);
+
+  if (liveStreamSnap.exists()) {
+    return liveStreamSnap.data().activeUsersCount || 0;
+  } else {
+    console.error('Live stream document does not exist.');
+    return 0;
   }
 };

@@ -3,7 +3,19 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Arial', 'sans-serif'],
+        sans: ['Graphik', 'sans-serif'],
+        serif: ['Merriweather', 'serif'],
+      },
+      //text size
+      fontSize: {
+        'xsm': '.65rem',
+        'sm': '.75rem',
+        'tiny': '.875rem',
+        'base': '1rem',
+        'lg': '1.125rem',
+        'xl': '1.25rem',
+        '2xl': '1.5rem',  
+        '3xl': '1.875rem',
       },
     },
   },

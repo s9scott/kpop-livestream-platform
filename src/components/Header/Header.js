@@ -6,6 +6,7 @@ import VideoHeader from './VideoHeader';
 import HeaderMenu from './HeaderMenu';
 import PrivateChatHeader from './PrivateChatHeader';
 import './styles/Header.css';
+import LiveStreamsButton from './LiveStreamsButton';
 
 const Header = ({
   user,
@@ -39,6 +40,7 @@ const Header = ({
       </div>
       <div className="w-9/12 z-40 flex justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+        <LiveStreamsButton setVideoId={setVideoId} />
       </div>
       <label className="swap swap-rotate mr-1">
         <input

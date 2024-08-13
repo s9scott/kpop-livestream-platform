@@ -74,10 +74,10 @@ const LoginHeader = ({ user, setUser }) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative text-xsm">
       {curUser ? (
         <Menu as="div" className="relative inline-block text-left z-[1001]">
-          <MenuButton className="btn btn-secondary btn-md rounded-md bg-secondary font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
+          <MenuButton className="btn btn-secondary relative text-xsm btn-md rounded-md bg-secondary font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
             <div className='flex items-center'>
               <ChevronDownIcon aria-hidden="true" className="h-5 w-5 mr-2" />
               <img

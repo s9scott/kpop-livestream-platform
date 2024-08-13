@@ -206,8 +206,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
         )}
        {isActiveUsersModalOpen && (
   <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-    <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
-      <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={toggleActiveUsersModal}>&times;</span>
+    <div className="modal-content w-[90%] bg-primary bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg">
+      <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right font-bold text-white" onClick={toggleActiveUsersModal}>&times;</span>
       <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
       <ul className="max-h-64 overflow-y-auto">
         {activeUsers.length > 0 ? (
@@ -238,8 +238,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   </div>
 )}
         {isPrivateChatUsersModalOpen && (
-          <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-secondary">
+          <div className="active-users-modal  fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="modal-content bg-primary w-[90%] rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-secondary">
               <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={togglePrivateUsersModal}>&times;</span>
               <h2 className="text-current text-xl font-semibold mb-4">Private Chat Members</h2>
               <ul className="max-h-64 overflow-y-auto">
