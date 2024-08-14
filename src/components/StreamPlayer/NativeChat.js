@@ -39,6 +39,7 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
 
       const fetchVideoTitle = async () => {
         const videoDetails = await fetchYoutubeDetails(videoId);
+        console.log(videoDetails);
         if (videoDetails) {
           setVideoTitle(videoDetails.title);
         }
@@ -49,18 +50,6 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
       return () => unsubscribe();
     }
   }, [videoId]);
-
-  useEffect(() => {
-    const welcomeMessage = {
-      text: `Welcome to the chat! Watching: ${videoTitle}. Active Users: ${activeUsers.length}`,
-      authorName: 'System',
-      authorUid: 'system',
-      timestamp: new Date().toISOString(),
-      isSystemMessage: true,
-    };
-
-    setMessages((prevMessages) => [...prevMessages]);
-  }, [videoTitle, activeUsers]);
 
   const handleSendClick = async (e) => {
     e.preventDefault();
