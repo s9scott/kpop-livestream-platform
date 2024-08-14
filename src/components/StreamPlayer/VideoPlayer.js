@@ -1,8 +1,6 @@
 import React from 'react';
-import Split from 'react-split';
-import DraggableResizable from './DraggableResizable';
 
-const VideoPlayer = ({ videoId, settings, onResizeStop, onDragStop }) => {
+const VideoPlayer = ({ videoId}) => {
   const videoSrc = `https://www.youtube.com/embed/${videoId}`;
 
   return (

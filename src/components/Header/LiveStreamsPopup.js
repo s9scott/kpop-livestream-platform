@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getLiveStreams, fetchActiveUsersCount, fetchVideoName, getActiveUsers} from '../../utils/firestoreUtils'; // Assuming these functions fetch data from your DB
 import useActiveUsers from '../../hooks/useActiveUsers';
 
 const LiveStreamsPopup = ({ onClose, setVideoId }) => {
   const [liveStreams, setLiveStreams] = useState([]);
   const [numberOfActiveUsers, setNumberOfActiveUsers] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLiveStreams = async () => {
@@ -36,6 +38,10 @@ const LiveStreamsPopup = ({ onClose, setVideoId }) => {
           const newVideoId = extractVideoId(url);
           if (newVideoId) {
             setVideoId(newVideoId);
+            if (window.location.hash !== '#/load-live') {
+              navigate('/load-live');
+            } else {
+            }
             console.log('Video ID updated to:', newVideoId);
           } else {
             console.error('Extracted video ID is invalid.');

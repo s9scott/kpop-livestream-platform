@@ -38,22 +38,7 @@ const VideoPlayerPage = ({
   selectedChatId,
   setSelectedChatId,
 }) => {
-  const calculateDefaultSettings = () => {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight - 150;
-    const videoPlayerWidth = screenWidth * 0.65;
-    const chatWidth = screenWidth * 0.35 - 50;
-
-    return {
-      videoPlayerSettings: { width: videoPlayerWidth, height: screenHeight, x: 20, y: 20 },
-      chatSettings: { width: chatWidth, height: screenHeight, x: videoPlayerWidth + 40, y: 20 }
-    };
-  };
-
-  const { videoPlayerSettings: defaultVideoPlayerSettings, chatSettings: defaultChatSettings } = calculateDefaultSettings();
   const [videoUrl, setVideoUrl] = useState('');
-  const [videoPlayerSettings, setVideoPlayerSettings] = useState(defaultVideoPlayerSettings);
-  const [chatSettings, setChatSettings] = useState(defaultChatSettings);
   const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
   const [notification, setNotification] = useState('');
 
@@ -100,12 +85,7 @@ const VideoPlayerPage = ({
   }, [user]);
 
   useEffect(() => {
-    const savedVideoPlayerSettings = JSON.parse(localStorage.getItem('videoPlayerSettings'));
-    const savedChatSettings = JSON.parse(localStorage.getItem('chatSettings'));
     const lastVideoId = localStorage.getItem('lastVideoId');
-
-    if (savedVideoPlayerSettings) setVideoPlayerSettings(savedVideoPlayerSettings);
-    if (savedChatSettings) setChatSettings(savedChatSettings);
     if (lastVideoId) {
       setVideoId(lastVideoId);
       localStorage.removeItem('lastVideoId');
@@ -117,32 +97,6 @@ const VideoPlayerPage = ({
       logWebsiteUsage(user.uid, 'Visited VideoPlayerPage');
     }
   }, [user]);
-
-  const handleResizeStop = (type, data) => {
-    const { size, position } = data;
-    if (type === 'video') {
-      const newSettings = { ...videoPlayerSettings, width: size.width, height: size.height, x: position.x, y: position.y };
-      setVideoPlayerSettings(newSettings);
-      localStorage.setItem('videoPlayerSettings', JSON.stringify(newSettings));
-    } else {
-      const newSettings = { ...chatSettings, width: size.width, height: size.height, x: position.x, y: position.y };
-      setChatSettings(newSettings);
-      localStorage.setItem('chatSettings', JSON.stringify(newSettings));
-    }
-  };
-
-  const handleDragStop = (type, data) => {
-    const { x, y } = data;
-    if (type === 'video') {
-      const newSettings = { ...videoPlayerSettings, x, y };
-      setVideoPlayerSettings(newSettings);
-      localStorage.setItem('videoPlayerSettings', JSON.stringify(newSettings));
-    } else {
-      const newSettings = { ...chatSettings, x, y };
-      setChatSettings(newSettings);
-      localStorage.setItem('chatSettings', JSON.stringify(newSettings));
-    }
-  };
 
   const handleCreateChat = async (chatSettings) => {
     if (privateChats.length < MAX_PRIVATE_CHATS) {
@@ -189,20 +143,17 @@ const VideoPlayerPage = ({
 
   return (
     
-    <div className="app-container flex flex-col">
+    <div className="app-container h-full w-full flex flex-col">
   {notification && <div className="notification">{notification}</div>}
   {videoId && (
     <>
     <div className="flex-grow flex overflow-hidden">
-      <div className='"video-player-container w-[70%] h-[90%] border-2 border-accent flex-shrink-0"'>
+      <div className='"video-player-container w-[70%] h-[90%] flex-shrink-0"'>
         <VideoPlayer
           videoId={videoId}
-          settings={videoPlayerSettings}
-          onResizeStop={(data) => handleResizeStop('video', data)}
-          onDragStop={(data) => handleDragStop('video', data)}
         />
       </div>
-      <div className="switchable-chat-container w-[30%] h-[90%] border-2 border-accent flex-shrink-0">
+      <div className="switchable-chat-container w-[30%] h-[90%] flex-shrink-0">
         <SwitchableChat
           user={user}
           videoId={videoId}
@@ -210,9 +161,6 @@ const VideoPlayerPage = ({
           selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
           setSelectedChats={setSelectedChats}
           handleTabClose={handleTabClose}
-          onResizeStop={(data) => handleResizeStop('video', data)}
-          onDragStop={(data) => handleDragStop('video', data)}
-          settings={chatSettings}
         />
       </div>
       </div>

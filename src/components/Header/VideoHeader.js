@@ -87,14 +87,6 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
     localStorage.setItem('videoHistory', JSON.stringify(newHistory));
   };
 
-
-  const handleReset = () => {
-    localStorage.removeItem('videoPlayerSettings');
-    localStorage.removeItem('chatSettings');
-    localStorage.setItem('lastVideoId', videoId);
-    window.location.reload();
-  };
-
   const clearHistory = () => {
     setHistory([]);
     localStorage.removeItem('videoHistory');
@@ -112,9 +104,6 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
         />
         <button type="submit" className="px-4 py-2 text-xsm bg-primary text-black whitespace-nowrap font-semibold rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-blue-500">
           Load Video
-        </button>
-        <button type="button" onClick={handleReset} className="px-4 py-2 text-xsm bg-red-500 text-black whitespace-nowrap font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
-          Reset Settings
         </button>
         <VideoHistoryDropdown setVideoUrl={setVideoUrl} />
       </form>

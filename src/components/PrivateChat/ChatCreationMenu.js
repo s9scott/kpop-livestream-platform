@@ -49,14 +49,14 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser }) => {
           placeholder="Chat Name"
           value={chatName}
           onChange={(e) => setChatName(e.target.value)}
-          className="mb-4 p-2 border rounded w-full text-white"
+          className="mb-4 p-2 border rounded w-full text-black"
         />
         <input
           type="text"
           placeholder="Live URL"
           value={chatUrl}
           onChange={(e) => setChatUrl(e.target.value)}
-          className="mb-4 p-2 border rounded w-full text-white"
+          className="mb-4 p-2 border rounded w-full"
         />
         <h3 className="font-semibold mb-2">Invite Users</h3>
         <div className="mb-4 max-h-40 overflow-y-auto">

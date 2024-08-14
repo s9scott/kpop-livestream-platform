@@ -3,12 +3,9 @@ import NativeChat from './NativeChat';
 import PrivateChat from '../PrivateChat/PrivateChat';
 import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
 import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat } from '../../utils/privateChatUtils';
-import DraggableResizable from '../StreamPlayer/DraggableResizable';
 import useActiveUsers from '../../hooks/useActiveUsers';
-import Split from 'react-split';
 
-
-const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose, onResizeStop, onDragStop, settings }) => {
+const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose}) => {
   const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default to YouTube chat
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
