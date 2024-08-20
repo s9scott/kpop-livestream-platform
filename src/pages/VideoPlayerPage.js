@@ -15,9 +15,7 @@ import {
   fetchPrivateChatVideoId
 } from '../utils/privateChatUtils';
 import VideoPlayer from '../components/StreamPlayer/VideoPlayer';
-import SwitchableChat from '../components/StreamPlayer/SwitchableChat';
-import ChatCreationMenu from '../components/PrivateChat/ChatCreationMenu';
-import InvitationPopup from '../components/PrivateChat/InvitationPopup';
+import SwitchableChat from '../components/Chat/SwitchableChat';
 import { logWebsiteUsage } from '../utils/firestoreUtils';
 
 
@@ -148,12 +146,12 @@ const VideoPlayerPage = ({
   {videoId && (
     <>
     <div className="flex-grow flex overflow-hidden">
-      <div className='"video-player-container w-[70%] h-[90%] flex-shrink-0"'>
+      <div className='"video-player-container flex-shrink-0"'>
         <VideoPlayer
           videoId={videoId}
         />
       </div>
-      <div className="switchable-chat-container w-[30%] h-[90%] flex-shrink-0">
+      <div className="switchable-chat-container flex-shrink-0">
         <SwitchableChat
           user={user}
           videoId={videoId}

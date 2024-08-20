@@ -52,11 +52,10 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
 
 
   return (
-    <Menu as="div" className="relative inline-block text-left z-[1001] border-radius-0">
-      <MenuButton className="flex items-center justify-between w-full text-sm btn btn-secondary hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 font-semibold">
+    <Menu as="div" className="relative inline-block text-left z-[1001] border-radius-0 ">
+      <MenuButton className="flex items-center justify-between text-left md:w-full md:text-sm text-xxxs btn btn-secondary hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 font-semibold">
         <span className="flex items-center space-x-2">
-          <span className="truncate">Video History</span>
-          <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
+          <span className="text-left">Video History</span>
         </span>
       </MenuButton>
 

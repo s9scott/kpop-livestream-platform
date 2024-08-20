@@ -93,7 +93,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
   };
 
   return (
-    <div className="bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg shadow-md">
+    <div className="md:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
       <form onSubmit={handleSubmit} className="flex items-center space-x-4 w-full">
         <input
           type="text"

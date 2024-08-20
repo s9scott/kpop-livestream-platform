@@ -3,7 +3,7 @@ import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'fir
 import { db } from '../../firebaseConfig';
 import PrivateMessages from './PrivateMessages';
 import PrivateChatInputForm from './PrivateChatInputForm';
-import UserInfoModal from '../StreamPlayer/UserInfoModal';
+import UserInfoModal from '../Chat/UserInfoModal';
 import Popup from './Popup';
 import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 

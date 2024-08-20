@@ -7,7 +7,10 @@ module.exports = {
         serif: ['Merriweather', 'serif'],
       },
       //text size
+    
       fontSize: {
+        'xxxs': '.5rem',
+        'xxs': '.5rem',
         'xsm': '.65rem',
         'sm': '.75rem',
         'tiny': '.875rem',
