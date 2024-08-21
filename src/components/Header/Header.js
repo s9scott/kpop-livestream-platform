@@ -5,6 +5,7 @@ import LoginHeader from './LoginHeader';
 import VideoHeader from './VideoHeader';
 import HeaderMenu from './HeaderMenu';
 import PrivateChatHeader from './PrivateChatHeader';
+import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
 
 const Header = ({
@@ -57,6 +58,9 @@ const Header = ({
           setSelectedChatId={setSelectedChatId} 
         />
       </div>
+      <div className="my-4">
+              <LiveStreamsButton setVideoId={setVideoId}/>
+      </div>
       <div className="hidden md:flex items-center">
         <LoginHeader user={user} setUser={setUser} />
       </div>
@@ -93,6 +97,9 @@ const Header = ({
                 selectedChatId={selectedChatId} 
                 setSelectedChatId={setSelectedChatId} 
               />
+            </div>
+            <div className="my-4">
+              <LiveStreamsButton setVideoId={setVideoId}/>
             </div>
           </div>
         </div>

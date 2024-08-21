@@ -82,7 +82,7 @@ const PrivateChatHeader = ({
       </button> */}
 
       {/* Chat Selection Dropdown */}
-      <div className="dropdown dropdown-hover menu-lg z-[1001]">
+      <div className="dropdown dropdown-hover menu-lg z-40">
         <div
           tabIndex={1}
           role="button"

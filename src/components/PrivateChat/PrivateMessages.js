@@ -20,7 +20,7 @@ const PrivateMessages = ({ videoId, privateChatId, messages, user, formatTimesta
       )}
       <div className="flex-grow overflow-y-auto p-4 bg-base-200 rounded-lg mb-5 no-scrollbar">
         {messages.map((message, index) => (
-          <PrivateMessage
+          <PrivateMessage 
             privateChatId={privateChatId}
             key={index}
             message={message}
