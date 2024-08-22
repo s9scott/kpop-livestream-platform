@@ -1,5 +1,9 @@
 import { NavLink } from 'react-router-dom';
 
+/**
+ * HeaderMenu component for rendering a dropdown menu with navigation links.
+ * @returns {JSX.Element} The rendered menu component.
+ */
 export default function HeaderMenu() {
   return (
     <div className="dropdown dropdown-hover menu-lg z-[1001]">

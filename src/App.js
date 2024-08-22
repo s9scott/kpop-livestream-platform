@@ -66,7 +66,6 @@ const App = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
-          <Route path="/test-private-chat" element={<TestPrivateChatPage />} />
         </Routes>
       </div>
     </div>

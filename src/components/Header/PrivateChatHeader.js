@@ -15,8 +15,21 @@ import {
 } from '../../utils/privateChatUtils';
 import { fetchUsers } from '../../utils/firestoreUtils';
 
-const MAX_PRIVATE_CHATS = 5;
+const MAX_PRIVATE_CHATS = 5; // Maximum number of private chats allowed
 
+/**
+ * PrivateChatHeader component manages the display and actions for private chats and invitations.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.user - Current user information.
+ * @param {Array} props.privateChats - Array of private chat objects.
+ * @param {Array} props.invitations - Array of invitation objects.
+ * @param {Array} props.selectedChats - Array of selected chat IDs.
+ * @param {Function} props.setSelectedChats - Function to update selected chats.
+ * @param {string|null} props.selectedChatId - ID of the currently selected chat.
+ * @param {Function} props.setSelectedChatId - Function to update the selected chat ID.
+ * @param {Function} props.setNotification - Function to set notification messages.
+ * @returns {JSX.Element} The rendered component.
+ */
 const PrivateChatHeader = ({
   user,
   privateChats,
@@ -29,34 +42,56 @@ const PrivateChatHeader = ({
   // handleSimulateInvite, // Commented out
 }) => {
 
-
+  /**
+   * Handles the creation of a new chat if the limit has not been reached.
+   * @param {Object} chatSettings - Settings for the new chat.
+   */
   const handleCreateChat = async (chatSettings) => {
     if (privateChats.length < MAX_PRIVATE_CHATS) {
-
-      await createChat(chatSettings, user);
-      setShowChatCreationMenu(false);
+      await createChat(chatSettings, user); // Create new chat
+      setShowChatCreationMenu(false); // Close chat creation menu
     } else {
       alert(`You can only create up to ${MAX_PRIVATE_CHATS} private chats.`);
     }
   };
 
+  /**
+   * Handles accepting a chat invitation.
+   * @param {string} invitationId - ID of the invitation.
+   * @param {string} chatId - ID of the chat to join.
+   */
   const handleAcceptInvite = async (invitationId, chatId) => {
     await handleAcceptInvitation(invitationId, chatId, user, setSelectedChats);
   };
 
+  /**
+   * Handles rejecting a chat invitation.
+   * @param {string} invitationId - ID of the invitation.
+   */
   const handleRejectInvite = async (invitationId) => {
     await handleRejectInvitation(invitationId, user);
   };
 
+  /**
+   * Simulates a chat invitation for testing purposes.
+   */
   const handleSimulateInvite = async () => {
     await simulateInvite(user);
   };
 
+  /**
+   * Sets and displays a notification message for a short period.
+   * @param {string} message - Notification message to display.
+   */
   const handleInviteNotification = (message) => {
     setNotification(message);
-    setTimeout(() => setNotification(''), 5000);
+    setTimeout(() => setNotification(''), 5000); // Clear notification after 5 seconds
   };
 
+  /**
+   * Handles closing a chat tab.
+   * @param {string} chatId - ID of the chat to close.
+   */
   const handleTabClose = (chatId) => {
     setSelectedChats(selectedChats.filter(id => id !== chatId));
     if (selectedChatId === chatId) {
@@ -64,12 +99,16 @@ const PrivateChatHeader = ({
     }
   };
 
+  /**
+   * Handles opening a chat tab.
+   * @param {string} chatId - ID of the chat to open.
+   */
   const handleTabOpen = (chatId) => {
     setSelectedChats([...selectedChats, chatId]);
     setSelectedChatId(chatId);
   };
 
-  const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
+  const [showChatCreationMenu, setShowChatCreationMenu] = useState(false); // State for showing chat creation menu
 
   return (
     <>

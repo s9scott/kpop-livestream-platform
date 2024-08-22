@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { GoogleUserSignIn, signOutUser } from '../../auth/googleAuth';
-import { addUser, fetchUserInfo } from '../../utils/firestoreUtils';
-import { NavLink } from 'react-router-dom';
-import './styles/LoginHeader.css';
+import { GoogleUserSignIn, signOutUser } from '../../auth/googleAuth'; // Authentication functions
+import { addUser, fetchUserInfo } from '../../utils/firestoreUtils'; // Firestore functions for user management
+import { NavLink } from 'react-router-dom'; // React Router component for navigation
+import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
 
+/**
+ * LoginHeader component displays user login/logout functionality and user profile menu.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.user - Current user information.
+ * @param {Function} props.setUser - Function to update user information.
+ * @returns {JSX.Element} The rendered component.
+ */
 const LoginHeader = ({ user, setUser }) => {
-  const [curUser, setCurUser] = useState(user);
+  const [curUser, setCurUser] = useState(user); // State to store the current user
 
   useEffect(() => {
     const lastUserData = localStorage.getItem("lastUser");
@@ -16,10 +23,13 @@ const LoginHeader = ({ user, setUser }) => {
       setCurUser(lastUser);
       setUser(lastUser);
     }
-  }, [curUser, setUser]);
+  }, [curUser, setUser]); // Effect runs when curUser or setUser changes
 
+  /**
+   * Handles user sign-in with Google authentication.
+   */
   async function handleSignIn() {
-    const response = await GoogleUserSignIn();
+    const response = await GoogleUserSignIn(); // Trigger Google sign-in
     if (response.result === "error") {
       console.log("An error occurred while signing in...");
     } else {
@@ -27,7 +37,7 @@ const LoginHeader = ({ user, setUser }) => {
       if (user) {
         try {
           console.log("Fetching user...");
-          const login = await fetchUserInfo(user.uid);
+          const login = await fetchUserInfo(user.uid); // Fetch user info from Firestore
           if (login) {
             const userInfo = {
               username: login.username,
@@ -39,7 +49,7 @@ const LoginHeader = ({ user, setUser }) => {
             };
             setCurUser(userInfo);
             setUser(userInfo);
-            localStorage.setItem("lastUser", JSON.stringify(userInfo));
+            localStorage.setItem("lastUser", JSON.stringify(userInfo)); // Save user info to local storage
           } else {
             console.log("No user info to fetch, creating new user...");
             const userInfo = {
@@ -50,26 +60,29 @@ const LoginHeader = ({ user, setUser }) => {
               uid: user.uid,
               email: user.email
             };
-            await addUser(userInfo);
-            localStorage.setItem("lastUser", JSON.stringify(userInfo));
+            await addUser(userInfo); // Add new user to Firestore
+            localStorage.setItem("lastUser", JSON.stringify(userInfo)); // Save new user info to local storage
             setCurUser(userInfo);
             setUser(userInfo);
           }
         } catch (error) {
-          console.log("An error occured, trying to fetch user info: ", error);
+          console.log("An error occurred, trying to fetch user info: ", error);
         }
       }
     }
   }
 
+  /**
+   * Handles user sign-out and updates the UI accordingly.
+   */
   function handleSignOut() {
-    const response = signOutUser();
+    const response = signOutUser(); // Trigger sign-out
     if (response === "error") {
       console.log("Error, user not signed out!");
     } else {
       setCurUser(null);
       setUser(null);
-      localStorage.removeItem("lastUser");
+      localStorage.removeItem("lastUser"); // Remove user info from local storage
     }
   }
 

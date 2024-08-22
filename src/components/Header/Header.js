@@ -8,6 +8,24 @@ import PrivateChatHeader from './PrivateChatHeader';
 import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
 
+/**
+ * Header component for displaying navigation and user options.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.user - Current user object.
+ * @param {Function} props.setUser - Function to update the user state.
+ * @param {string} props.videoId - Current video ID.
+ * @param {Function} props.setVideoId - Function to update the video ID.
+ * @param {string} props.videoUrl - URL of the current video.
+ * @param {Function} props.setVideoUrl - Function to update the video URL.
+ * @param {Array} props.activeUsers - List of active users.
+ * @param {Array} props.privateChats - List of private chats.
+ * @param {Array} props.invitations - List of chat invitations.
+ * @param {Array} props.selectedChats - List of selected chats.
+ * @param {Function} props.setSelectedChats - Function to update the selected chats.
+ * @param {string} props.selectedChatId - ID of the selected chat.
+ * @param {Function} props.setSelectedChatId - Function to update the selected chat ID.
+ * @returns {JSX.Element} The rendered header component.
+ */
 const Header = ({
   user,
   setUser,
@@ -25,6 +43,10 @@ const Header = ({
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  /**
+   * Toggles between light and dark theme based on the checkbox state.
+   * @param {Object} e - The event object.
+   */
   const handleThemeToggle = (e) => {
     document.documentElement.setAttribute('data-theme', 'kpop_light');
     if (e.target.checked) {
@@ -34,6 +56,9 @@ const Header = ({
     }
   };
 
+  /**
+   * Toggles the visibility of the popup modal.
+   */
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
@@ -59,7 +84,7 @@ const Header = ({
         />
       </div>
       <div className="my-4">
-              <LiveStreamsButton setVideoId={setVideoId}/>
+        <LiveStreamsButton setVideoId={setVideoId}/>
       </div>
       <div className="hidden md:flex items-center">
         <LoginHeader user={user} setUser={setUser} />

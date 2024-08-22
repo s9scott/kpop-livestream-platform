@@ -5,8 +5,21 @@ import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
 import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat } from '../../utils/privateChatUtils';
 import useActiveUsers from '../../hooks/useActiveUsers';
 
-const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose}) => {
-  const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default to YouTube chat
+/**
+ * SwitchableChat component for handling and displaying different chat types.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {Object} props.user - Current user.
+ * @param {string} props.videoId - Current YouTube video ID.
+ * @param {Function} props.setVideoId - Function to set video ID.
+ * @param {Array} props.selectedChats - List of selected private chats.
+ * @param {Function} props.setSelectedChats - Function to update selected chats.
+ * @param {Function} props.handleTabClose - Function to handle closing of private chat tabs.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
+const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose }) => {
+  const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default tab
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
@@ -44,7 +57,9 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
     console.log('Private Chat Video ID:', privateChatVideoId);
   }, [selectedTab, videoId, privateChatVideoId]);
 
-
+  /**
+   * Toggles between native chat and login alert based on user authentication status.
+   */
   const toggleChat = () => {
     const lastUserData = localStorage.getItem("lastUser");
     if (lastUserData) {
@@ -54,22 +69,34 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
     }
   };
 
+  /**
+   * Toggles the modal displaying active users.
+   */
   const toggleActiveUsersModal = () => {
     fetchActiveUsers();
     setIsActiveUsersModalOpen((prev) => !prev);
   };
 
+  /**
+   * Toggles the modal displaying private chat members.
+   */
   const togglePrivateUsersModal = async () => {
     try {
       const members = await fetchPrivateChatMembers(selectedTab);
       setPrivateChatMembers(members || []);
     } catch (error) {
       console.error('Error fetching private chat members:', error);
-      setPrivateChatMembers([]); // Set an empty array if there's an error
+      setPrivateChatMembers([]);
     }
     setIsPrivateChatUsersModalOpen((prev) => !prev);
   };
 
+  /**
+   * Extracts video ID from a given URL.
+   * 
+   * @param {string} url - The URL to extract the video ID from.
+   * @returns {string|null} The extracted video ID or null if not found.
+   */
   const extractVideoId = (url) => {
     console.log('Extracting video ID from:', url);
     try {
@@ -98,11 +125,15 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
       console.error('No video ID found in URL');
       return null;
     } catch (error) {
-      //console.error('Error extracting video ID:', error);
       return null;
     }
   };
 
+  /**
+   * Updates the video ID based on the selected tab.
+   * 
+   * @param {string} tabId - The ID of the selected tab.
+   */
   const updateVideoId = async (tabId) => {
     if (tabId === 'youtubeChat' || tabId === 'nativeChat') {
       console.log(`Switching to ${tabId} tab.`);
@@ -126,6 +157,11 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
     }
   };
 
+  /**
+   * Invites a user to the private chat.
+   * 
+   * @param {string} inviteeUid - The UID of the user to invite.
+   */
   const inviteToChat = async (inviteeUid) => {
     try {
       const chatId = selectedTab; // Assuming the selectedTab is the chat ID
@@ -143,21 +179,21 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   ];
 
   return (
-      <div className="switchable-chat-container md:w-[30%] w-full h-[60%] bottom-0 md:h-full md:inset-y-24 md:right-0 md:bottom-0 fixed">
-        <PrivateChatTabs
-          chats={mainTabs}
-          selectedChat={selectedTab}
-          onSelectChat={setSelectedTab}
-        />
-        <PrivateChatTabs
-          chats={selectedChats}
-          selectedChat={selectedTab}
-          onSelectChat={setSelectedTab}
-          onCloseChat={handleTabClose}
-        />
-        <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral h-[90%] md:h-[80%]">
-          {selectedTab === 'youtubeChat' ? (
-            <div className="w-full h-full">
+    <div className="switchable-chat-container md:w-[30%] w-full h-[60%] bottom-0 md:h-full md:inset-y-24 md:right-0 md:bottom-0 fixed">
+      <PrivateChatTabs
+        chats={mainTabs}
+        selectedChat={selectedTab}
+        onSelectChat={setSelectedTab}
+      />
+      <PrivateChatTabs
+        chats={selectedChats}
+        selectedChat={selectedTab}
+        onSelectChat={setSelectedTab}
+        onCloseChat={handleTabClose}
+      />
+      <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral h-[90%] md:h-[80%]">
+        {selectedTab === 'youtubeChat' ? (
+          <div className="w-full h-full">
             <iframe
               className="rounded-badge"
               width="100%"
@@ -168,94 +204,95 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               allowFullScreen
               title="Live Chat"
             />
-            </div>
-          ) : selectedTab === 'nativeChat' ? (
-            <div className="w-full h-full">
+          </div>
+        ) : selectedTab === 'nativeChat' ? (
+          <div className="w-full h-full">
             <NativeChat
               videoId={videoId}
               user={user}
               activeUsers={activeUsers}
               toggleActiveUsersModal={toggleActiveUsersModal}
             />
-            </div>
-          ) : (
-            <PrivateChat
-              privateChatId={selectedTab}
-              user={user}
-              updateVideoId={updateVideoId}
-              videoId={videoId}
-              togglePrivateUsersModal={togglePrivateUsersModal}
-            />
-          )}
-        </div>
-
-        {showLoginAlert && (
-          <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
-              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={() => { setShowLoginAlert(!showLoginAlert) }}>&times;</span>
-              <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to chat in the Native Chat!</h2>
-            </div>
           </div>
-        )}
-       {isActiveUsersModalOpen && (
-  <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-    <div className="modal-content w-[90%] bg-primary bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg">
-      <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right font-bold text-white" onClick={toggleActiveUsersModal}>&times;</span>
-      <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
-      <ul className="max-h-64 overflow-y-auto">
-        {activeUsers.length > 0 ? (
-          activeUsers.map((activeUser, index) => (
-            <li key={index} className="flex items-center mb-2">
-              <img
-                src={activeUser.photoURL || activeUser.profilePicture}
-                alt="Profile"
-                className="profile-pic w-12 h-12 rounded-full mr-2"
-              />
-              <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
-              {/* Invite Button */}
-              {activeUser.uid !== user.uid && !selectedChats.includes(activeUser.uid) && (
-                <button
-                  className="ml-auto btn btn-sm btn-primary"
-                  onClick={() => inviteToChat(activeUser.uid)}
-                >
-                  Invite
-                </button>
-              )}
-            </li>
-          ))
         ) : (
-          <li className="text-gray-700 dark:text-gray-200">No active users</li>
-        )}
-      </ul>
-    </div>
-  </div>
-)}
-        {isPrivateChatUsersModalOpen && (
-          <div className="active-users-modal  fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="modal-content bg-primary w-[90%] rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-secondary">
-              <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={togglePrivateUsersModal}>&times;</span>
-              <h2 className="text-current text-xl font-semibold mb-4">Private Chat Members</h2>
-              <ul className="max-h-64 overflow-y-auto">
-                {privateChatMembers.length > 0 ? (
-                  privateChatMembers.map((activeUser, index) => (
-                    <li key={index} className="flex items-center mb-2">
-                      <img
-                        src={activeUser.photoURL || activeUser.profilePicture}
-                        alt="Profile"
-                        className="profile-pic w-12 h-12 rounded-full mr-2"
-                      />
-                      <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-gray-700 dark:text-gray-200">No active users</li>
-                )}
-              </ul>
-            </div>
-          </div>
+          <PrivateChat
+            privateChatId={selectedTab}
+            user={user}
+            updateVideoId={updateVideoId}
+            videoId={videoId}
+            togglePrivateUsersModal={togglePrivateUsersModal}
+          />
         )}
       </div>
-  );
+  
+      {showLoginAlert && (
+        <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
+            <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={() => { setShowLoginAlert(!showLoginAlert) }}>&times;</span>
+            <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to chat in the Native Chat!</h2>
+          </div>
+        </div>
+      )}
+      
+      {isActiveUsersModalOpen && (
+        <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="modal-content w-[90%] bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg">
+            <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right font-bold text-white" onClick={toggleActiveUsersModal}>&times;</span>
+            <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
+            <ul className="max-h-64 overflow-y-auto">
+              {activeUsers.length > 0 ? (
+                activeUsers.map((activeUser, index) => (
+                  <li key={index} className="flex items-center mb-2">
+                    <img
+                      src={activeUser.photoURL || activeUser.profilePicture}
+                      alt="Profile"
+                      className="profile-pic w-12 h-12 rounded-full mr-2"
+                    />
+                    <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
+                    {activeUser.uid !== user.uid && !selectedChats.includes(activeUser.uid) && (
+                      <button
+                        className="ml-auto btn btn-sm btn-primary"
+                        onClick={() => inviteToChat(activeUser.uid)}
+                      >
+                        Invite
+                      </button>
+                    )}
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-700 dark:text-gray-200">No active users</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+      
+      {isPrivateChatUsersModalOpen && (
+        <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="modal-content bg-primary w-[90%] rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-secondary">
+            <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={togglePrivateUsersModal}>&times;</span>
+            <h2 className="text-current text-xl font-semibold mb-4">Private Chat Members</h2>
+            <ul className="max-h-64 overflow-y-auto">
+              {privateChatMembers.length > 0 ? (
+                privateChatMembers.map((activeUser, index) => (
+                  <li key={index} className="flex items-center mb-2">
+                    <img
+                      src={activeUser.photoURL || activeUser.profilePicture}
+                      alt="Profile"
+                      className="profile-pic w-12 h-12 rounded-full mr-2"
+                    />
+                    <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-700 dark:text-gray-200">No active users</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  ); 
 };
 
 export default SwitchableChat;
