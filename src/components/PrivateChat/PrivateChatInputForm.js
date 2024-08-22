@@ -3,6 +3,25 @@ import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import users from '../../assets/users.svg';
 
+/**
+ * 
+ * @param input, handleInputChange, handleSendClick, mentionDropdown, handleMentionClick, togglePrivateUsersModal
+ * What they are?
+ * input: The current input value in the chat input field
+ * handleInputChange: Function to handle input change in the chat input field
+ * handleSendClick: Function to handle send button click in the chat input field
+ * mentionDropdown: The list of users to mention in the chat
+ * handleMentionClick: Function to handle mention click in the chat input field
+ * togglePrivateUsersModal: Function to toggle the private users modal
+ * @returns PrivateChatInputForm
+ * 
+ * This component displays the input form for the private chat.
+ * It allows users to type messages, mention other users, and send messages.
+ * It also displays a dropdown with user suggestions when a user is mentioned.
+ * When a user is clicked, the user information modal is displayed.
+ * When the private users modal is toggled, the modal is displayed or hidden.
+ */
+
 const PrivateChatInputForm = ({
   input,
   handleInputChange,
@@ -11,15 +30,17 @@ const PrivateChatInputForm = ({
   handleMentionClick,
   togglePrivateUsersModal,
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [filteredMentions, setFilteredMentions] = useState([]);
-  const inputRef = useRef(input);
+  const [showDropdown, setShowDropdown] = useState(false); // State for mention dropdown
+  const [filteredMentions, setFilteredMentions] = useState([]); // State for filtered mentions
+  const inputRef = useRef(input); // Reference to the input field
   const [showEmojiDropdown, setShowEmojiDropdown] = useState(false); // State for emoji picker
 
+  // Update the input reference when the input changes
   useEffect(() => {
     inputRef.current = input;
   }, [input]);
 
+  // Handle key down event
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -27,6 +48,7 @@ const PrivateChatInputForm = ({
     }
   };
 
+  // Add emoji to the input field
   const addEmoji = (emoji) => {
     const value = inputRef.current;
     const newValue = value.replace(/:\w*:*$/, '') + emoji.native;
@@ -34,6 +56,7 @@ const PrivateChatInputForm = ({
     setShowEmojiDropdown(false);
   };
 
+  // Handle key up event
   const handleKeyUp = (e) => {
     const value = e.target.value;
     if (value.includes('@')) {
@@ -54,6 +77,7 @@ const PrivateChatInputForm = ({
     }
   };
 
+  // Handle mention click event to add the mention to the input field
   const handleMentionClickWrapper = (displayName) => {
     const value = inputRef.current;
     const newValue = value.substring(0, value.lastIndexOf('@')) + `@${displayName} `;
@@ -62,6 +86,7 @@ const PrivateChatInputForm = ({
     setShowDropdown(false);
   };
 
+  // Hide dropdown when the input field is blurred
   useEffect(() => {
     if (!input.includes('@')) {
       setShowDropdown(false);
@@ -71,6 +96,7 @@ const PrivateChatInputForm = ({
     }
   }, [input]);
 
+  // Render the component
   return (
     <div className="relative">
       <form onSubmit={handleSendClick}>

@@ -1,5 +1,21 @@
 import React from 'react';
 
+/**
+ * 
+ * @param chats, selectedChat, onSelectChat, onCloseChat
+ * What they are?
+ * chats: Array of private chat objects
+ * selectedChat: ID of the selected chat
+ * onSelectChat: Function to select a chat
+ * onCloseChat: Function to close a chat
+ * @returns PrivateChatTabs 
+ * 
+ * This component displays a list of private chat tabs.
+ * It allows users to switch between different private chats.
+ * Each tab displays the chat name or URL and a close button.
+ * When a tab is clicked, the chat is selected.
+ */
+
 const PrivateChatTabs = ({ chats, selectedChat, onSelectChat, onCloseChat }) => {
   return (
     <div className="flex bg-base-200 border-b border-gray-200 dark:border-gray-700">

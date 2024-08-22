@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPrivateChatName, fetchUser } from '../../utils/privateChatUtils';
 
-const InvitationPopup = ({ invitation, onAccept, onReject }) => {
-  const [chatName, setChatName] = useState('');
-  const [creatorName, setCreatorName] = useState('');
+/**
+ * @param invitation, onAccept, onReject
+ * What they are?
+ * invitation: Object with the chat invitation details { chatId: string, invitedBy: string }
+ * onAccept: Function to accept the chat invitation
+ * onReject: Function to reject the chat invitation
+ * @returns InvitationPopup
+ * 
+ * What is it?
+ * This component displays a popup with the details of a chat invitation.
+ * It shows the name of the chat and the user who sent the invitation.
+ * Users can accept or reject the invitation by clicking the corresponding buttons.
+ * 
+*/
 
+const InvitationPopup = ({ invitation, onAccept, onReject }) => {
+  const [chatName, setChatName] = useState(''); // State variable for the chat name
+  const [creatorName, setCreatorName] = useState(''); // State variable for the creator's name
+
+  // Fetch chat details and creator's name when the component mounts
   useEffect(() => {
     const fetchChatDetails = async () => {
       const chatName = await fetchPrivateChatName(invitation.chatId);
@@ -19,6 +35,7 @@ const InvitationPopup = ({ invitation, onAccept, onReject }) => {
     fetchChatDetails();
   }, [invitation.chatId, invitation.invitedBy]);
 
+  // Display the chat invitation popup
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
       <div className="bg-secondary p-6 rounded-lg">

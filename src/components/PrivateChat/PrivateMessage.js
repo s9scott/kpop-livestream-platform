@@ -1,9 +1,30 @@
 import React, { useState } from 'react';
-import { muteUser } from '../../utils/firestoreUtils';
 import { deletePrivateMessage, addPrivateReaction } from '../../utils/privateChatUtils';
 import addEmoji from "../../assets/emoji-add.svg";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+
+/**
+ * 
+ * @param privateChatId, message, user, index, formatTimestamp, toggleOptions, showOptions, handleSeeAccountInfo, handleRemoveMessage
+ * What they are?
+ * privateChatId: The ID of the private chat
+ * message: The message object
+ * user: The current user
+ * index: The index of the message
+ * formatTimestamp: Function to format the timestamp
+ * toggleOptions: Function to toggle the message options
+ * showOptions: State to show the message options
+ * handleSeeAccountInfo: Function to see the account information of the user
+ * handleRemoveMessage: Function to remove the message
+ * @returns PrivateMessage
+ * 
+ * This component displays a private message in the private chat.
+ * It shows the user's profile picture, name, message, and timestamp.
+ * It also displays the message options when the user hovers over the message.
+ * The message options include seeing the user's account information, removing the message, and muting the user.
+ * The component also allows the user to add reactions to the message.
+ */
 
 const PrivateMessage = ({
   privateChatId,
@@ -16,19 +37,23 @@ const PrivateMessage = ({
   handleSeeAccountInfo,
   handleRemoveMessage
 }) => {
-  const isUserMessage = message.authorUid === user.uid;
+  const isUserMessage = message.authorUid === user.uid; // Check if the message is from the current user
   const messageClasses = message.text.includes(`@${user.displayName}`) ? 'text-current bg-secondary rounded-xl p-1' : 'text-current'; // Add highlighting class
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State for emoji picker
+  const [showDropdown, setShowDropdown] = useState(false); // State for message options dropdown
 
+
+  // Handle mouse enter event to show message options
   const handleMouseLeave = () => {
     setShowDropdown(false);
   };
 
+ // Handle three dots click to show message options
   const handleThreeDotsClick = () => {
     setShowDropdown(!showDropdown);
   };
 
+  // Handle remove message click
   const handleRemoveClick = async () => {
     try {
       console.log('Message removed:', privateChatId);
@@ -38,18 +63,7 @@ const PrivateMessage = ({
     }
   };
 
-  const handleMuteUserClick = async () => {
-    const muteDuration = prompt('Enter mute duration in minutes:');
-    if (muteDuration) {
-      try {
-        await muteUser(message.privateChatId, message.authorUid, parseInt(muteDuration));
-        alert(`User ${message.authorName} has been muted for ${muteDuration} minutes.`);
-      } catch (error) {
-        console.error('Error muting user: ', error);
-      }
-    }
-  };
-
+  // Handle add reaction click to show emoji picker 
   const handleAddReaction = async (reaction) => {
     try {
       await addPrivateReaction(privateChatId, message.text, message.timestamp, reaction);
@@ -59,6 +73,7 @@ const PrivateMessage = ({
     }
   };
 
+  // Handle emoji picker click to show emoji picker
   return (
     <div className="flex items-start gap-2 mb-6 relative group w-full">
       <img
@@ -84,9 +99,6 @@ const PrivateMessage = ({
                       <p onClick={handleRemoveClick} className="rounded-xl block p-2 m-2 hover:bg-accent dark:hover:bg-gray-600 dark:hover:text-white">Remove message</p>
                     </li>
                   )}
-                  <li>
-                    <p onClick={handleMuteUserClick} className="rounded-xl block p-2 m-2 hover:bg-accent dark:hover:bg-gray-600 dark:hover:text-white">Mute account</p>
-                  </li>
                   <li>
                     <p onClick={() => handleSeeAccountInfo(message.authorUid)} className="rounded-xl block p-2 m-2 hover:bg-accent dark:hover:bg-gray-600 dark:hover:text-white">See account info</p>
                   </li>

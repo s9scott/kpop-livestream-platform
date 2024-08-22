@@ -1,10 +1,19 @@
+/**
+ * Firestore utility functions for the Kpop Livestream Platform
+ */
+
+
 import { db, storage } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, query, orderBy, limit, where, onSnapshot, Timestamp, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc, increment } from 'firebase/firestore';
+import { collection, query, orderBy, limit, where, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc, increment } from 'firebase/firestore';
 
+// YOUTUBE API key
 const API_KEY = 'AIzaSyCJXkbG-hi1ECUlkXJ3yZS_-agRa9bPzCM';
 
-// Function to add or update a user
+/**
+ * @param {*} user 
+ * Function to add a user to the Firestore database
+ */
 export const addUser = async (user) => {
   const userRef = doc(db, 'users', user.uid);  // Using user UID as the document ID
   await setDoc(userRef, {
@@ -17,6 +26,9 @@ export const addUser = async (user) => {
   }, { merge: true });
 };
 
+/**
+ * @returns Array of users from the Firestore database
+ */
 export const fetchUsers = async () => {
   const usersSnapshot = await getDocs(collection(db, 'users'));
   const users = usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id }));
@@ -24,8 +36,12 @@ export const fetchUsers = async () => {
   return users;
 };
 
-
-// Function to log a message sent
+/**
+ * @param {*} userId 
+ * @param {*} message 
+ * Function to log a message sent by a user
+ * This function will create a new document for the user if it doesn't exist
+ */
 export const logMessageSent = async (userId, message) => {
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
   const userDoc = await getDoc(userRef);
@@ -39,7 +55,12 @@ export const logMessageSent = async (userId, message) => {
   });
 };
 
-// Function to log website usage
+/**
+ * @param {*} userId 
+ * @param {*} activity 
+ * Function to log website usage by a user
+ * This function will create a new document for the user if it doesn't exist
+ */
 export const logWebsiteUsage = async (userId, activity) => {
   const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
   const userDoc = await getDoc(userRef);
@@ -53,7 +74,10 @@ export const logWebsiteUsage = async (userId, activity) => {
   });
 };
 
-// Function to get active users based on the last 100 messages within the last 5 minutes
+/**
+ * @param {*} videoId 
+ * @returns Array of messages from the Firestore database for a specific video
+ */
 export const getActiveUsers = async (videoId) => {
   try {
     // Query to get the last 100 messages ordered by timestamp
@@ -93,12 +117,19 @@ export const getActiveUsers = async (videoId) => {
   }
 };
 
+/**
+ * @param videoId 
+ * @returns number of active users in the last 5 minutes
+ */
 export const getNumberOfActiveUsers = async (videoId) => {
   const activeUsers = await getActiveUsers(videoId);
   return activeUsers.length;
 };
 
-
+/**
+ * @param videoId 
+ * @returns youtube video details for the given videoId (title, description, channelTitle, publishedAt, thumbnails)
+ */
 export const fetchYoutubeDetails = async (videoId) => {
   try {
     const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
@@ -114,7 +145,10 @@ export const fetchYoutubeDetails = async (videoId) => {
   }
 };
 
-// Fetch active livestreams
+/**
+ * @returns list of active streams
+ * Fetches all active streams from the Firestore database
+ */
 export const fetchActiveStreams = async () => {
   const q = query(collection(db, 'livestreams'), where('isActive', '==', true));
   const querySnapshot = await getDocs(q);
@@ -125,7 +159,10 @@ export const fetchActiveStreams = async () => {
   return streams;
 };
 
-// Fetch video details
+/**
+ * @param {*} videoId 
+ * @returns video details for the given videoId from firestore database (title, description, channelTitle, publishedAt, thumbnails  )
+ */
 export const fetchVideoDetails = async (videoId) => {
   const docRef = doc(db, 'videos', videoId);
   const docSnap = await getDoc(docRef);
@@ -137,7 +174,13 @@ export const fetchVideoDetails = async (videoId) => {
   }
 };
 
-// Add a new livestream
+/**
+ * @param {*} videoId 
+ * @param {*} title 
+ * @param {*} url 
+ * Adds a new live stream to the Firestore database
+ * The videoId is used as the document ID
+ */
 export const addLiveStream = async (videoId, title, url) => {
   const livestreamRef = doc(db, 'livestreams', videoId);
   await setDoc(livestreamRef, {
@@ -148,7 +191,12 @@ export const addLiveStream = async (videoId, title, url) => {
   });
 };
 
-// Function to archive chat messages
+/**
+ * @param {*} videoId
+ * Updates the isActive field of the live stream to false
+ * This effectively stops the live stream from being embeded in the website
+ * The videoId is used as the document ID
+ */
 export const archiveChatMessages = async (videoId) => {
   const messagesRef = collection(db, 'livestreams', videoId, 'messages');
   const archiveRef = collection(db, 'archive', videoId, 'messages');
@@ -162,7 +210,15 @@ export const archiveChatMessages = async (videoId) => {
   });
 };
 
-// Function to delete a message
+/**
+ * @param {*} videoId 
+ * @param {*} text 
+ * @param {*} timestamp 
+ * Deletes a message from the Firestore database
+ * The message is identified by the text and timestamp
+ * The videoId is used as the document ID
+ * The text and timestamp are used as the message ID
+ */
 export const deleteMessage = async (videoId, text, timestamp) => {
   console.log('Deleting message:', videoId, text, timestamp);
   const messagesRef = collection(db, 'livestreams', videoId, 'messages');
@@ -174,15 +230,13 @@ export const deleteMessage = async (videoId, text, timestamp) => {
   });
 };
 
-// Function to mute a user
-export const muteUser = async (videoId, userId, duration) => {
-  const muteRef = doc(db, `livestreams/${videoId}/mutedUsers`, userId);
-  await setDoc(muteRef, {
-    mutedAt: serverTimestamp(),
-    duration: duration // Duration in minutes
-  });
-};
+export const muteUser = async (videoId, uid) => {
+}
 
+/**
+ * @param {*} uid 
+ * @after user information from the Firestore database
+ */
 export const fetchUserInfo = async (uid) => {
   const userRef = doc(db, 'users', uid);
 
@@ -191,7 +245,104 @@ export const fetchUserInfo = async (uid) => {
   return info.data();
 };
 
-// Function to determine the content type based on file extension
+/**
+ * @param {*} url
+ * @returns the title of the youtube video from the given url
+ */
+export const fetchYoutubeVideoNameFromUrl = async (url) => {
+  if(url) {
+    try {
+      const videoId = url.split('v=')[1];
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
+      const data = await response.json();
+      if (data.items && data.items.length > 0) {
+        return data.items[0].snippet.title;
+      } else {
+        throw new Error('Video not found');
+      }
+    } catch (error) {
+      console.error('Error fetching video details:', error);
+      return 'No video just chatting :)';
+    }
+  }
+};
+
+/**
+ * @param {*} videoId 
+ * @param {*} text 
+ * @param {*} timestamp 
+ * @param {*} reaction 
+ * Adds a reaction to a message in the Firestore database
+ * The message is identified by the text and timestamp
+ * The videoId is used as the document ID
+ */
+export const addReaction = async (videoId, text, timestamp, reaction) => {
+  const messagesCollectionRef = collection(db, 'livestreams', videoId, 'messages');
+  const q = query(messagesCollectionRef, where('text', '==', text), where('timestamp', '==', timestamp));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      updateDoc(doc.ref, {
+        [`reactions.${reaction}`]: increment(1)
+      });
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+//!!! HELP RENAME
+/**
+ * @param {*} streamId
+ * @returns the title of the live stream with the given streamId
+*/
+export const fetchVideoName = async (streamId) => {
+  try {
+    const liveStreamRef = doc(db, 'livestreams', streamId);
+    const liveStreamSnap = await getDoc(liveStreamRef);
+
+    if (liveStreamSnap.exists()) {
+      return liveStreamSnap.data().title;
+    } else {
+      console.error('Live stream document does not exist.');
+      return 'Error fetching title';
+    }
+  } catch (error) {
+    console.error('Error fetching video name:', error);
+    return 'Error fetching title';
+  }
+};
+
+//!!! HELP RENAME
+/**
+ * @returns an array of all live streams in the Firestore database
+ */
+export const getLiveStreams = async () => {
+  const liveStreamsSnapshot = await getDocs(collection(db, 'livestreams'));
+  return liveStreamsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+//!!! HELP RENAME
+
+export const fetchActiveUsersCount = async (liveStreamId) => {
+  const liveStreamRef = doc(db, 'livestreams', liveStreamId);
+  const liveStreamSnap = await getDoc(liveStreamRef);
+
+  if (liveStreamSnap.exists()) {
+    return liveStreamSnap.data().activeUsersCount || 0;
+  } else {
+    console.error('Live stream document does not exist.');
+    return 0;
+  }
+};
+
+//!!! ACCOUNT UTILS -> MOVE
+
+/**
+ * @param {*} file 
+ * @returns the content type of the file
+ */
 const getContentType = (file) => {
   console.log("file: ", file, " file type: ", file.type, " file name: ", file.name);
   const extension = file.name.split('.').pop().toLowerCase();
@@ -248,71 +399,3 @@ export const resetDisplayName = async (uid, name) => {
   });
 };
 
-export const fetchYoutubeVideoNameFromUrl = async (url) => {
-  if(url) {
-    try {
-      const videoId = url.split('v=')[1];
-      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
-      const data = await response.json();
-      if (data.items && data.items.length > 0) {
-        return data.items[0].snippet.title;
-      } else {
-        throw new Error('Video not found');
-      }
-    } catch (error) {
-      console.error('Error fetching video details:', error);
-      return 'No video just chatting :)';
-    }
-  }
-};
-
-export const addReaction = async (videoId, text, timestamp, reaction) => {
-  const messagesCollectionRef = collection(db, 'livestreams', videoId, 'messages');
-  const q = query(messagesCollectionRef, where('text', '==', text), where('timestamp', '==', timestamp));
-
-  try {
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      updateDoc(doc.ref, {
-        [`reactions.${reaction}`]: increment(1)
-      });
-    });
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const fetchVideoName = async (streamId) => {
-  try {
-    const liveStreamRef = doc(db, 'livestreams', streamId);
-    const liveStreamSnap = await getDoc(liveStreamRef);
-
-    if (liveStreamSnap.exists()) {
-      return liveStreamSnap.data().title;
-    } else {
-      console.error('Live stream document does not exist.');
-      return 'Error fetching title';
-    }
-  } catch (error) {
-    console.error('Error fetching video name:', error);
-    return 'Error fetching title';
-  }
-};
-
-
-export const getLiveStreams = async () => {
-  const liveStreamsSnapshot = await getDocs(collection(db, 'livestreams'));
-  return liveStreamsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-};
-
-export const fetchActiveUsersCount = async (liveStreamId) => {
-  const liveStreamRef = doc(db, 'livestreams', liveStreamId);
-  const liveStreamSnap = await getDoc(liveStreamRef);
-
-  if (liveStreamSnap.exists()) {
-    return liveStreamSnap.data().activeUsersCount || 0;
-  } else {
-    console.error('Live stream document does not exist.');
-    return 0;
-  }
-};

@@ -2,6 +2,16 @@ import { collection, addDoc, query, orderBy, onSnapshot, doc, where, getDoc, upd
 import { db } from '../firebaseConfig';
 import { fetchYoutubeVideoNameFromUrl } from './firestoreUtils';
 
+
+/**
+ * 
+ * @param {*} privateChatId, setMessages
+ * privateChatId: string - the ID of the private chat
+ * setMessages: function - a function to set the messages
+ * @returns 
+ * 
+ * Fetches messages from a private chat and sets them in the state.
+ */
 export const fetchMessages = (privateChatId, setMessages) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
   const unsubscribe = onSnapshot(q, async (snapshot) => {
@@ -22,6 +32,19 @@ export const fetchMessages = (privateChatId, setMessages) => {
   return unsubscribe;
 };
 
+/**
+ * 
+ * @param {*} privateChatId, user, input, setInput
+ * user: object - the authenticated user
+ * input: string - the message to send
+ * setInput: function - a function to set the input
+ * @returns 
+ * 
+ * Sends a message to a private chat.
+ * If the input is not empty, the private chat ID exists, and the user is authenticated, the message is sent.
+ * The message is added to the private chat's messages collection.
+ */
+
 export const sendMessage = async (privateChatId, user, input, setInput) => {
   if (input.trim() && privateChatId && user) {
     const messageData = {
@@ -35,17 +58,35 @@ export const sendMessage = async (privateChatId, user, input, setInput) => {
   }
 };
 
+/**
+ * @param {*} privateChatId, text, timestamp
+ * privateChatId: string - the ID of the private chat
+ * text: string - the text of the message to delete
+ * timestamp: string - the timestamp of the message to delete
+ * 
+ * Deletes a private message from a private chat.
+*/
 export const deletePrivateMessage = async (privateChatId, text, timestamp) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
   const snapshot = await getDocs(q);
   snapshot.forEach(async (doc) => {
     const message = doc.data();
     if (message.text === text && message.timestamp === timestamp) {
+      // Delete the message
       await doc.ref.delete();
+      //put into another collection
+      await addDoc(collection(db, 'deletedMessages'), { ...message, chatId: privateChatId });
     }
   });
 };
 
+/**
+ * @param {*} setActiveUsers
+ * setActiveUsers: function - a function to set the active users
+ * 
+ * Fetches the active users from the Firestore database and sets them in the state.
+ * The active users are users who are currently online.
+*/
 export const fetchActiveUsers = async (setActiveUsers) => {
   const usersSnapshot = await getDocs(collection(db, 'users'));
   const users = usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id }));
@@ -63,6 +104,15 @@ export const handleAcceptInvitation = async (invitationId, chatId, user, setSele
   }
 };
 
+/**
+ * @param {*} invitationId, user
+ * invitationId: string - the ID of the invitation
+ * user: object - the authenticated user
+ * 
+ * Rejects an invitation to a private chat.
+ * The status of the invitation is set to 'rejected'.
+ * The invitation is not deleted from the database.
+ */
 export const handleRejectInvitation = async (invitationId, user) => {
   const invitationRef = doc(db, 'users', user.uid, 'invitations', invitationId);
   const invitationSnap = await getDoc(invitationRef);
@@ -73,6 +123,16 @@ export const handleRejectInvitation = async (invitationId, user) => {
   }
 };
 
+/**
+ * @param {*} chatId, user
+ * chatId: string - the ID of the private chat
+ * user: object - the authenticated user
+ * 
+ * create a new chat with the given chat settings
+ * The chat is added to the privateChats collection.
+ * Invitations are sent to the invited users.
+ * The invitations are added to the users' invitations collection.
+*/
 export const createChat = async (chatSettings, user) => {
   const chatData = {
     name: chatSettings.name,
@@ -93,6 +153,12 @@ export const createChat = async (chatSettings, user) => {
   });
 };
 
+/***
+ * @param {*} user
+ * user: object - the authenticated user
+ * 
+ * Simulates an invitation to a private chat *for testing*.
+ */
 export const simulateInvite = async (user) => {
   const chatId = 'testChatId';
   const invitationData = {
@@ -104,6 +170,15 @@ export const simulateInvite = async (user) => {
   await addDoc(collection(db, 'users', user.uid, 'invitations'), invitationData);
 };
 
+/**
+ * 
+ * @param {*} chatId 
+ * chatId: string - the ID of the private chat
+ * @returns 
+ * 
+ * Fetches the name of a private chat from the Firestore database.
+ * If the chat document exists, the name is returned.
+ */
 export const fetchPrivateChatName = async (chatId) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const chatSnap = await getDoc(chatRef);
@@ -115,6 +190,15 @@ export const fetchPrivateChatName = async (chatId) => {
   }
 };
 
+/**
+ * @param {*} chatId, setVideoTitle
+ * chatId: string - the ID of the private chat
+ * setVideoTitle: function - a function to set the video title
+ * 
+ * Fetches the title of the YouTube video from the Firestore database.
+ * If the chat document exists, the video title is set in the state.
+ * If the chat document does not exist, an error is logged.
+ */
 export const fetchPrivateChatVideoTitle = (chatId, setVideoTitle) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const unsubscribe = onSnapshot(chatRef, async (doc) => {
@@ -128,6 +212,14 @@ export const fetchPrivateChatVideoTitle = (chatId, setVideoTitle) => {
   });
   return unsubscribe;
 };
+
+/***
+ * @param {*} chatId
+ * chatId: string - the ID of the private chat
+ * @returns returns the URL of the video
+ * 
+ * Fetches the URL of the YouTube video from the Firestore database.
+ */
 
 export const fetchPrivateChatVideoUrl = async (chatId) => {
   try {
@@ -146,6 +238,13 @@ export const fetchPrivateChatVideoUrl = async (chatId) => {
   }
 };
 
+/**
+ * 
+ * @param {*} chatId 
+ * @returns the video ID of the YouTube video
+ * 
+ * Fetches the video ID of the YouTube video from the Firestore database.
+ */
 export const fetchPrivateChatVideoId = async (chatId) => {
   try {
     const chatRef = doc(db, 'privateChats', chatId);
@@ -167,6 +266,13 @@ export const fetchPrivateChatVideoId = async (chatId) => {
   }
 };
 
+/**
+ * @param {*} chatId
+ * chatId: string - the ID of the private chat
+ * @returns the members of the private chat with chatId
+ * 
+ * Fetches the members of a private chat from the Firestore database.
+*/
 export const fetchPrivateChatMembers = async (chatId) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const chatSnap = await getDoc(chatRef);
@@ -189,6 +295,12 @@ export const fetchPrivateChatMembers = async (chatId) => {
   }
 };
 
+/**
+ * @param {*} userId  
+ * @returns the user object with the given userId
+ * 
+ * Fetches the user object with the given userId from the Firestore database.
+ */
 export const fetchUser = async (userId) => {
   const userRef = doc(db, 'users', userId);
   const userSnap = await getDoc(userRef);
@@ -201,6 +313,15 @@ export const fetchUser = async (userId) => {
   }
 };
 
+/**
+ * @param {*} chatId, user
+ * chatId: string - the ID of the private chat
+ * user: object - the user object
+ * 
+ * Adds the user to the list of invited users in the private chat with chatId.
+ * If the user is already in the list, the function does nothing.
+ * If the user is not in the list, the function adds the user to the list.
+ */
 export const addUserToPrivateChat = async (chatId, user) => {
   //not using arrayunion because it doesn't work with the emulator
   const chatRef = doc(db, 'privateChats', chatId);

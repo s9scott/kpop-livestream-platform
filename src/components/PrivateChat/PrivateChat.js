@@ -7,18 +7,40 @@ import UserInfoModal from '../Chat/UserInfoModal';
 import Popup from './Popup';
 import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 
-const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal}) => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [showOptions, setShowOptions] = useState({});
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [mentionDropdown, setMentionDropdown] = useState([]);
-  const [activeUsers, setActiveUsers] = useState([]);
-  const messagesEndRef = useRef(null);
-  const [videoTitle, setVideoTitle] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(true);
-  const [privateChatVideoId, setPrivateChatVideoId] = useState(null);
+/**
+ * 
+ * @param privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal
+ * What they are?
+ * privateChatId: The ID of the private chat room
+ * user: The current user object
+ * updateVideoId: Function to update the video ID in the chat room
+ * videoId: The ID of the video being watched in the chat room
+ * togglePrivateUsersModal: Function to toggle the private users modal
+ * @returns PrivateChat
+ * 
+ * This component displays the private chat room for a specific private chat.
+ * It fetches and displays the messages in the chat room.
+ * It allows users to send messages, mention other users, and view user information.
+ * It also displays the active users in the chat room.
+ * When a user is mentioned, a dropdown with user suggestions is displayed.
+ * When a user is clicked, a modal with user information is displayed.
+ * When the video ID is updated, the video being watched is updated in the chat room.
+ * When the private users modal is toggled, the modal is displayed or hidden.
+ */
 
+const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal}) => {
+  const [messages, setMessages] = useState([]); // State variable for the messages in the chat
+  const [input, setInput] = useState(''); // State variable for the input message
+  const [showOptions, setShowOptions] = useState({}); // State variable for the user options modal
+  const [selectedUser, setSelectedUser] = useState(null); // State variable for the selected user
+  const [mentionDropdown, setMentionDropdown] = useState([]); // State variable for the mention dropdown
+  const [activeUsers, setActiveUsers] = useState([]); // State variable for the active users in the chat
+  const messagesEndRef = useRef(null); // Reference to the end of the messages container
+  const [videoTitle, setVideoTitle] = useState(''); // State variable for the video title
+  const [isPopupOpen, setIsPopupOpen] = useState(true); // State variable for the popup
+  const [privateChatVideoId, setPrivateChatVideoId] = useState(null); // State variable for the video ID
+
+  // Fetch messages, video title, and video ID when the component mounts
   useEffect(() => {
     const fetchVideoId = async () => {
       if (privateChatId) {
@@ -40,7 +62,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     }
   }, [privateChatId]);
 
-
+ // Fetch active users every 30 seconds
   useEffect(() => {
     const fetchUsers = async () => {
       await fetchActiveUsers(setActiveUsers);
@@ -51,26 +73,31 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     return () => clearInterval(interval);
   }, []);
 
+  // Scroll to the bottom of the messages container when new messages are added
   const handleSendClick = async (e) => {
     e.preventDefault();
     await sendMessage(privateChatId, user, input, setInput);
   };
 
+  // Format the timestamp to display the time
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  // Toggle the user options modal
   const toggleOptions = (index) => {
     setShowOptions((prev) => ({ ...prev, [index]: !prev[index] }));
   };
 
+  // Close the user options modal when clicking outside of it
   const handleClickOutside = (event) => {
     if (!event.target.closest('.options-menu')) {
       setShowOptions({});
     }
   };
 
+  // Handle the mention dropdown
   const handleSeeAccountInfo = async (uid) => {
     if (!uid) return;
     try {
@@ -83,11 +110,13 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
       console.error("Failed to fetch user data:", error);
     }
   };
-
+ 
+  // Handle the mention dropdown
   const handleRemoveMessage = (index) => {
     setMessages(prevMessages => prevMessages.filter((_, i) => i !== index));
   };
 
+  // Handle the mention dropdown
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInput(value);
@@ -105,6 +134,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     }
   };
 
+  // Handle the mention dropdown
   const handleMentionClick = (username) => {
     const inputParts = input.split('@');
     inputParts.pop();
@@ -113,6 +143,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     setMentionDropdown([]);
   };
 
+  // Handle the mention dropdown
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
@@ -120,6 +151,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     };
   }, []);
 
+  // Handle the mention dropdown
   return (
     <div className="flex flex-col w-full h-full">
       {isPopupOpen && (

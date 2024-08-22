@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import ChatCreationMenu from './ChatCreationMenu';
 import InvitationPopup from './InvitationPopup';
 
+/**
+ * 
+ * @param user, privateChats, activeUsers, invitations, handleTabOpen, handleCreateChat, handleAcceptInvite, handleRejectInvite
+ * What they are?
+ * user: Variable with current user info { uid: string, username: string, email: string }
+ * privateChats: Array of private chat objects { id: string, name: string, url: string, users: Array }
+ * activeUsers: Array of active user objects { uid: string, username: string, email: string }
+ * invitations: Array of invitation objects { id: string, chatId: string, sender: string, receiver: string }
+ * handleTabOpen: Function to open a chat tab
+ * handleCreateChat: Function to create a private chat
+ * handleAcceptInvite: Function to accept an invitation
+ * handleRejectInvite: Function to reject an invitation
+ * 
+ * @returns PrivateChatSection
+ *
+ */
 const PrivateChatSection = ({
   user,
   privateChats,
@@ -9,23 +25,15 @@ const PrivateChatSection = ({
   invitations,
   handleTabOpen,
   handleCreateChat,
-  // handleSimulateInvite, // Commented out
   handleAcceptInvite,
   handleRejectInvite
 }) => {
-  const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
+  const [showChatCreationMenu, setShowChatCreationMenu] = useState(false); // State variable to show/hide the chat creation menu
 
+  // Render the private chat section with a dropdown menu to select chats
   return (
     <>
-      {/* Commenting out the Simulate Invite Button */}
-      {/* <button
-        onClick={handleSimulateInvite}
-        className="btn-secondary mb-4 px-4 py-2 text-white rounded"
-      >
-        Simulate Invite
-      </button> */}
 
-      {/* Chat Selection Dropdown */}
       <div className="dropdown dropdown-hover menu-lg z-[1001]">
         <div
           tabIndex={1}
