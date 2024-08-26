@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LightMode from '../../assets/LightMode.svg';
 import NightMode from '../../assets/NightMode.svg';
 import LoginHeader from './LoginHeader';
@@ -42,6 +42,17 @@ const Header = ({
   setSelectedChatId,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
+
+
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (currentTheme === 'kpop_light') {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, []);
 
   /**
    * Toggles between light and dark theme based on the checkbox state.
@@ -51,8 +62,10 @@ const Header = ({
     //document.documentElement.setAttribute('data-theme', 'kpop_light');
     if (e.target.checked) {
       document.documentElement.setAttribute('data-theme', 'kpop_light');
+      setIsChecked(true);
     } else {
       document.documentElement.setAttribute('data-theme', 'kpop_dark');
+      setIsChecked(false);
     }
   };
 
@@ -90,7 +103,7 @@ const Header = ({
         <LoginHeader user={user} setUser={setUser} />
       </div>
       <label className="swap swap-rotate md:mr-1">
-        <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} />
+        <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} checked={isChecked} />
         <img src={LightMode} alt="Day Mode" className="swap-off h-8 w-8 md:h-12 md:w-12" />
         <img src={NightMode} alt="Night Mode" className="swap-on h-8 w-8 md:h-12 md:w-12" />
       </label>

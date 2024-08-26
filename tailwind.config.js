@@ -28,19 +28,6 @@ module.exports = {
   daisyui: {
     themes: [
         {
-          kpop_light: {
-            "primary": "#e91e63",    // Deep pink
-            "secondary": "#9c27b0",  // Deep purple
-            "accent": "#ffc107",     // Deep yellow
-            "neutral": "#ffffff",    // White background
-            "base-100": "#f8fafc",   // Light background
-            "info": "#b3e5fc",       // Pastel blue
-            "success": "#d4edda",    // Pastel green
-            "warning": "#ffe5b4",    // Pastel orange
-            "error": "#ffcccb",      // Pastel red
-          },
-        },
-        {
           kpop_dark: {
             "primary": "#e91e63",    // Deep pink
             "secondary": "#9c27b0",  // Deep purple
@@ -53,6 +40,20 @@ module.exports = {
             "error": "#f44336",      // Deep red
           },
         },
+        {
+          kpop_light: {
+            "primary": "#e91e63",    // Deep pink
+            "secondary": "#9c27b0",  // Deep purple
+            "accent": "#ffc107",     // Deep yellow
+            "neutral": "#ffffff",    // White background
+            "base-100": "#f8fafc",   // Light background
+            "info": "#b3e5fc",       // Pastel blue
+            "success": "#d4edda",    // Pastel green
+            "warning": "#ffe5b4",    // Pastel orange
+            "error": "#ffcccb",      // Pastel red
+          },
+        },
+        
     ],
   },
   plugins: [
