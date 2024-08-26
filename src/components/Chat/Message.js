@@ -30,10 +30,18 @@ const Message = ({
   toggleOptions,
   showOptions,
   handleSeeAccountInfo,
-  handleRemoveMessage
+  handleRemoveMessage,
+  selectedTab, 
+  setSelectedTab
 }) => {
-  const isUserMessage = message.authorUid === user.uid; // Checks if the message was authored by the current user
-  const messageClasses = message.text.includes(`@${user.displayName}`) ? 'text-current bg-secondary rounded-xl p-1' : 'text-current'; // Adds highlighting if the message mentions the user
+  let isUserMessage = null;
+  let messageClasses = null;
+  if (user !== null) { 
+    isUserMessage = message.authorUid === user.uid // Checks if the message was authored by the current user
+    messageClasses = message.text.includes(`@${user.displayName}`) ? 'text-current bg-secondary rounded-xl p-1' : 'text-current';  // Adds highlighting if the message mentions the user
+  } else {
+    setSelectedTab("youtubeChat")
+  }
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Controls the visibility of the emoji picker
   const [showDropdown, setShowDropdown] = useState(false); // Controls the visibility of the options dropdown
 

@@ -41,6 +41,7 @@ const PrivateChatHeader = ({
   setNotification,
   // handleSimulateInvite, // Commented out
 }) => {
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
 
   /**
    * Handles the creation of a new chat if the limit has not been reached.
@@ -142,7 +143,7 @@ const PrivateChatHeader = ({
           ))}
           <li>
             <button
-              onClick={() => setShowChatCreationMenu(true)}
+              onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} } }
               className="block text-align-center text-xsm text-base-content font-bold hover:bg-accent hover:text-m bg-neutral duration-200 w-full text-left"
             >
               Create Private Chat
@@ -157,6 +158,8 @@ const PrivateChatHeader = ({
           onCreateChat={handleCreateChat}
           onClose={() => setShowChatCreationMenu(false)}
           currentUser={user}
+          showLoginAlert={showLoginAlert}
+          setShowLoginAlert={setShowLoginAlert}
         />
       )}
 

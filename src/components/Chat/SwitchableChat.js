@@ -37,6 +37,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
         toggleChat();
       }
       if (selectedTab !== 'youtubeChat' && selectedTab !== 'nativeChat') {
+        toggleChat();
         try {
           const url = await fetchPrivateChatVideoUrl(selectedTab);
           console.log('Fetched video URL:', url);
@@ -65,7 +66,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
     if (lastUserData) {
       setUseNativeChat((prev) => !prev);
     } else {
-      setShowLoginAlert(!showLoginAlert);
+      setShowLoginAlert(true);
     }
   };
 
@@ -212,6 +213,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
               user={user}
               activeUsers={activeUsers}
               toggleActiveUsersModal={toggleActiveUsersModal}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
             />
           </div>
         ) : (
@@ -221,6 +224,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
             updateVideoId={updateVideoId}
             videoId={videoId}
             togglePrivateUsersModal={togglePrivateUsersModal}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
           />
         )}
       </div>
@@ -228,8 +233,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
       {showLoginAlert && (
         <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
           <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg dark:bg-gray-800">
-            <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={() => { setShowLoginAlert(!showLoginAlert) }}>&times;</span>
-            <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to chat in the Native Chat!</h2>
+            <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right" onClick={() => { setShowLoginAlert(false) }}>&times;</span>
+            <h2 className="text-current text-2xl font-semibold m-4 text-center">You must Login to chat in the Native or Private Chats!</h2>
           </div>
         </div>
       )}

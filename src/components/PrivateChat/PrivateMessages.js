@@ -22,7 +22,7 @@ import info from '../../assets/info.svg';
  * It shows the messages in the private chat and allows the user to see the account information of the user, remove the message, and toggle the message options.
  * The component also allows the user to see the account information popup.
  */
-const PrivateMessages = ({ videoId, privateChatId, messages, user, formatTimestamp, toggleOptions, showOptions, handleSeeAccountInfo, handleRemoveMessage, isPopupOpen, setIsPopupOpen }) => {
+const PrivateMessages = ({ videoId, privateChatId, messages, user, formatTimestamp, toggleOptions, showOptions, handleSeeAccountInfo, handleRemoveMessage, isPopupOpen, setIsPopupOpen, selectedTab, setSelectedTab}) => {
   const messagesEndRef = useRef(null); // Reference to the last message
 
   // Scroll to the bottom of the messages
@@ -52,6 +52,8 @@ const PrivateMessages = ({ videoId, privateChatId, messages, user, formatTimesta
             showOptions={showOptions}
             handleSeeAccountInfo={handleSeeAccountInfo}
             handleRemoveMessage={handleRemoveMessage}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
           />
         ))}
         <div ref={messagesEndRef} />

@@ -28,7 +28,7 @@ import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitl
  * When the private users modal is toggled, the modal is displayed or hidden.
  */
 
-const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal}) => {
+const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivateUsersModal, selectedTab, setSelectedTab }) => {
   const [messages, setMessages] = useState([]); // State variable for the messages in the chat
   const [input, setInput] = useState(''); // State variable for the input message
   const [showOptions, setShowOptions] = useState({}); // State variable for the user options modal
@@ -181,6 +181,8 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
           handleRemoveMessage={handleRemoveMessage}
           isPopupOpen={isPopupOpen}
           setIsPopupOpen={setIsPopupOpen}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
         />
         <div ref={messagesEndRef} />
       </div>

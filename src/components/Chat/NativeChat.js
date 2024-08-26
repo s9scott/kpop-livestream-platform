@@ -17,7 +17,7 @@ import data from '@emoji-mart/data';
  * @param {Function} props.toggleActiveUsersModal - Function to toggle active users modal.
  * @returns {JSX.Element} The NativeChat component.
  */
-const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
+const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal, selectedTab, setSelectedTab }) => {
   // State variables
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -216,6 +216,8 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal }) => {
           handleRemoveMessage={handleRemoveMessage}
           isPopupOpen={isPopupOpen}
           setIsPopupOpen={setIsPopupOpen}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
         />
         <div ref={messagesEndRef} />
       </div>

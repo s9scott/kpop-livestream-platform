@@ -30,7 +30,9 @@ const Messages = ({
   handleSeeAccountInfo,
   handleRemoveMessage,
   isPopupOpen,
-  setIsPopupOpen
+  setIsPopupOpen,
+  selectedTab, 
+  setSelectedTab
 }) => {
   const messagesEndRef = useRef(null); // Ref to track the end of the messages list
 
@@ -65,6 +67,8 @@ const Messages = ({
             showOptions={showOptions}
             handleSeeAccountInfo={handleSeeAccountInfo}
             handleRemoveMessage={handleRemoveMessage}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
           />
         ))}
         {/* Empty div used as a scroll target to ensure the latest message is visible */}

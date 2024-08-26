@@ -48,7 +48,7 @@ const Header = ({
    * @param {Object} e - The event object.
    */
   const handleThemeToggle = (e) => {
-    document.documentElement.setAttribute('data-theme', 'kpop_light');
+    //document.documentElement.setAttribute('data-theme', 'kpop_light');
     if (e.target.checked) {
       document.documentElement.setAttribute('data-theme', 'kpop_light');
     } else {
