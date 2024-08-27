@@ -9,11 +9,11 @@ import {
   fetchActiveUsers,
   fetchPrivateChatName,
   fetchMessages,
-  sendMessage,
+  sendPrivateChatMessage,
   fetchPrivateChatVideoTitle,
   fetchPrivateChatVideoId
 } from '../../utils/privateChatUtils';
-import { fetchUsers } from '../../utils/firestoreUtils';
+import { fetchUsers } from '../../utils/usersUtils';
 
 const MAX_PRIVATE_CHATS = 5; // Maximum number of private chats allowed
 

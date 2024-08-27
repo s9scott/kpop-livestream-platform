@@ -4,7 +4,7 @@ import { db } from '../../firebaseConfig';
 import Messages from './Messages';
 import ChatInputForm from './ChatInputForm';
 import UserInfoModal from './UserInfoModal';
-import { fetchYoutubeDetails } from '../../utils/firestoreUtils';
+import { fetchYoutubeDetails } from '../../utils/livestreamsUtils';
 import data from '@emoji-mart/data';
 
 /**

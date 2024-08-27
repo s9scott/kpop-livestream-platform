@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLiveStreams, fetchActiveUsersCount, fetchVideoName, getActiveUsers } from '../../utils/firestoreUtils'; // Functions to interact with Firestore
+import { fetchLiveStreams, fetchActiveUsersCount, fetchLivestreamTitle, getActiveUsers, fetchLiveStreamTitle } from '../../utils/livestreamsUtils'; // Functions to interact with Firestore
 import useActiveUsers from '../../hooks/useActiveUsers'; // Custom hook for active user management
 
 /**
@@ -20,12 +20,12 @@ const LiveStreamsPopup = ({ onClose, setVideoId }) => {
    */
   useEffect(() => {
     const fetchLiveStreams = async () => {
-      const streams = await getLiveStreams(); // Fetch live streams from the database
+      const streams = await fetchLiveStreams(); // Fetch live streams from the database
       
       const streamsWithDetails = await Promise.all(
         streams.map(async (stream) => {
           setNumberOfActiveUsers(0); // Reset active users count for each stream
-          const videoTitle = await fetchVideoName(stream.id); // Fetch the video title for the stream
+          const videoTitle = await fetchLiveStreamTitle(stream.id); // Fetch the video title for the stream
           return {
             ...stream,
             title: videoTitle, // Add video title to the stream object

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUsers } from '../../utils/firestoreUtils';
+import { fetchUsers } from '../../utils/usersUtils';
 
 /**
  * 

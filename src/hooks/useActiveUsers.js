@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getActiveUsers } from '../utils/firestoreUtils'; // Adjust the path to point to the correct location
+import { getActiveUsers } from '../utils/livestreamsUtils'; // Adjust the path to point to the correct location
 
 /**
  * Custom hook to manage and fetch active users for a given video.

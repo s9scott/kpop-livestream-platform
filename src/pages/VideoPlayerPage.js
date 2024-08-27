@@ -9,14 +9,14 @@ import {
   handleRejectInvitation,
   fetchActiveUsers,
   fetchPrivateChatName,
-  fetchMessages,
-  sendMessage,
+  fetchPrivateChatMessages,
+  sendPrivateChatMessage,
   fetchPrivateChatVideoTitle,
   fetchPrivateChatVideoId
 } from '../utils/privateChatUtils';
 import VideoPlayer from '../components/StreamPlayer/VideoPlayer';
 import SwitchableChat from '../components/Chat/SwitchableChat';
-import { logWebsiteUsage } from '../utils/firestoreUtils';
+import { logWebsiteUsage } from '../utils/livestreamsUtils';
 
 
 const MAX_PRIVATE_CHATS = 10;

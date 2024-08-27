@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails } from '../../utils/firestoreUtils';
+import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails } from '../../utils/livestreamsUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VideoHistoryDropdown from './VideoHistoryDropdown';
 

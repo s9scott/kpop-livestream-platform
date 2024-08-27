@@ -1,6 +1,6 @@
 import { collection, addDoc, query, orderBy, onSnapshot, doc, where, getDoc, updateDoc, getDocs, increment } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { fetchYoutubeVideoNameFromUrl } from './firestoreUtils';
+import { fetchYoutubeVideoNameFromUrl } from './livestreamsUtils';
 
 
 /**
@@ -12,7 +12,7 @@ import { fetchYoutubeVideoNameFromUrl } from './firestoreUtils';
  * 
  * Fetches messages from a private chat and sets them in the state.
  */
-export const fetchMessages = (privateChatId, setMessages) => {
+export const fetchPrivateChatMessages = (privateChatId, setMessages) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
   const unsubscribe = onSnapshot(q, async (snapshot) => {
     const messagesData = await Promise.all(snapshot.docs.map(async (docSnapshot) => {
@@ -45,7 +45,7 @@ export const fetchMessages = (privateChatId, setMessages) => {
  * The message is added to the private chat's messages collection.
  */
 
-export const sendMessage = async (privateChatId, user, input, setInput) => {
+export const sendPrivateChatMessage = async (privateChatId, user, input, setInput) => {
   if (input.trim() && privateChatId && user) {
     const messageData = {
       text: input,
@@ -66,7 +66,7 @@ export const sendMessage = async (privateChatId, user, input, setInput) => {
  * 
  * Deletes a private message from a private chat.
 */
-export const deletePrivateMessage = async (privateChatId, text, timestamp) => {
+export const deletePrivateChatMessage = async (privateChatId, text, timestamp) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
   const snapshot = await getDocs(q);
   snapshot.forEach(async (doc) => {
@@ -339,7 +339,7 @@ export const addUserToPrivateChat = async (chatId, user) => {
 
 
 
-export const addPrivateReaction = async (privateChatId, text, timestamp, reaction) => {
+export const addPrivateChatReaction = async (privateChatId, text, timestamp, reaction) => {
   const q = query(collection(db, 'privateChats', privateChatId, 'messages'), where('timestamp', '==', timestamp));
   try {
     const querySnapshot = await getDocs(q);

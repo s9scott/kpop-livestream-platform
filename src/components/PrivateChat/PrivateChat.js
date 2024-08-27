@@ -5,7 +5,7 @@ import PrivateMessages from './PrivateMessages';
 import PrivateChatInputForm from './PrivateChatInputForm';
 import UserInfoModal from '../Chat/UserInfoModal';
 import Popup from './Popup';
-import { fetchMessages, sendMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
+import { fetchPrivateChatMessages, sendPrivateChatMessage, fetchActiveUsers, fetchPrivateChatVideoTitle, fetchPrivateChatVideoUrl, fetchPrivateChatVideoId } from '../../utils/privateChatUtils';
 
 /**
  * 
@@ -51,7 +51,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
     };
 
     if (privateChatId) {
-      const unsubscribeMessages = fetchMessages(privateChatId, setMessages);
+      const unsubscribeMessages = fetchPrivateChatMessages(privateChatId, setMessages);
       const unsubscribeVideoTitle = fetchPrivateChatVideoTitle(privateChatId, setVideoTitle);
       fetchVideoId();
 
@@ -76,7 +76,7 @@ const PrivateChat = ({ privateChatId, user, updateVideoId, videoId, togglePrivat
   // Scroll to the bottom of the messages container when new messages are added
   const handleSendClick = async (e) => {
     e.preventDefault();
-    await sendMessage(privateChatId, user, input, setInput);
+    await sendPrivateChatMessage(privateChatId, user, input, setInput);
   };
 
   // Format the timestamp to display the time

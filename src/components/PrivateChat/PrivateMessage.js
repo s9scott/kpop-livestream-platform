@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { deletePrivateMessage, addPrivateReaction } from '../../utils/privateChatUtils';
+import { deletePrivateChatMessage, addPrivateChatReaction } from '../../utils/privateChatUtils';
 import addEmoji from "../../assets/emoji-add.svg";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
@@ -65,7 +65,7 @@ const PrivateMessage = ({
   const handleRemoveClick = async () => {
     try {
       console.log('Message removed:', privateChatId);
-      await deletePrivateMessage(privateChatId, message.text, message.timestamp);
+      await deletePrivateChatMessage(privateChatId, message.text, message.timestamp);
     } catch (error) {
       console.error('Error removing message: ', error);
     }
@@ -74,7 +74,7 @@ const PrivateMessage = ({
   // Handle add reaction click to show emoji picker 
   const handleAddReaction = async (reaction) => {
     try {
-      await addPrivateReaction(privateChatId, message.text, message.timestamp, reaction);
+      await addPrivateChatReaction(privateChatId, message.text, message.timestamp, reaction);
       setShowEmojiPicker(false); // Hide the emoji picker after selection
     } catch (error) {
       console.error('Error adding reaction: ', error);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { deleteMessage, muteUser, addReaction } from '../../utils/firestoreUtils';
+import { deleteMessage, muteUser, addReaction } from '../../utils/livestreamsUtils';
 import addEmoji from "../../assets/emoji-add.svg";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';

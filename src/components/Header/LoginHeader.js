@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { GoogleUserSignIn, signOutUser } from '../../auth/googleAuth'; // Authentication functions
-import { addUser, fetchUserInfo } from '../../utils/firestoreUtils'; // Firestore functions for user management
+import {addUser, fetchUserInfo} from '../../utils/usersUtils';
 import { NavLink } from 'react-router-dom'; // React Router component for navigation
 import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
 

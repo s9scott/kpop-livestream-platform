@@ -1,40 +1,14 @@
 /**
- * Firestore utility functions for the Kpop Livestream Platform
+ * Firebase Firestore functions for the livestreams collection
  */
-
-
-import { db, storage } from '../firebaseConfig';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db } from '../firebaseConfig';
 import { collection, query, orderBy, limit, where, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc, increment } from 'firebase/firestore';
 
 // YOUTUBE API key
 const API_KEY = 'AIzaSyCJXkbG-hi1ECUlkXJ3yZS_-agRa9bPzCM';
 
-/**
- * @param {*} user 
- * Function to add a user to the Firestore database
- */
-export const addUser = async (user) => {
-  const userRef = doc(db, 'users', user.uid);  // Using user UID as the document ID
-  await setDoc(userRef, {
-    username: user.username,
-    displayName: user.displayName,
-    email: user.email,
-    photoURL: user.photoURL,
-    profilePicture: user.profilePicture,
-    createdAt: serverTimestamp(),
-  }, { merge: true });
-};
 
-/**
- * @returns Array of users from the Firestore database
- */
-export const fetchUsers = async () => {
-  const usersSnapshot = await getDocs(collection(db, 'users'));
-  const users = usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id }));
 
-  return users;
-};
 
 /**
  * @param {*} userId 
@@ -233,17 +207,6 @@ export const deleteMessage = async (videoId, text, timestamp) => {
 export const muteUser = async (videoId, uid) => {
 }
 
-/**
- * @param {*} uid 
- * @after user information from the Firestore database
- */
-export const fetchUserInfo = async (uid) => {
-  const userRef = doc(db, 'users', uid);
-
-  const info = await getDoc(userRef);
-  console.log("DB Info: ", info.data());
-  return info.data();
-};
 
 /**
  * @param {*} url
@@ -297,7 +260,7 @@ export const addReaction = async (videoId, text, timestamp, reaction) => {
  * @param {*} streamId
  * @returns the title of the live stream with the given streamId
 */
-export const fetchVideoName = async (streamId) => {
+export const fetchLiveStreamTitle = async (streamId) => {
   try {
     const liveStreamRef = doc(db, 'livestreams', streamId);
     const liveStreamSnap = await getDoc(liveStreamRef);
@@ -314,17 +277,18 @@ export const fetchVideoName = async (streamId) => {
   }
 };
 
-//!!! HELP RENAME
 /**
  * @returns an array of all live streams in the Firestore database
  */
-export const getLiveStreams = async () => {
+export const fetchLiveStreams = async () => {
   const liveStreamsSnapshot = await getDocs(collection(db, 'livestreams'));
   return liveStreamsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
-//!!! HELP RENAME
-
+/**
+ * @param {*} liveStreamId 
+ * @returns the number of active users in the live stream with the given liveStreamId
+*/
 export const fetchActiveUsersCount = async (liveStreamId) => {
   const liveStreamRef = doc(db, 'livestreams', liveStreamId);
   const liveStreamSnap = await getDoc(liveStreamRef);
@@ -336,66 +300,3 @@ export const fetchActiveUsersCount = async (liveStreamId) => {
     return 0;
   }
 };
-
-//!!! ACCOUNT UTILS -> MOVE
-
-/**
- * @param {*} file 
- * @returns the content type of the file
- */
-const getContentType = (file) => {
-  console.log("file: ", file, " file type: ", file.type, " file name: ", file.name);
-  const extension = file.name.split('.').pop().toLowerCase();
-  switch (extension) {
-    case 'jpg':
-    case 'jpeg':
-      return 'image/jpeg';
-    case 'png':
-      return 'image/png';
-    case 'gif':
-      return 'image/gif';
-    case 'webp':
-      return 'image/webp';
-    default:
-      return 'image/png'; // Fallback content type
-  }
-};
-
-export const uploadUserProfilePhoto = async (uid, file) => {
-  try {
-    // Create a reference to the storage bucket location, and get the reference
-    const storageRef = ref(storage, `profilePhotos/${uid}`);
-    const contentType = getContentType(file); // Determine the content type
-    const metadata = {
-      contentType: contentType,
-    };
-    const snapshot = await uploadBytes(storageRef, file, metadata);
-    const photoURL = await getDownloadURL(snapshot.ref);
-
-    // Update the user's photoURL in Firestore with the new reference
-    const userRef = doc(db, 'users', uid);
-    await updateDoc(userRef, {
-      photoURL: photoURL
-    });
-
-    return photoURL;
-  } catch (error) {
-    console.error('Error uploading profile photo:', error);
-    throw error;
-  }
-};
-
-export const resetPfp = async (uid, photoURL) => {
-  const userRef = doc(db, 'users', uid);
-  await updateDoc(userRef, {
-    photoURL: photoURL
-  });
-};
-
-export const resetDisplayName = async (uid, name) => {
-  const userRef = doc(db, 'users', uid);
-  await updateDoc(userRef, {
-    displayName: name
-  });
-};
-
