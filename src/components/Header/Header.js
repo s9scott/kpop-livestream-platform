@@ -77,7 +77,7 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between p-1 bg-neutral text-base-content">
+    <header className="navbar flex items-center justify-between p-header-padding h-header-desktop md:h-header-mobile bg-neutral text-base-content">
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
         <HeaderMenu />

@@ -12,7 +12,7 @@ const VideoPlayer = ({ videoId }) => {
   const videoSrc = `https://www.youtube.com/embed/${videoId}?controls=1`;
 
   return (
-    <div className="video-container rounded-border border-accent size-full fixed md:h-[90%] md:w-[70%] h-[30%] w-full">
+    <div className="video-container fixed rounded-border border-accent md:w-video-desktop md:h-video-desktop w-video-mobile h-video-mobile md:top-video-desktop-top md:left-video-desktop-left">
       {/* Iframe to display the YouTube video */}
       <iframe
         width="100%"

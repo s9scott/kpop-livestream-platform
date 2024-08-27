@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import Split from 'react-split';
 import {
   createChat,
   simulateInvite,
@@ -9,10 +8,6 @@ import {
   handleRejectInvitation,
   fetchActiveUsers,
   fetchPrivateChatName,
-  fetchPrivateChatMessages,
-  sendPrivateChatMessage,
-  fetchPrivateChatVideoTitle,
-  fetchPrivateChatVideoId
 } from '../utils/privateChatUtils';
 import VideoPlayer from '../components/StreamPlayer/VideoPlayer';
 import SwitchableChat from '../components/Chat/SwitchableChat';
@@ -25,11 +20,9 @@ const VideoPlayerPage = ({
   user, 
   videoId, 
   setVideoId,
-  activeUsers,
   setActiveUsers,
   privateChats,
   setPrivateChats,
-  invitations,
   setInvitations,
   selectedChats,
   setSelectedChats,

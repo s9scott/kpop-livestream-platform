@@ -7,7 +7,7 @@ import ContactPage from './pages/ContactPage';
 import VideoPlayerPage from './pages/VideoPlayerPage';
 import AccountPage from './pages/AccountPage';
 import Header from './components/Header/Header';
-import TestPrivateChatPage from './pages/TestPrivateChatPage';
+
 
 const App = () => {
   const [user, setUser] = useState(null);

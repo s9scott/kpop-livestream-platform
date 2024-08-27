@@ -180,7 +180,8 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   ];
 
   return (
-    <div className="switchable-chat-container md:w-[30%] w-full h-[60%] bottom-0 md:h-full md:inset-y-24 md:right-0 md:bottom-0 fixed">
+    
+<div className="switchable-chat-container fixed md:w-chat-desktop md:h-chat-desktop md:inset-y-chat-desktop-top md:right-chat-desktop-right md:bottom-chat-desktop-bottom w-chat-mobile h-chat-mobile bottom-chat-mobile-bottom">
       <PrivateChatTabs
         chats={mainTabs}
         selectedChat={selectedTab}
