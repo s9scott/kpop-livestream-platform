@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { GoogleUserSignIn, signOutUser } from '../../auth/googleAuth'; // Authentication functions
-import {addUser, fetchUserInfo} from '../../utils/usersUtils';
+import { logWebsiteUsage} from '../../utils/livestreamsUtils';
+import { addUser, fetchUserInfo } from '../../utils/usersUtils'
 import { NavLink } from 'react-router-dom'; // React Router component for navigation
 import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
 
@@ -15,6 +16,7 @@ import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
  */
 const LoginHeader = ({ user, setUser }) => {
   const [curUser, setCurUser] = useState(user); // State to store the current user
+  const [loginTime, setLoginTime] = useState(null); // State to store the login time for session tracking
 
   useEffect(() => {
     const lastUserData = localStorage.getItem("lastUser");
@@ -65,6 +67,9 @@ const LoginHeader = ({ user, setUser }) => {
             setCurUser(userInfo);
             setUser(userInfo);
           }
+
+          setLoginTime(new Date())
+          logWebsiteUsage(user.uid, `User logged in at ${loginTime.toUTCString()}`)
         } catch (error) {
           console.log("An error occurred, trying to fetch user info: ", error);
         }
@@ -79,10 +84,13 @@ const LoginHeader = ({ user, setUser }) => {
     const response = signOutUser(); // Trigger sign-out
     if (response === "error") {
       console.log("Error, user not signed out!");
+    
     } else {
       setCurUser(null);
       setUser(null);
       localStorage.removeItem("lastUser"); // Remove user info from local storage
+      const logoutTime = new Date() 
+      logWebsiteUsage(user.uid, `User logged out at ${logoutTime.toUTCString()}, with a session time of ${( (logoutTime.getTime() - loginTime.getTime() ) / (1000  * 60) ) } minutes.`)
     }
   }
 

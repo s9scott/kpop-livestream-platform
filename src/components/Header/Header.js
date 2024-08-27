@@ -83,7 +83,7 @@ const Header = ({
         <HeaderMenu />
       </div>
       <div className="hidden md:flex w-8/12 justify-center">
-        <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+        <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
       <div className="hidden md:flex items-center">
         <PrivateChatHeader 
@@ -123,7 +123,7 @@ const Header = ({
           <div className="bg-white rounded-lg p-4 w-11/12 max-w-md">
             <button onClick={togglePopup} className="text-red-500 hover:text-red-800 float-right">✕</button>
             <div className="my-4">
-              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl}  user={user}/>
             </div>
             <div className="my-4">
               <PrivateChatHeader 

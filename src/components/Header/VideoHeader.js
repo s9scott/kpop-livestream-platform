@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails } from '../../utils/livestreamsUtils';
+import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage } from '../../utils/livestreamsUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VideoHistoryDropdown from './VideoHistoryDropdown';
 
@@ -13,7 +13,7 @@ import VideoHistoryDropdown from './VideoHistoryDropdown';
  * @param {Function} props.setVideoUrl - Function to update the current video URL.
  * @returns {JSX.Element} The rendered `VideoHeader` component.
  */
-export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
+export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user}) => {
   const [url, setUrl] = useState(''); // State to store the current URL input
   const [history, setHistory] = useState([]); // State to store video history
   const [error, setError] = useState(''); // State to store error messages
@@ -56,7 +56,10 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl }) => {
       if (window.location.hash !== '#/load-live') {
         navigate('/load-live');
       }
-    } else {
+      if (user) {
+        logWebsiteUsage(user.uid, `User loaded video ID: ${newVideoId}, URL: ${url}, TITLED: ${title}.`)
+      }
+      } else {
       setError('Invalid YouTube URL');
     }
   };

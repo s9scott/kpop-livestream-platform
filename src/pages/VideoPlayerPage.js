@@ -83,12 +83,6 @@ const VideoPlayerPage = ({
     }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      logWebsiteUsage(user.uid, 'Visited VideoPlayerPage');
-    }
-  }, [user]);
-
   const handleCreateChat = async (chatSettings) => {
     if (privateChats.length < MAX_PRIVATE_CHATS) {
 
