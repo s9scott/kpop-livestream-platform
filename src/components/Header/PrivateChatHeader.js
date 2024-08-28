@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ChatCreationMenu from '../PrivateChat/ChatCreationMenu';
 import InvitationPopup from '../PrivateChat/InvitationPopup';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import {
   createChat,
   simulateInvite,
@@ -122,35 +123,41 @@ const PrivateChatHeader = ({
       </button> */}
 
       {/* Chat Selection Dropdown */}
-      <div className="dropdown dropdown-hover menu-lg z-40">
-        <div
-          tabIndex={1}
-          role="button"
-          className="btn btn-secondary text-sm whitespace-nowrap hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 mr-1"
-        >
-          Select Chat
-        </div>
-        <ul className="dropdown-content menu bg-primary text-primary-content rounded-lg z-[1] w-52 p-2 mt-2 shadow">
+      
+      <Menu as="div" className="relative inline-block text-left z-40">
+      {/* Button to open the dropdown menu */}
+      <MenuButton className="flex items-center text-nowrap justify-between text-left md:w-full md:text-sm text-xxxs btn btn-secondary hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 font-semibold">    
+          <span>Select Chat</span>
+      </MenuButton>
+
+      {/* Dropdown menu displaying available chats */}
+      <MenuItems className="absolute text-sm left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-80 overflow-y-auto no-scrollbar">
+        <div className="py-1">
           {privateChats.map(chat => (
-            <li key={chat.id}>
-              <button
-                onClick={() => handleTabOpen(chat.id)}
-                className="block px-4 py-2 text-base text-xsm font-semibold hover:bg-accent hover:text-m transition-colors duration-200 w-full text-left"
-              >
-                {chat.name}
-              </button>
-            </li>
+            <MenuItem key={chat.id}>
+              {({ active }) => (
+                <div
+                  onClick={() => handleTabOpen(chat.id)}
+                  className={`block px-4 py-2 text-xsm break-all rounded-md m-1 cursor-pointer ${active ? 'bg-accent text-black' : 'text-white'}`}
+                >
+                  {chat.name}
+                </div>
+              )}
+            </MenuItem>
           ))}
-          <li>
-            <button
-              onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} } }
-              className="block text-align-center text-xsm text-base-content font-bold hover:bg-accent hover:text-m bg-neutral duration-200 w-full text-left"
-            >
-              Create Private Chat
-            </button>
-          </li>
-        </ul>
-      </div>
+          <MenuItem>
+            {({ active }) => (
+              <div
+                onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }}
+                className={`block px-4 py-2 text-xsm rounded-md m-1 cursor-pointer font-bold ${active ? 'bg-accent text-white' : 'bg-neutral text-accent'}`}
+              >
+                Create Private Chat
+              </div>
+            )}
+          </MenuItem>
+        </div>
+      </MenuItems>
+    </Menu>
 
       {/* Chat Creation Menu */}
       {showChatCreationMenu && (
