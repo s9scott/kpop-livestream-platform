@@ -1,9 +1,10 @@
 # Kpop Livestream Platform
 
-## To run
-- cd frontend
-    - npm install
-    - npm start
+## [Access the Website here!](https://s9scott.github.io/kpop-livestream-platform/)
+
+## To run 
+- npm install
+- npm start
     
 ## Getting started
 

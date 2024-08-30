@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { resetDisplayName, resetPfp, uploadUserProfilePhoto } from '../utils/firestoreUtils';
+import { resetDisplayName, resetPfp, uploadUserProfilePhoto } from '../utils/usersUtils';
+
 
 const AccountPage = ({ user, setUser }) => {
     const [newPfp, setNewPfp] = useState(null);
