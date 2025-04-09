@@ -4,6 +4,7 @@ import PrivateChat from '../PrivateChat/PrivateChat';
 import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
 import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat } from '../../utils/privateChatUtils';
 import useActiveUsers from '../../hooks/useActiveUsers';
+import LiveChatContainer from './LiveChatContainer';
 
 /**
  * SwitchableChat component for handling and displaying different chat types.
@@ -195,18 +196,11 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
       />
       <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral h-[90%] md:h-[80%]">
         {selectedTab === 'youtubeChat' ? (
-          <div className="w-full h-full">
-            <iframe
-              className="rounded-badge"
-              width="100%"
-              height="95%"
-              src={chatSrc}
-              frameBorder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Live Chat"
-            />
+          
+          <div>
+            <LiveChatContainer chatSrc={chatSrc} />
           </div>
+        
         ) : selectedTab === 'nativeChat' ? (
           <div className="w-full h-full">
             <NativeChat
