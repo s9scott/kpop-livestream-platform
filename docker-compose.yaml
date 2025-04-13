@@ -9,9 +9,7 @@ services:
       - DB_USER=root
       - DB_PASSWORD=pwd
       - DB_NAME=livestream_db
-      - YOUTUBE_API_KEY=AIzaSyCJXkbG-hi1ECUlkXJ3yZS_-agRa9bPzCM
-      - HF_API_KEY=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
-      - TEXTRAZOR_API_KEY=6e804fefb0bdaee5049c4eab82c11195665378fd198eb859e38d9bc0
+      - YOUTUBE_API_KEY
     networks:
       - backend-frontend
       - backend-database
@@ -23,23 +21,23 @@ services:
       - ./backend/src/:/usr/src/app/src/
       - ./backend/public/:/usr/src/app/public/
 
-  # database:
-  #   image: mysql:latest
-  #   build:
-  #     context: ./database
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=pwd
-  #     - MYSQL_DATABASE=livestream_db
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "--host=localhost"]
-  #     interval: 10s
-  #     retries: 3
-  #   ports:
-  #     - "3306:3306"
-  #   networks:
-  #     - backend-database
-  #   volumes:
-  #     - db-data:/var/lib/mysql  # Persist MySQL data to a named volume
+  database:
+    image: mysql:latest
+    build:
+      context: ./database
+    environment:
+      - MYSQL_ROOT_PASSWORD=pwd
+      - MYSQL_DATABASE=livestream_db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--host=localhost"]
+      interval: 10s
+      retries: 3
+    ports:
+      - "3306:3306"
+    networks:
+      - backend-database
+    volumes:
+      - db-data:/var/lib/mysql  # Persist MySQL data to a named volume
 
   frontend:
     build:
