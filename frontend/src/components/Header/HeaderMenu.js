@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 
 /**
  * HeaderMenu component for rendering a dropdown menu with navigation links.
@@ -10,9 +11,9 @@ export default function HeaderMenu() {
       <div
         tabIndex={1}
         role="button"
-        className="btn btn-secondary text-sm hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200"
+        className="btn btn-secondary p-2 hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200"
       >
-        Menu
+        <Bars3Icon className="h-6 w-6 text-white" />
       </div>
       <ul className="dropdown-content menu bg-primary text-primary-content rounded-lg z-[1] w-52 p-2 mt-2 shadow">
         <li>

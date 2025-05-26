@@ -20,6 +20,9 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   const navigate = useNavigate(); // Hook for navigation
   const location = useLocation(); // Hook for location information
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+
   useEffect(() => {
     // Load video history from local storage and fetch active streams on component mount
     const savedHistory = JSON.parse(localStorage.getItem('videoHistory')) || [];
@@ -135,21 +138,40 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   };
 
   return (
-    <div className="md:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
+    <div className="rmd:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
       {/* Form for submitting a YouTube URL */}
-      <form onSubmit={handleSubmit} className="flex items-center space-x-4 w-full">
-        <input
+      <form onSubmit={handleSubmit} className="relative flex items-center space-x-4 w-full">
+        <div className="relative w-full">
+          <input
           type="text"
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setTimeout(() => setIsInputFocused(false), 200)} // Delay to allow click on dropdown
           placeholder="Enter YouTube URL"
-          className="flex-grow w-fit p-2 text-sm text-left border border-gray-300 text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-grow w-full p-2 text-sm text-left border border-gray-300 text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        
+        {isInputFocused && history.length > 0 && (
+          <div className="absolute left-0 top-full mt-1 w-full bg-pink-600 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50">
+            {history.map((item, index) => (
+              <div
+                key={index}
+                onMouseDown={() => handleHistoryClick(item.url)}
+                className="px-4 py-2 cursor-pointer hover:bg-accent hover:text-black text-white"
+              >
+                {item.title}
+              </div>
+            ))}
+          </div>
+        )}
+        </div>
+        
         <button type="submit" className="px-4 py-2 text-xsm bg-primary text-black whitespace-nowrap font-semibold rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-blue-500">
           Load Video
         </button>
         {/* Dropdown for selecting video from history */}
-        <VideoHistoryDropdown setVideoUrl={setVideoUrl} />
+        {/* <VideoHistoryDropdown setVideoUrl={setVideoUrl} /> */}
       </form>
       {/* Display error message if there is an error */}
       {error && <p className="ml-4 text-sm text-red-500">{error}</p>}

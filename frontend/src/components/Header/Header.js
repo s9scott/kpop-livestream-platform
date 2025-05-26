@@ -85,17 +85,7 @@ const Header = ({
       <div className="hidden md:flex w-8/12 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
-      <div className="hidden md:flex items-center">
-        <PrivateChatHeader 
-          user={user} 
-          privateChats={privateChats} 
-          invitations={invitations} 
-          selectedChats={selectedChats} 
-          setSelectedChats={setSelectedChats} 
-          selectedChatId={selectedChatId} 
-          setSelectedChatId={setSelectedChatId} 
-        />
-      </div>
+      
       <div className="my-4">
         <LiveStreamsButton setVideoId={setVideoId}/>
       </div>
