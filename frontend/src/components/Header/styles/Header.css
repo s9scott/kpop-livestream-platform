@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  background-color: #2d2d2d;
+  padding: 12px 20px;
+  background-color: #000000;
   color: white;
 }
 

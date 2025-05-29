@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import "./styles/VideoHistoryDropdown.css";
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 /**
  * `VideoHistoryDropdown` component displays a dropdown menu with the user's video history.
@@ -87,9 +88,20 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
               {({ active }) => (
                 <div
                   onClick={() => handleHistoryClick(item.url)}
-                  className={`block px-4 py-2 text-xsm rounded-md m-1 cursor-pointer ${active ? 'bg-accent text-black' : 'text-white'}`}
+                  className={`flex justify-between items-center w-full px-4 py-2 text-xsm rounded-md m-1 cursor-pointer ${active ? 'bg-gray-100 text-black' : 'text-white'}`}
                 >
-                  {item.title}
+                  <span className="flex-grow truncate pr-2">
+                    {item.title}
+                  </span>
+
+                  <button
+                    className={`flex-shrink-0 p-1 rounded-full ${active ? 'text-gray-600 hover:text-red-500 hover:bg-gray-300' : 'text-gray-500 hover:text-red-500 hover:bg-gray-700'}`}
+                    onClick={(e) => e.stopPropagation()} 
+                    aria-label="Borrar (Diseño)"
+                  >
+                    X {/* <-- ¡CAMBIO AQUÍ! Solo una X */}
+                  </button>
+
                 </div>
               )}
             </MenuItem>
