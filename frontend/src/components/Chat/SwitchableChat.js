@@ -42,7 +42,7 @@ const SwitchableChat = ({
   selectedPrivateChat,
   setSelectedPrivateChat,}) => {
 
-  const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default tab
+  const [selectedTab, setSelectedTab] = useState('youtubeTab'); // Default tab
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
@@ -50,17 +50,16 @@ const SwitchableChat = ({
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [privateChatMembers, setPrivateChatMembers] = useState([]);
-  const [viewingPrivateChat, setViewingPrivateChat] = useState(false);
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
 
   useEffect(() => {
     const fetchAndSetVideoId = async () => {
-      if (selectedTab === 'nativeChat') {
+      if (selectedTab === 'nativeTab') {
         toggleChat();
       }
-      if (selectedTab !== 'youtubeChat' && selectedTab !== 'nativeChat') {
+      if (selectedTab !== 'youtubeTab' && selectedTab !== 'nativeTab') {
         toggleChat();
         try {
           const url = await fetchPrivateChatVideoUrl(selectedTab);
