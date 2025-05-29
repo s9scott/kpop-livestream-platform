@@ -92,11 +92,14 @@ const Header = ({
       <div className="hidden md:flex items-center">
         <LoginHeader user={user} setUser={setUser} />
       </div>
+      
+      {/* Theme Toggle Button 
       <label className="swap swap-rotate md:mr-1">
         <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} checked={isChecked} />
         <img src={LightMode} alt="Day Mode" className="swap-off h-8 w-8 md:h-12 md:w-12" />
         <img src={NightMode} alt="Night Mode" className="swap-on h-8 w-8 md:h-12 md:w-12" />
       </label>
+      */}
 
       {/* Mobile View */}
       <div className="flex md:hidden w-full justify-between items-center p-2">

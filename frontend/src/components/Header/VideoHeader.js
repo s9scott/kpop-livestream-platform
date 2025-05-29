@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage } from '../../utils/livestreamsUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VideoHistoryDropdown from './VideoHistoryDropdown';
+import { PlayCircleIcon } from '@heroicons/react/24/outline';
+import { PlayIcon } from '@heroicons/react/24/solid';
 
 /**
  * `VideoHeader` component handles video URL input, video loading, and video history management.
@@ -140,8 +142,8 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   return (
     <div className="rmd:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
       {/* Form for submitting a YouTube URL */}
-      <form onSubmit={handleSubmit} className="relative flex items-center space-x-4 w-full">
-        <div className="relative w-full">
+      <form onSubmit={handleSubmit} className="relative justify-center w-full">
+        <div className="flex items-center bg-white shadow-md w-full rounded-lg overflow-hidden">
           <input
           type="text"
           value={videoUrl}
@@ -149,16 +151,21 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setTimeout(() => setIsInputFocused(false), 200)} // Delay to allow click on dropdown
           placeholder="Enter YouTube URL"
-          className="flex-grow w-full p-2 text-sm text-left border border-gray-300 text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-grow px-4 py-2 text-sm text-left text-zinc-400 rounded-l-md focus:outline-none focus:ring-1 focus:ring-gray-400"
         />
-        
+
+        <button type="submit" 
+        className="px-4 py-2 bg-white shadow-2xl transition-all duration-200 mr-3 my-1 focus:outline-none focus:ring-2">
+          <PlayIcon className="w-5 h-5 text-gray-700" />
+        </button>
+
         {isInputFocused && history.length > 0 && (
-          <div className="absolute left-0 top-full mt-1 w-full bg-pink-600 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50">
+          <div className="absolute left-0 top-full mt-1 w-full bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50">
             {history.map((item, index) => (
               <div
                 key={index}
                 onMouseDown={() => handleHistoryClick(item.url)}
-                className="px-4 py-2 cursor-pointer hover:bg-accent hover:text-black text-white"
+                className="px-4 py-2 cursor-pointer hover:bg-gray-300 hover:text-black text-black"
               >
                 {item.title}
               </div>
@@ -167,11 +174,6 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
         )}
         </div>
         
-        <button type="submit" className="px-4 py-2 text-xsm bg-primary text-black whitespace-nowrap font-semibold rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-blue-500">
-          Load Video
-        </button>
-        {/* Dropdown for selecting video from history */}
-        {/* <VideoHistoryDropdown setVideoUrl={setVideoUrl} /> */}
       </form>
       {/* Display error message if there is an error */}
       {error && <p className="ml-4 text-sm text-red-500">{error}</p>}

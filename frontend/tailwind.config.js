@@ -85,15 +85,16 @@ module.exports = {
     themes: [
       {
         kpop_dark: {
-          "primary": "#e91e63",
-          "secondary": "#9c27b0",
-          "accent": "#ffc107",
-          "neutral": "#212121",
-          "base-100": "#121212",
-          "info": "#03a9f4",
-          "success": "#4caf50",
-          "warning": "#ff9800",
-          "error": "#f44336",
+          "primary": "#e91e63",      
+          "secondary": "#2a2a2a",    
+          "accent": "#ff4081",       
+          "neutral": "#1c1c1c",      
+          "base-100": "#121212",     
+          "info": "#2196f3",         
+          "success": "#4caf50",     
+          "warning": "#ff9800",      
+          "error": "#f44336",        
+          "text-base": "#ffffff",    
         },
       },
       {
