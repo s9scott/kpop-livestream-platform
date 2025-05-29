@@ -50,7 +50,7 @@ const LiveChatContainer = ({ chatSrc }) => {
         >
           <iframe
             className="w-full h-full border-0"
-            src={chatSrc}
+            src={chatSrc} //url format diff from emebdding youtube video (even though this uses iframe as well)
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

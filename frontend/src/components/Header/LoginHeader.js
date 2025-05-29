@@ -20,7 +20,7 @@ const LoginHeader = ({ user, setUser }) => {
 
   useEffect(() => {
     const lastUserData = localStorage.getItem("lastUser");
-    if (lastUserData && !curUser) {
+    if (lastUserData && !curUser) { //check that there is no current user logged in
       const lastUser = JSON.parse(lastUserData);
       setCurUser(lastUser);
       setUser(lastUser);

@@ -85,10 +85,10 @@ module.exports = {
     themes: [
       {
         kpop_dark: {
-          "primary": "#e91e63",
-          "secondary": "#9c27b0",
-          "accent": "#ffc107",
-          "neutral": "#212121",
+          "primary": "#819171",
+          "secondary": "#212121",
+          "accent": "#323232",
+          "neutral": "#0C0C0C",
           "base-100": "#121212",
           "info": "#03a9f4",
           "success": "#4caf50",

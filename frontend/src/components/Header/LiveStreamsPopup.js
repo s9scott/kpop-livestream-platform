@@ -4,7 +4,7 @@ import { fetchLiveStreams, fetchLiveStreamTitle, fetchActiveUsersCount } from '.
 
 const LiveStreamsPopup = ({ onClose, setVideoId }) => {
   const [liveStreams, setLiveStreams] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //automatically switch page to given path
 
   useEffect(() => {
     const fetchStreamsData = async () => {

@@ -1,25 +1,47 @@
+/**
+ * @file SwitchableChat.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-28
+ * @desc file containing SwitchableChat
+ */
+
 import React, { useState, useEffect } from 'react';
 import NativeChat from './NativeChat';
 import PrivateChat from '../PrivateChat/PrivateChat';
 import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
-import { fetchPrivateChatName, fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat } from '../../utils/privateChatUtils';
+import {fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat} from '../../utils/privateChatUtils';
 import useActiveUsers from '../../hooks/useActiveUsers';
 import LiveChatContainer from './LiveChatContainer';
+import ChatTabs from './ChatTabs'
+import CreatePrivateChatButton from '../PrivateChat/CreatePrivateChatButton';
 
 /**
- * SwitchableChat component for handling and displaying different chat types.
+ * SwitchableChat component for handling and displaying different chat types (Youtube, Native, PrivateTabs, PrivateChat)
  * 
- * @param {Object} props - Component properties.
- * @param {Object} props.user - Current user.
- * @param {string} props.videoId - Current YouTube video ID.
- * @param {Function} props.setVideoId - Function to set video ID.
- * @param {Array} props.selectedChats - List of selected private chats.
- * @param {Function} props.setSelectedChats - Function to update selected chats.
- * @param {Function} props.handleTabClose - Function to handle closing of private chat tabs.
+ * @param {Object} user - Current user.
+ * @param {string} videoId - Current YouTube video ID.
+ * @param {Function} setVideoId - Function to set video ID.
+ * @param {Function} handleTabClose - Function to handle closing of private chat tabs.
+ * @param {Array} privateChats - array of all privateChats
+ * @param {Function} setPrivateChars - setState function to set privateChats
+ * @param {Array} invitations - list of invitation objects
+ * @param {string} selectedPrivateChat - current selected private chat
+ * @param {Function} setSelectedPrivateChat - Function to set the selectedPrivateChat
  * 
  * @returns {JSX.Element} The rendered component.
  */
-const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedChats, handleTabClose }) => {
+const SwitchableChat = ({
+  user, 
+  videoId, 
+  setVideoId, 
+  handleTabClose, 
+  privateChats,
+  setPrivateChats,
+  invitations,
+  selectedPrivateChat,
+  setSelectedPrivateChat,}) => {
+
   const [selectedTab, setSelectedTab] = useState('youtubeChat'); // Default tab
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
@@ -28,6 +50,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [privateChatMembers, setPrivateChatMembers] = useState([]);
+  const [viewingPrivateChat, setViewingPrivateChat] = useState(false);
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
@@ -84,7 +107,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
    */
   const togglePrivateUsersModal = async () => {
     try {
-      const members = await fetchPrivateChatMembers(selectedTab);
+      const members = await fetchPrivateChatMembers(selectedPrivateChat);
       setPrivateChatMembers(members || []);
     } catch (error) {
       console.error('Error fetching private chat members:', error);
@@ -137,7 +160,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
    * @param {string} tabId - The ID of the selected tab.
    */
   const updateVideoId = async (tabId) => {
-    if (tabId === 'youtubeChat' || tabId === 'nativeChat') {
+    if (tabId === 'youtubeTab' || tabId === 'nativeTab') {
       console.log(`Switching to ${tabId} tab.`);
     } else {
       try {
@@ -176,53 +199,75 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
   };
 
   const mainTabs = [
-    { id: 'youtubeChat', name: 'YouTube Chat' },
-    { id: 'nativeChat', name: 'Native Chat' },
+    { id: 'youtubeTab', name: 'youtube' },
+    { id: 'nativeTab', name: 'native' },
+    { id: 'privateTab', name: 'private'}
   ];
 
   return (
     
 <div className="switchable-chat-container fixed md:w-chat-desktop md:h-chat-desktop md:inset-y-chat-desktop-top md:right-chat-desktop-right md:bottom-chat-desktop-bottom w-chat-mobile h-chat-mobile bottom-chat-mobile-bottom">
-      <PrivateChatTabs
-        chats={mainTabs}
-        selectedChat={selectedTab}
-        onSelectChat={setSelectedTab}
+      <ChatTabs
+        tabs={mainTabs}
+        selectedTab={selectedTab}
+        onSelectTab={setSelectedTab}
       />
-      <PrivateChatTabs
-        chats={selectedChats}
-        selectedChat={selectedTab}
-        onSelectChat={setSelectedTab}
-        onCloseChat={handleTabClose}
-      />
-      <div className="chat-content flex-grow overflow-y-auto p-4 bg-neutral h-[90%] md:h-[80%]">
-        {selectedTab === 'youtubeChat' ? (
-          
+      <div className="chat-content flex-grow p-4 bg-neutral h-[90%] md:h-[80%]">
+
+        {selectedTab === 'youtubeTab' ? (
+
           <div>
             <LiveChatContainer chatSrc={chatSrc} />
           </div>
         
-        ) : selectedTab === 'nativeChat' ? (
+        ) : selectedTab === 'nativeTab' ? (
+
           <div className="w-full h-full">
             <NativeChat
               videoId={videoId}
               user={user}
               activeUsers={activeUsers}
               toggleActiveUsersModal={toggleActiveUsersModal}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
             />
           </div>
-        ) : (
-          <PrivateChat
-            privateChatId={selectedTab}
-            user={user}
-            updateVideoId={updateVideoId}
-            videoId={videoId}
-            togglePrivateUsersModal={togglePrivateUsersModal}
-            selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
-          />
-        )}
+          
+        ) : selectedTab === 'privateTab' ? (
+
+          <div className="w-full h-full flex flex-col">
+
+            {/*under private tab we could see all the chats or be in one specific chat*/}
+            {selectedPrivateChat===null?(
+              <>
+              <PrivateChatTabs
+                chats={privateChats}
+                onSelectChat={setSelectedPrivateChat}
+                onCloseChat={handleTabClose}
+              />
+              <CreatePrivateChatButton 
+                user={user} 
+                privateChats={privateChats} 
+                setPrivateChats={setPrivateChats}
+                invitations={invitations} 
+                setNotification={()=>{}}
+              />
+              </>
+            ):(<PrivateChat
+              privateChatId={selectedPrivateChat}
+              videoId={videoId}
+              updateVideoId={updateVideoId}
+              user={user}
+              togglePrivateUsersModal={togglePrivateUsersModal}
+              privateChatMembers={privateChatMembers}
+              setPrivateChatMembers={setPrivateChatMembers}
+              setSelectedTab={setSelectedTab}
+              setSelectedPrivateChat={setSelectedPrivateChat}
+            />)}
+
+          </div>
+
+        ) : (<>invalid page</>)}
+
+
       </div>
   
       {showLoginAlert && (
@@ -239,6 +284,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
           <div className="modal-content w-[90%] bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg">
             <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right font-bold text-white" onClick={toggleActiveUsersModal}>&times;</span>
             <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
+            <span>{activeUsers.length > 0 && activeUsers.length != 1 ? activeUsers.length+" users active" : activeUsers.length+" user active"}</span>
             <ul className="max-h-64 overflow-y-auto">
               {activeUsers.length > 0 ? (
                 activeUsers.map((activeUser, index) => (
@@ -249,7 +295,7 @@ const SwitchableChat = ({ user, videoId, setVideoId, selectedChats, setSelectedC
                       className="profile-pic w-12 h-12 rounded-full mr-2"
                     />
                     <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
-                    {activeUser.uid !== user.uid && !selectedChats.includes(activeUser.uid) && (
+                    {activeUser.uid !== user.uid && !privateChats.includes(activeUser.uid) && (
                       <button
                         className="ml-auto btn btn-sm btn-primary"
                         onClick={() => inviteToChat(activeUser.uid)}

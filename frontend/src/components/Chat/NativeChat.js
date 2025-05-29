@@ -1,3 +1,11 @@
+/**
+ * @file NativeChat.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-28
+ * @desc file containing NativeChat
+ */
+
 import React, { useState, useRef, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
@@ -10,15 +18,20 @@ import data from '@emoji-mart/data';
 /**
  * NativeChat component handles the chat interface for a livestream.
  *
- * @param {Object} props - Component properties.
- * @param {string} props.videoId - ID of the livestream video.
- * @param {Object} props.user - Current user information.
- * @param {Array} props.activeUsers - List of users currently active in the chat.
- * @param {Function} props.toggleActiveUsersModal - Function to toggle active users modal.
+ * @param {string} videoId - ID of the livestream video.
+ * @param {Object} user - Current user information.
+ * @param {Array} activeUsers - List of users currently active in the chat.
+ * @param {Function} toggleActiveUsersModal - Function to toggle active users modal.
+ * 
  * @returns {JSX.Element} The NativeChat component.
  */
-const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal, selectedTab, setSelectedTab }) => {
-  // State variables
+const NativeChat = ({ 
+  videoId, 
+  user, 
+  activeUsers, 
+  toggleActiveUsersModal, 
+  }) => {
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showOptions, setShowOptions] = useState({});
@@ -194,30 +207,23 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal, select
   }, []);
 
   return (
-    <div className="flex flex-col w-full h-full">
-      <div className="flex-grow overflow-y-auto">
-        {isPopupOpen && (
-          <div className="absolute top-24 left-5 right-5 bg-base-100 bg-secondary p-6 rounded-lg shadow-lg z-50">
-            <button onClick={() => setIsPopupOpen(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">✕</button>
-            <h2 className="text-lg font-semibold text-base">Welcome to the private chat!</h2>
-            <p className="text-sm text-neutral">Watching: {videoTitle}</p>
-            <p className="text-sm dark:text-gray-300">Active Users: {activeUsers.length}</p>
-          </div>
-        )}
+    <div className="relative flex flex-col w-full h-full">
+        <div className="px-8 py-2 rounded-lg shadow-lg z-50 text-center items-center">
+          <h2 className="text-lg font-semibold text-base">native chat</h2>
+          <span className="w-full whitespace-nowrap overflow-hidden text-ellipsis block text-sm">{videoTitle}</span>
+        </div>
 
+        <div className="sticky flex-grow overflow-y-auto">
         <Messages
-          videoId={videoId}
+          privacyLevel='public'
+          chatId={videoId}
           messages={messages}
           user={user}
           formatTimestamp={formatTimestamp}
-          toggleOptions={toggleOptions}
-          showOptions={showOptions}
           handleSeeAccountInfo={handleSeeAccountInfo}
-          handleRemoveMessage={handleRemoveMessage}
           isPopupOpen={isPopupOpen}
           setIsPopupOpen={setIsPopupOpen}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
+
         />
         <div ref={messagesEndRef} />
       </div>
@@ -227,7 +233,7 @@ const NativeChat = ({ videoId, user, activeUsers, toggleActiveUsersModal, select
         handleSendClick={handleSendClick}
         mentionDropdown={mentionDropdown}
         handleMentionClick={handleMentionClick}
-        toggleActiveUsersModal={toggleActiveUsersModal}
+        toggleUsersModal={toggleActiveUsersModal}
       />
       <UserInfoModal
         selectedUser={selectedUser}

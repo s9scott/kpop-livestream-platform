@@ -4,7 +4,6 @@ import NightMode from '../../assets/NightMode.svg';
 import LoginHeader from './LoginHeader';
 import VideoHeader from './VideoHeader';
 import HeaderMenu from './HeaderMenu';
-import PrivateChatHeader from './PrivateChatHeader';
 import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
 
@@ -33,13 +32,6 @@ const Header = ({
   setVideoId,
   videoUrl,
   setVideoUrl,
-  activeUsers,
-  privateChats,
-  invitations,
-  selectedChats,
-  setSelectedChats,
-  selectedChatId,
-  setSelectedChatId,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
@@ -85,17 +77,6 @@ const Header = ({
       <div className="hidden md:flex w-8/12 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
-      <div className="hidden md:flex items-center">
-        <PrivateChatHeader 
-          user={user} 
-          privateChats={privateChats} 
-          invitations={invitations} 
-          selectedChats={selectedChats} 
-          setSelectedChats={setSelectedChats} 
-          selectedChatId={selectedChatId} 
-          setSelectedChatId={setSelectedChatId} 
-        />
-      </div>
       <div className="my-4">
         <LiveStreamsButton setVideoId={setVideoId}/>
       </div>
@@ -124,17 +105,6 @@ const Header = ({
             <button onClick={togglePopup} className="text-red-500 hover:text-red-800 float-right">✕</button>
             <div className="my-4">
               <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl}  user={user}/>
-            </div>
-            <div className="my-4">
-              <PrivateChatHeader 
-                user={user} 
-                privateChats={privateChats} 
-                invitations={invitations} 
-                selectedChats={selectedChats} 
-                setSelectedChats={setSelectedChats} 
-                selectedChatId={selectedChatId} 
-                setSelectedChatId={setSelectedChatId} 
-              />
             </div>
             <div className="my-4">
               <LiveStreamsButton setVideoId={setVideoId}/>

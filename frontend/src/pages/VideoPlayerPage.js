@@ -7,14 +7,14 @@ import {
   handleAcceptInvitation,
   handleRejectInvitation,
   fetchActiveUsers,
-  fetchPrivateChatName,
+  fetchChats
 } from '../utils/privateChatUtils';
 import VideoPlayer from '../components/StreamPlayer/VideoPlayer';
 import SwitchableChat from '../components/Chat/SwitchableChat';
 import { logWebsiteUsage } from '../utils/livestreamsUtils';
 
 
-const MAX_PRIVATE_CHATS = 10;
+const MAX_PRIVATE_CHATS = 100;
 
 const VideoPlayerPage = ({ 
   user, 
@@ -23,62 +23,55 @@ const VideoPlayerPage = ({
   setActiveUsers,
   privateChats,
   setPrivateChats,
+  invitations,
   setInvitations,
   selectedChats,
   setSelectedChats,
-  selectedChatId,
-  setSelectedChatId,
+  selectedPrivateChat,
+  setSelectedPrivateChat,
 }) => {
+
   const [videoUrl, setVideoUrl] = useState('');
   const [showChatCreationMenu, setShowChatCreationMenu] = useState(false);
   const [notification, setNotification] = useState('');
 
   useEffect(() => {
+
+    //declare function
     const fetchUsers = async () => {
       await fetchActiveUsers(setActiveUsers);
     };
 
+    //call function
     fetchUsers();
 
+    //if user logged in
     if (user) {
-      const fetchChats = async () => {
-        // Query for chats where the user is an invited user
-        const invitedQuery = query(collection(db, 'privateChats'), where('invitedUsers', 'array-contains', user.uid));
-        const ownerQuery = query(collection(db, 'privateChats'), where('creator', '==', user.uid));
 
-        const invitedSnapshot = await getDocs(invitedQuery);
-        const ownerSnapshot = await getDocs(ownerQuery);
+      fetchChats(user,setPrivateChats);
 
-        const combinedSnapshots = [...invitedSnapshot.docs, ...ownerSnapshot.docs];
-
-        const fetchChatNames = async () => {
-          const chats = await Promise.all(combinedSnapshots.map(async (doc) => {
-            const chatData = doc.data();
-            const chatName = await fetchPrivateChatName(doc.id);
-            return { id: doc.id, ...chatData, name: chatName };
-          }));
-          setPrivateChats(chats);
-        };
-        fetchChatNames();
-      };
-
-      fetchChats();
-
+      //onSnapshot() sets a listener on a collection or document, will re-run code anytime data updates
+      //this function constantly listens for any invites, and will update the invite list if needed
       const unsubscribeInvited = onSnapshot(query(collection(db, 'users', user.uid, 'invitations'), where('status', '==', 'pending')), (snapshot) => {
         const invites = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         setInvitations(invites);
       });
 
       return () => {
+        //cleanup function, runs whenever useEffect triggers, or whenever the component using the useEffect unmounts from DOM
         unsubscribeInvited();
       };
     }
-  }, [user]);
+  }, [user]); //function called if user changes
 
+  //this triggers on initial rendering of this component
   useEffect(() => {
+
     const lastVideoId = localStorage.getItem('lastVideoId');
     if (lastVideoId) {
+      //set videoId to lastVideoId
       setVideoId(lastVideoId);
+      //remove lastVideoId from localStorage
       localStorage.removeItem('lastVideoId');
     }
   }, []);
@@ -111,49 +104,47 @@ const VideoPlayerPage = ({
   };
 
   const handleTabClose = (chatId) => {
-    setSelectedChats(selectedChats.filter(id => id !== chatId));
-    if (selectedChatId === chatId) {
-      setSelectedChatId(selectedChats.length > 1 ? selectedChats[0] : null);
+    console.log('handleTabClose called -',chatId,privateChats)
+    setPrivateChats(privateChats.filter(id => id !== chatId));
+    if (selectedPrivateChat === chatId) {
+      setSelectedPrivateChat(privateChats.length > 1 ? privateChats[0] : null);
     }
   };
 
-  const handleTabOpen = (chatId) => {
-    setSelectedChats([...selectedChats, chatId]);
-    setSelectedChatId(chatId);
-  };
-
-  const handleTabSelect = (chatId) => {
-    setSelectedChatId(chatId);
-  };
+  //selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
 
   return (
     
     <div className="app-container h-full w-full flex flex-col">
-  {notification && <div className="notification">{notification}</div>}
-  {videoId && (
-    <>
-    <div className="flex-grow flex overflow-hidden">
-      <div className='"video-player-container flex-shrink-0"'>
-        <VideoPlayer
-          videoId={videoId}
-        />
-      </div>
-      <div className="switchable-chat-container flex-shrink-0">
-        <SwitchableChat
-          user={user}
-          videoId={videoId}
-          setVideoId={setVideoId}
-          selectedChats={privateChats.filter(chat => selectedChats.includes(chat.id))}
-          setSelectedChats={setSelectedChats}
-          handleTabClose={handleTabClose}
-        />
-      </div>
-      </div>
-      </>
-  )}
-</div>
-
-    
+      {/*only render notification div if notification exists*/}
+      {notification && <div className="notification">{notification}</div>}
+      {videoId && (
+        <>
+          <div className="flex-grow flex overflow-hidden">
+            <div className='"video-player-container flex-shrink-0"'>
+              <VideoPlayer
+                videoId={videoId}
+              />
+            </div>
+            <div className="switchable-chat-container flex-shrink-0">
+              <SwitchableChat
+                user={user}
+                videoId={videoId}
+                setVideoId={setVideoId}
+                selectedChats={selectedChats}
+                setSelectedChats={setSelectedChats}
+                handleTabClose={handleTabClose}
+                privateChats = {privateChats}
+                setPrivateChats = {setPrivateChats}
+                invitations = {invitations}
+                selectedPrivateChat= {selectedPrivateChat}
+                setSelectedPrivateChat = {setSelectedPrivateChat}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+//this is the AI summary portion above the chat
+
 const YouTubeLiveChatOverlay = ({ chatSrc }) => {
   const [overlayText, setOverlayText] = useState("");
   const [topics, setTopics] = useState([]);

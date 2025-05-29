@@ -16,7 +16,7 @@ const VideoPlayer = ({ videoId }) => {
       {/* Iframe to display the YouTube video */}
       <iframe
         width="100%"
-        height="100%"
+        height="85%"
         src={videoSrc}
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
