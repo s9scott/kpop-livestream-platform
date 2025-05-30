@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import './styles/ChatTabs.css'
 
 /**
  * This component displays a list of chat tabs (youtube, native, private) - also used for the messages/invites
@@ -26,13 +27,15 @@ const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
     <div className="flex">
       {tabs.length > 0 ? (
         tabs.map((tab) => (
+          <div className={`rounded-full button-container mx-3 flex items-center justify-between flex-grow flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>
           <button
             key={tab.id}
-            className={`rounded-full mx-3 flex items-center justify-between p-1 cursor-pointer flex-grow flex-1 text-xs ${selectedTab === tab.id ? 'bg-neutral border-2 border-primary' : 'text-neutral bg-accent'}`}
+            className={`rounded-full p-1 cursor-pointer w-full text-xs ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}
             onClick={() => {console.log(tab);onSelectTab(tab.id)}}
           >
             <span className="flex-grow truncate font-bold">{tab.name || tab.url}</span>
           </button>
+          </div>
         ))
       ) : (
         <div className="flex items-center justify-between p-2 flex-1 text-sm text-base-content">
