@@ -140,7 +140,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   };
 
   return (
-    <div className="rmd:content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md bg-transparent">
+    <div className="w-full md:w-8/12 xl:w-9/12 items-center justify-center p-2 md:p-4 rounded-lg md:shadow-md bg-transparent">
       {/* Form for submitting a YouTube URL */}
       <form onSubmit={handleSubmit} className="relative justify-center w-full">
         <div className="flex items-center shadow-md w-full rounded-lg overflow-hidden"
@@ -174,7 +174,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
         </button>
 
         {isInputFocused && history.length > 0 && (
-          <div className="absolute left-0 top-full mt-1 bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50" style={{width: '89%'}}>
+          <div className="absolute left-0 top-full mt-1 bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50" style={{width: '91%'}}>
             {history.map((item, index) => (
               <div
                 key={index}

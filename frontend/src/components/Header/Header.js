@@ -6,6 +6,7 @@ import VideoHeader from './VideoHeader';
 import HeaderMenu from './HeaderMenu';
 import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
+import { PlayIcon } from '@heroicons/react/24/solid';
 
 /**
  * Header component for displaying navigation and user options.
@@ -35,7 +36,7 @@ const Header = ({
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
-
+  const [showMobileInput, setShowMobileInput] = useState(false); 
 
   useEffect(() => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -78,8 +79,7 @@ const Header = ({
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
 
-      
-        <div className="my-4">
+        <div className="hidden md:flex my-4">
           <LiveStreamsButton setVideoId={setVideoId}/>
         </div>
         <div className="hidden md:flex items-center">
@@ -96,12 +96,36 @@ const Header = ({
       */}
 
       {/* Mobile View */}
-      <div className="flex md:hidden w-full justify-between items-center p-2">
+      <div className="flex md:hidden w-full items-center">
+        {!showMobileInput ? (
+          <>
         <HeaderMenu />
-        <button onClick={togglePopup} className="btn btn-primary">
-          Open Menu
-        </button>
-        <LoginHeader user={user} setUser={setUser} />
+        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
+        <div className="flex items-center gap-2 ml-24">
+          <button 
+                onClick={() => setShowMobileInput(true)}
+                className="bg-transparent text-black px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                <PlayIcon className="w-6 h-6 text-white bg-transparent"/>
+          </button>
+          <LoginHeader user={user} setUser={setUser} />
+        </div>
+        </>
+        ) : (
+          <div className="w-full flex items-center gap-2 px-4">
+            <button 
+              onClick={() => setShowMobileInput(false)}
+              className="text-white"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div className="flex-1 w-full">
+              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Popup Modal for Mobile */}
@@ -110,7 +134,7 @@ const Header = ({
           <div className="bg-white rounded-lg p-4 w-11/12 max-w-md">
             <button onClick={togglePopup} className="text-red-500 hover:text-red-800 float-right">✕</button>
             <div className="my-4">
-              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl}  user={user}/>
+              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user}/>
             </div>
             <div className="my-4">
               <LiveStreamsButton setVideoId={setVideoId}/>

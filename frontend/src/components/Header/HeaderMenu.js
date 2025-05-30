@@ -32,7 +32,7 @@ export default function HeaderMenu() {
       </button>
 
       {/* Título */}
-      <span className="text-md font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
+      <span className="hidden md:block text-md font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
 
       {/* Menú Dropdown */}
       {isMenuOpen && (
