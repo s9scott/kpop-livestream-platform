@@ -4,31 +4,39 @@ module.exports = {
     extend: {
       // Width, Height, and Position
       width: {
+
+        //desktop styles (md)
         'video-desktop': '70vw', // Video width for desktop
         'chat-desktop': '25vw', // Chat width for desktop
 
+        //landscape mobile styles (sm)
+        'video-mobile-landscape': '50vw', // Video width for mobile
+        'chat-mobile-landscape': '45vw',
 
-        'chat-mobile-landscape':'30%',
-        'chat-mobile': '100%', // Chat width for mobile
+        //portrait landscape styles (default)
+        'video-mobile-portrait': '95vw', // Video width for mobile
+        'chat-mobile-portrait': '95vw', // Chat width for mobile
         
-        'video-mobile': '100%', // Video width for mobile
         // Add more customizable width settings here...
       },
       height: {
-        'player-page-height': '100vh',
+
+        'player-page-height': '125vh',
+
+        //desktop styles
         'video-desktop': '75vh', // Video height for desktop
         'chat-desktop': '85vh', // Chat height for desktop
         'header-desktop': '10vh', // Header height for desktop
       
 
+        //landscape mobile styles (sm)
+        'video-mobile-landscape': '45vh', // Video height for mobile
+        'chat-mobile-landscape':'150vh',
 
-        'chat-mobile-landscape':'100%',
+        //portrait landscape styles
+        'video-mobile-portrait': '25vh', // Video height for mobile
+        'chat-mobile-portrait': '65vh', // Chat height for mobile
 
-        'chat-mobile': '60%', // Chat height for mobile
-
-        'video-mobile': '30%', // Video height for mobile
-        'header-desktop': '2rem', // Header height for desktop
-        'header-mobile': '2rem', // Header height for mobile
         // Add more customizable height settings here...
       },
       inset: {

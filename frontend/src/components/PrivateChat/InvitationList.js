@@ -1,5 +1,5 @@
 const InvitationList = () =>{
-    return(<>hey</>)
+    return(<>invitation list</>)
 }
 
 export default InvitationList

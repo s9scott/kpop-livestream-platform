@@ -13,7 +13,7 @@ const VideoPlayer = ({ videoId }) => {
 
   //video-container fixed rounded-border border-accent md:w-video-desktop md:h-video-desktop w-video-mobile h-video-mobile md:top-video-desktop-top md:left-video-desktop-left
   return (
-    <div className="md:w-video-desktop md:h-video-desktop rounded-xl overflow-hidden">
+    <div className="md:w-video-desktop md:h-video-desktop sm:h-video-mobile-landscape sm:w-video-mobile-landscape w-video-mobile-portrait h-video-mobile-portrait rounded-xl overflow-hidden">
       {/* Iframe to display the YouTube video */}
       <iframe
         width="100%"

@@ -217,7 +217,7 @@ const SwitchableChat = ({
 
     
     
-    <div className="md:w-chat-desktop md:h-chat-desktop">
+    <div className="md:w-chat-desktop md:h-chat-desktop sm:w-chat-mobile-landscape sm:h-chat-mobile-landscape w-chat-mobile-portrait h-chat-mobile-portrait">
       <ChatTabs
         tabs={mainTabs}
         selectedTab={selectedTab}
