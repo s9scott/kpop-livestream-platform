@@ -96,12 +96,12 @@ module.exports = {
       {
         kpop_dark: {
           "primary": "#819171",
-          "secondary": "#212121",
-          "accent": "#323232",
+          "secondary": "#181818",
+          "accent": "#D5D6CB",
           "neutral": "#0C0C0C", //black
           "base-100": "#323232", //background color
           "base-200": "#212121", //darker background (we will use to make gradient)
-          "base-300": "#0C0C0C",
+          "base-300": "#0C0C0C", //darkest backround color
           "info": "#03a9f4",
           "success": "#4caf50",
           "warning": "#ff9800",
