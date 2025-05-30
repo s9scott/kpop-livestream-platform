@@ -12,7 +12,7 @@ import { db } from '../../firebaseConfig';
 import Messages from './Messages';
 import ChatInputForm from './ChatInputForm';
 import UserInfoModal from './UserInfoModal';
-import { fetchYoutubeDetails } from '../../utils/livestreamsUtils';
+import { fetchVideoDetails } from '../../utils/livestreamsUtils';
 import data from '@emoji-mart/data';
 
 /**
@@ -64,7 +64,7 @@ const NativeChat = ({
 
       // Fetch video title
       const fetchVideoTitle = async () => {
-        const videoDetails = await fetchYoutubeDetails(videoId);
+        const videoDetails = await fetchVideoDetails(videoId);
         console.log(videoDetails);
         if (videoDetails) {
           setVideoTitle(videoDetails.title);

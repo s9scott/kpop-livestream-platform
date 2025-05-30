@@ -24,32 +24,32 @@ const PrivateChatList = ({
   onCloseChat}) => {
 
   return (
-        <>
+        <div className='px-2 w-full'>
 
         {chats.length > 0 ? (
 
           chats.map((chat) => (
             <div
               key={chat.id}
-              className="w-full flex items-center px-4 mb-3"
+              className="flex items-center mb-3"
               onClick={() => {onSelectChat(chat.id)}}
             >
 
-              <img className="w-11 h-11 mr-3 border-white rounded-full" src={TreasureLogo} alt={chat.id + " logo"} />
+              <img className="w-11 h-11 mr-2 border-white rounded-full" src={TreasureLogo} alt={chat.id + " logo"} />
               <div className="flex flex-wrap items-center justify-between p-2 cursor-pointer flex-1 text-sm">
-                <span className="flex-grow truncate font-bold">
-                  {chat.name || chat.url}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onCloseChat(chat.id);
-                  }}
-                  className="ml-2 text-base w-5 h-6"
-                >
-                  ⋮
-                </button>
-                <span className="flex-grow truncate w-full">userA: this is placeholder text</span>
+                  <span className="truncate font-bold mr-auto">
+                    {chat.name || chat.url}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onCloseChat(chat.id);
+                    }}
+                    className="ml-2 text-base w-5 h-6"
+                  >
+                    ⋮
+                  </button>
+                <p className="w-full whitespace-nowrap text-ellipsis">userA: this is placeholder text</p>
               </div>
               
             </div>))
@@ -61,7 +61,7 @@ const PrivateChatList = ({
           </div>
 
         )}
-      </>
+      </div>
   );
 };
 

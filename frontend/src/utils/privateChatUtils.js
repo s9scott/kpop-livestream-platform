@@ -148,6 +148,7 @@ export const createChat = async (chatSettings, user) => {
     creator: user.uid,
     invitedUsers: chatSettings.invitedUsers.map(u => u.uid),
     url: chatSettings.url,
+    videoTitle: await fetchYoutubeVideoNameFromUrl(chatSettings.url),
     createdAt: new Date().toISOString(),
   };
   const chatRef = await addDoc(collection(db, 'privateChats'), chatData); //chat will exist in privateChats collection if request to create is made - regardless of whether invitation is accepted
@@ -212,7 +213,8 @@ export const fetchPrivateChatVideoTitle = (chatId, setVideoTitle) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const unsubscribe = onSnapshot(chatRef, async (doc) => {
     if (doc.exists()) {
-      const videoTitle = await fetchYoutubeVideoNameFromUrl(doc.data().url);
+      console.log(doc.videoTitle);
+      const videoTitle = doc.videoTitle
       setVideoTitle(videoTitle || 'no video');
     } else {
       console.error('Chat document does not exist.');

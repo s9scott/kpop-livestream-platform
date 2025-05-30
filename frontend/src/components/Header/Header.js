@@ -69,7 +69,8 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between w-100vw" style={{boxShadow: "0 2px 8px rgb(0, 0, 0)"}}>
+    <header className="navbar flex items-center justify-between w-100vw p-0" style={{boxShadow: "0 2px 8px rgb(0, 0, 0)"}}>
+      
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
         <HeaderMenu />
@@ -79,7 +80,7 @@ const Header = ({
       </div>
 
       
-        <div className="my-4">
+        <div>
           <LiveStreamsButton setVideoId={setVideoId}/>
         </div>
         <div className="hidden md:flex items-center">
@@ -96,7 +97,7 @@ const Header = ({
       */}
 
       {/* Mobile View */}
-      <div className="flex md:hidden w-full justify-between items-center p-2">
+      <div className="flex md:hidden w-full justify-between items-center">
         <HeaderMenu />
         <button onClick={togglePopup} className="btn btn-primary">
           Open Menu

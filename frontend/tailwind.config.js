@@ -6,16 +6,16 @@ module.exports = {
       width: {
 
         //desktop styles (md)
-        'video-desktop': '70vw', // Video width for desktop
-        'chat-desktop': '25vw', // Chat width for desktop
+        'video-desktop': '70vw', 
+        'chat-desktop': '25vw', 
 
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '50vw', // Video width for mobile
+        'video-mobile-landscape': '50vw', 
         'chat-mobile-landscape': '45vw',
 
         //portrait landscape styles (default)
-        'video-mobile-portrait': '95vw', // Video width for mobile
-        'chat-mobile-portrait': '95vw', // Chat width for mobile
+        'video-mobile-portrait': '95vw', 
+        'chat-mobile-portrait': '95vw', 
         
         // Add more customizable width settings here...
       },
@@ -24,29 +24,20 @@ module.exports = {
         'player-page-height': '125vh',
 
         //desktop styles
-        'video-desktop': '75vh', // Video height for desktop
-        'chat-desktop': '85vh', // Chat height for desktop
-        'header-desktop': '10vh', // Header height for desktop
+        'video-desktop': '75vh',
+        'chat-desktop': '85vh',
+        'header-desktop': '10vh',
       
-
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '45vh', // Video height for mobile
+        'video-mobile-landscape': '45vh',
         'chat-mobile-landscape':'150vh',
 
         //portrait landscape styles
-        'video-mobile-portrait': '25vh', // Video height for mobile
-        'chat-mobile-portrait': '65vh', // Chat height for mobile
+        'video-mobile-portrait': '25vh',
+        'chat-mobile-portrait': '65vh',
 
         // Add more customizable height settings here...
-      },
-      inset: {
-        'chat-desktop-top': '6rem', // Top offset for desktop (md:inset-y-24)
-        'chat-desktop-right': '0', // Right position for desktop
-        'chat-desktop-bottom': '0', // Bottom position for desktop
-        'chat-mobile-bottom': '0', // Bottom position for mobile
-        'video-desktop-top': '6rem', // Top offset for desktop
-        'video-desktop-left': '0', // Left position for desktop
-        // Add more customizable inset settings here...
+
       },
 
       // Text Size for Everything
