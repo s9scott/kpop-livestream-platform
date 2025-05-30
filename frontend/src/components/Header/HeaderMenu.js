@@ -11,8 +11,7 @@ export default function HeaderMenu() {
 
   // Definimos las clases como constantes para no repetir tanto
   const linkBaseClass = "block px-4 py-3 text-white font-semibold transition-colors duration-200";
-  // Clase para el hover (usamos el fucsia/rosa)
-  const hoverClass = "hover:bg-pink-600";
+  const hoverClass = "hover:bg-primary";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -23,7 +22,7 @@ export default function HeaderMenu() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       {/* Botón Hamburguesa */}
       <button 
         onClick={toggleMenu}
@@ -33,7 +32,7 @@ export default function HeaderMenu() {
       </button>
 
       {/* Título */}
-      <span className="text-xl font-bold text-white ml-4">livestreaming prototype</span>
+      <span className="text-xl font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
 
       {/* Menú Dropdown */}
       {isMenuOpen && (
@@ -50,7 +49,7 @@ export default function HeaderMenu() {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-pink-600' : ''}`
+                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                 }
                 onClick={closeMenu}
               >
@@ -61,7 +60,7 @@ export default function HeaderMenu() {
               <NavLink
                 to="/load-live"
                 className={({ isActive }) =>
-                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-pink-600' : ''}`
+                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                 }
                 onClick={closeMenu}
               >
@@ -72,7 +71,7 @@ export default function HeaderMenu() {
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-pink-600' : ''}`
+                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                 }
                 onClick={closeMenu}
               >

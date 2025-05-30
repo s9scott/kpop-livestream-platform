@@ -76,7 +76,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
    */
   const handleHistoryClick = async (url) => {
     setVideoUrl(url);
-    await loadVideo(url);
+    //await loadVideo(url);
   };
 
   /**
@@ -140,10 +140,12 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   };
 
   return (
-    <div className="rmd:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
+    <div className="rmd:content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md bg-transparent">
       {/* Form for submitting a YouTube URL */}
       <form onSubmit={handleSubmit} className="relative justify-center w-full">
-        <div className="flex items-center bg-white shadow-md w-full rounded-lg overflow-hidden">
+        <div className="flex items-center shadow-md w-full rounded-lg overflow-hidden"
+        
+        >
           <input
           type="text"
           value={videoUrl}
@@ -151,12 +153,24 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setTimeout(() => setIsInputFocused(false), 200)} // Delay to allow click on dropdown
           placeholder="Enter YouTube URL"
-          className="flex-grow px-4 py-2 text-sm text-left text-zinc-400 rounded-l-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+          className="h-8 flex-grow px-4 py-2 text-sm text-left text-zinc-400 focus:outline-none focus:ring-1 focus:ring-gray-100 focus:ring-inset focus:ring-offset-1 bg-white rounded-l-xl"
+          style={{boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.42)'}}
         />
 
-        <button type="submit" 
-        className="px-4 py-2 bg-white shadow-2xl transition-all duration-200 mr-3 my-1 focus:outline-none focus:ring-2">
-          <PlayIcon className="w-5 h-5 text-gray-700" />
+        <button 
+          type="submit" 
+          className="px-4 py-1 h-8  bg-white hover:bg-gray-50 transition-all duration-200 mr-2 my-1 focus:outline-none focus:ring-2 focus:ring-gray-300 border-l border-gray-200 rounded-r-xl"
+          style={{
+            transition: 'box-shadow 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '-6px 0 12px rgba(0, 0, 0, 0.2)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '-4px 0 8px rgba(0, 0, 0, 0.1)';
+          }}
+        >
+          <PlayIcon className="w-5 h-5 text-gray-600 hover:text-gray-800" />
         </button>
 
         {isInputFocused && history.length > 0 && (
@@ -165,9 +179,18 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
               <div
                 key={index}
                 onMouseDown={() => handleHistoryClick(item.url)}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-300 hover:text-black text-black"
+                className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-300 hover:text-black text-black"
               >
-                {item.title}
+                <span className="flex-grow">{item.title}</span>
+
+                <span 
+                  onMouseDown={(e) => {
+                    e.stopPropagation(); 
+                  }}
+                  className="text-red-500 hover:text-red-600 text-xs cursor-pointer flex-shrink-0"
+                >
+                  delete
+                </span>
               </div>
             ))}
           </div>

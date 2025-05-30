@@ -31,6 +31,11 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
     localStorage.setItem('lastVideoId', extractVideoId(url));
   };
 
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   /**
    * Extracts the video ID from a given YouTube URL.
    * 
@@ -93,14 +98,6 @@ const VideoHistoryDropdown = ({ setVideoUrl }) => {
                   <span className="flex-grow truncate pr-2">
                     {item.title}
                   </span>
-
-                  <button
-                    className={`flex-shrink-0 p-1 rounded-full ${active ? 'text-gray-600 hover:text-red-500 hover:bg-gray-300' : 'text-gray-500 hover:text-red-500 hover:bg-gray-700'}`}
-                    onClick={(e) => e.stopPropagation()} 
-                    aria-label="Borrar (Diseño)"
-                  >
-                    X {/* <-- ¡CAMBIO AQUÍ! Solo una X */}
-                  </button>
 
                 </div>
               )}
