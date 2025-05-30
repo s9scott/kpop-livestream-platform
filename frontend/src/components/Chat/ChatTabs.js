@@ -28,7 +28,7 @@ const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
         tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`rounded-full mx-3 flex items-center justify-between p-1 cursor-pointer flex-grow text-xs ${selectedTab === tab.id ? 'bg-neutral border-2 border-primary' : 'text-neutral bg-accent'}`}
+            className={`rounded-full mx-3 flex items-center justify-between p-1 cursor-pointer flex-grow flex-1 text-xs ${selectedTab === tab.id ? 'bg-neutral border-2 border-primary' : 'text-neutral bg-accent'}`}
             onClick={() => {console.log(tab);onSelectTab(tab.id)}}
           >
             <span className="flex-grow truncate font-bold">{tab.name || tab.url}</span>
