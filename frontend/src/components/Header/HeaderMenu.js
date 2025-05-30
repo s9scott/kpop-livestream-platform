@@ -22,7 +22,7 @@ export default function HeaderMenu() {
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center ">
       {/* Botón Hamburguesa */}
       <button 
         onClick={toggleMenu}
@@ -32,7 +32,7 @@ export default function HeaderMenu() {
       </button>
 
       {/* Título */}
-      <span className="text-xl font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
+      <span className="text-md font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
 
       {/* Menú Dropdown */}
       {isMenuOpen && (

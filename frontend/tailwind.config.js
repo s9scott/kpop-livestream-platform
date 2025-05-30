@@ -15,9 +15,11 @@ module.exports = {
         // Add more customizable width settings here...
       },
       height: {
+        'player-page-height': '100vh',
         'video-desktop': '75vh', // Video height for desktop
         'chat-desktop': '85vh', // Chat height for desktop
-        'player-page-height': '100vh',
+        'header-desktop': '10vh', // Header height for desktop
+      
 
 
         'chat-mobile-landscape':'100%',
@@ -53,7 +55,8 @@ module.exports = {
 
       // Header Settings
       padding: {
-        'header-padding': '3rem', // Default padding for the header
+        'header-padding': '1rem', // Default padding for the header
+        'header-padding-sm': '0.5rem', // Smaller padding 
         // Add more customizable padding settings here...
       },
 
