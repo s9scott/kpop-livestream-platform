@@ -69,7 +69,7 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between p-header-padding h-header-desktop md:h-header-mobile bg-neutral text-base-content">
+    <header className="navbar flex items-center justify-between h-header-desktop md:h-header-mobile bg-base-200" style={{boxShadow: "0 2px 8px rgb(0, 0, 0)"}}>
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
         <HeaderMenu />
@@ -77,13 +77,15 @@ const Header = ({
       <div className="hidden md:flex w-8/12 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
+
       
-      <div className="my-4">
-        <LiveStreamsButton setVideoId={setVideoId}/>
-      </div>
-      <div className="hidden md:flex items-center">
-        <LoginHeader user={user} setUser={setUser} />
-      </div>
+        <div className="my-4">
+          <LiveStreamsButton setVideoId={setVideoId}/>
+        </div>
+        <div className="hidden md:flex items-center">
+          <LoginHeader user={user} setUser={setUser} />
+        </div>
+      
       
       {/* Theme Toggle Button 
       <label className="swap swap-rotate md:mr-1">
