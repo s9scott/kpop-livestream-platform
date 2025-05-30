@@ -9,7 +9,7 @@
 import React from 'react';
 
 /**
- * This component displays a list of chat tabs (youtube, native, private)
+ * This component displays a list of chat tabs (youtube, native, private) - also used for the messages/invites
  * It allows users to switch between different tabs.
  * When a tab is clicked, the corresponding pane will appear in switchable chat
  * 
@@ -28,7 +28,7 @@ const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
         tabs.map((tab) => (
           <button
             key={tab.id}
-            className={` rounded-xl mx-5 bg-secondary flex items-center justify-between p-2 cursor-pointer flex-1 text-xs ${selectedTab === tab.id ? 'text-primary' : 'text-base-content'}`}
+            className={` rounded-xl mb-5 mx-5 bg-secondary flex items-center justify-between p-2 cursor-pointer flex-1 text-xs ${selectedTab === tab.id ? 'text-primary' : 'text-base-content'}`}
             onClick={() => {console.log(tab);onSelectTab(tab.id)}}
           >
             <span className="flex-grow truncate font-bold">{tab.name || tab.url}</span>

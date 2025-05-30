@@ -11,12 +11,13 @@ const VideoPlayer = ({ videoId }) => {
   // Constructs the URL for the YouTube iframe embed with the provided videoId
   const videoSrc = `https://www.youtube.com/embed/${videoId}?controls=1`;
 
+  //video-container fixed rounded-border border-accent md:w-video-desktop md:h-video-desktop w-video-mobile h-video-mobile md:top-video-desktop-top md:left-video-desktop-left
   return (
-    <div className="video-container fixed rounded-border border-accent md:w-video-desktop md:h-video-desktop w-video-mobile h-video-mobile md:top-video-desktop-top md:left-video-desktop-left">
+    <div className="md:w-video-desktop md:h-video-desktop rounded-xl overflow-hidden">
       {/* Iframe to display the YouTube video */}
       <iframe
         width="100%"
-        height="85%"
+        height="100%"
         src={videoSrc}
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen

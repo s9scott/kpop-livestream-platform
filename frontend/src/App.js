@@ -3,9 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import ArtistPage from './pages/ArtistPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
 import VideoPlayerPage from './pages/VideoPlayerPage';
 import AccountPage from './pages/AccountPage';
 import Header from './components/Header/Header';
@@ -47,7 +44,6 @@ const App = () => {
         <Routes>
           {/*use router to declare pages of website, exact path prevents partial URL matches from going to that route */}
           <Route exact path="/" element={<HomePage />} />
-          <Route path="/artists" element={<ArtistPage />} />
           <Route path="/load-live" element={
           <VideoPlayerPage 
           user={user} 
@@ -63,8 +59,6 @@ const App = () => {
           setSelectedPrivateChat={setSelectedPrivateChat}
       />
           } />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
           <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
         </Routes>
       </div>

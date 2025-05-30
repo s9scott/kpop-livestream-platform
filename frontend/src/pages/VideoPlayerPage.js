@@ -115,12 +115,12 @@ const VideoPlayerPage = ({
 
   return (
     
-    <div className="app-container h-full w-full flex flex-col">
+    <div className="app-container h-full w-full flex flex-col bg-gradient-to-t from-base-300 via-base-200 to-base-100">
       {/*only render notification div if notification exists*/}
-      {notification && <div className="notification">{notification}</div>}
+      {notification && <div className="notification md:h-player-page-height">{notification}</div>}
       {videoId && (
         <>
-          <div className="flex-grow flex overflow-hidden">
+          <div className="flex-grow flex overflow-hidden justify-around items-start mt-10">
             <div className='"video-player-container flex-shrink-0"'>
               <VideoPlayer
                 videoId={videoId}

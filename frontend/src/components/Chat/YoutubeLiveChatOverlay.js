@@ -71,7 +71,8 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
   }, [chatSrc]);
 
   return (
-    <div className="w-full h-full max-h-[700px] scrollable-y space-y-4 text-white pt-0 pl-2 pr-2 pb-24 bg-black bg-opacity-70">
+    <div className="w-full h-full max-h-[700px] scrollable-y space-y-4 text-white pt-0 pl-2 pr-2 pb-24">
+
     <div className="flex gap-8 mt-4 overflow-auto">
       {/* Topics - more space */}
       <div className="flex-[2] overflow-auto pr-0">
@@ -86,7 +87,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
             ))}
           </ul>
         ) : (
-          <p className="text-base text-gray-300">No topics found</p>
+          <p className="text-base">No topics found</p>
         )}
       </div>
   
@@ -103,7 +104,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
             ))}
           </ul>
         ) : (
-          <p className="text-base text-gray-300">No languages found</p>
+          <p className="text-base">No languages found</p>
         )}
       </div>
     </div>

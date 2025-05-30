@@ -4,19 +4,29 @@ module.exports = {
     extend: {
       // Width, Height, and Position
       width: {
-        'chat-desktop': '30%', // Chat width for desktop
+        'video-desktop': '70vw', // Video width for desktop
+        'chat-desktop': '25vw', // Chat width for desktop
+
+
+        'chat-mobile-landscape':'30%',
         'chat-mobile': '100%', // Chat width for mobile
-        'video-desktop': '70%', // Video width for desktop
+        
         'video-mobile': '100%', // Video width for mobile
         // Add more customizable width settings here...
       },
       height: {
-        'chat-desktop': '100%', // Chat height for desktop
+        'video-desktop': '75vh', // Video height for desktop
+        'chat-desktop': '85vh', // Chat height for desktop
+        'player-page-height': '100vh',
+
+
+        'chat-mobile-landscape':'100%',
+
         'chat-mobile': '60%', // Chat height for mobile
-        'video-desktop': '100%', // Video height for desktop
+
         'video-mobile': '30%', // Video height for mobile
-        'header-desktop': '4rem', // Header height for desktop
-        'header-mobile': '3rem', // Header height for mobile
+        'header-desktop': '2rem', // Header height for desktop
+        'header-mobile': '2rem', // Header height for mobile
         // Add more customizable height settings here...
       },
       inset: {
@@ -88,8 +98,10 @@ module.exports = {
           "primary": "#819171",
           "secondary": "#212121",
           "accent": "#323232",
-          "neutral": "#0C0C0C",
-          "base-100": "#121212",
+          "neutral": "#0C0C0C", //black
+          "base-100": "#323232", //background color
+          "base-200": "#212121", //darker background (we will use to make gradient)
+          "base-300": "#0C0C0C",
           "info": "#03a9f4",
           "success": "#4caf50",
           "warning": "#ff9800",

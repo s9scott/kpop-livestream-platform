@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import NativeChat from './NativeChat';
 import PrivateChat from '../PrivateChat/PrivateChat';
-import PrivateChatTabs from '../PrivateChat/PrivateChatTabs';
+import PrivateChatSection from '../PrivateChat/PrivateChatSection';
 import {fetchPrivateChatVideoUrl, fetchPrivateChatMembers, addUserToPrivateChat} from '../../utils/privateChatUtils';
 import useActiveUsers from '../../hooks/useActiveUsers';
 import LiveChatContainer from './LiveChatContainer';
@@ -42,7 +42,7 @@ const SwitchableChat = ({
   selectedPrivateChat,
   setSelectedPrivateChat,}) => {
 
-  const [selectedTab, setSelectedTab] = useState('youtubeTab'); // Default tab
+  const [selectedTab, setSelectedTab] = useState('youtubeTab'); // Default tab (youtubeTab, nativeTab, privateTab)
   const [privateChatVideoId, setPrivateChatVideoId] = useState('');
   const [useNativeChat, setUseNativeChat] = useState(false);
   const [isActiveUsersModalOpen, setIsActiveUsersModalOpen] = useState(false);
@@ -50,6 +50,9 @@ const SwitchableChat = ({
   const { activeUsers, fetchActiveUsers } = useActiveUsers(videoId);
   const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [privateChatMembers, setPrivateChatMembers] = useState([]);
+
+  const [selectedPrivateTab,setSelectedPrivateTab] = useState('messagesTab') // for privateTab panel (messageTab, invitationsTab)
+  
 
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;
@@ -203,15 +206,24 @@ const SwitchableChat = ({
     { id: 'privateTab', name: 'private'}
   ];
 
+  const privateTabs = [
+    { id: 'messagesTab', name: 'messages' },
+    { id: 'invitationsTab', name: 'invitations' },
+  ];
+
+  //switchable-chat-container fixed md:w-chat-desktop md:h-chat-desktop md:inset-y-chat-desktop-top md:right-chat-desktop-right md:bottom-chat-desktop-bottom w-chat-mobile h-chat-mobile bottom-chat-mobile-bottom
+
   return (
+
     
-<div className="switchable-chat-container fixed md:w-chat-desktop md:h-chat-desktop md:inset-y-chat-desktop-top md:right-chat-desktop-right md:bottom-chat-desktop-bottom w-chat-mobile h-chat-mobile bottom-chat-mobile-bottom">
+    
+    <div className="md:w-chat-desktop md:h-chat-desktop">
       <ChatTabs
         tabs={mainTabs}
         selectedTab={selectedTab}
         onSelectTab={setSelectedTab}
       />
-      <div className="chat-content flex-grow p-4 bg-neutral h-[90%] md:h-[80%]">
+      <div className="chat-content flex-grow p-4 h-[90%] md:h-[80%]">
 
         {selectedTab === 'youtubeTab' ? (
 
@@ -232,21 +244,21 @@ const SwitchableChat = ({
           
         ) : selectedTab === 'privateTab' ? (
 
-          <div className="w-full h-full flex flex-col">
+          <div className="w-full h-full bg-neutral rounded-xl">
 
             {/*under private tab we could see all the chats or be in one specific chat*/}
             {selectedPrivateChat===null?(
               <>
-              <PrivateChatTabs
-                chats={privateChats}
+              <PrivateChatSection
+                user = {user}
+                privateChats={privateChats}
+                setPrivateChats = {setPrivateChats}
                 onSelectChat={setSelectedPrivateChat}
                 onCloseChat={handleTabClose}
-              />
-              <CreatePrivateChatButton 
-                user={user} 
-                privateChats={privateChats} 
-                setPrivateChats={setPrivateChats}
-                invitations={invitations} 
+                privateTabs={privateTabs}
+                selectedPrivateTab={selectedPrivateTab}
+                setSelectedPrivateTab={setSelectedPrivateTab}
+                invitations={invitations}
                 setNotification={()=>{}}
               />
               </>

@@ -124,7 +124,7 @@ const ChatInputForm = ({
     <div className="relative">
       <form onSubmit={handleSendClick}>
         <label htmlFor="chat" className="sr-only">Your message</label>
-        <div className="flex items-center py-2 px-3 bg-accent rounded-xl mb-5 relative">
+        <div className="flex items-center py-3 px-3 bg-neutral relative rounded-xl">
           {/*removed button to send images, may implement later.*/}
           {/* Button to toggle the active users modal */}
           <button

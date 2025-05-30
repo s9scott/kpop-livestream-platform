@@ -61,7 +61,7 @@ const Messages = ({
         </button>
       )}
       {/* Container for the messages list with scrolling enabled */}
-      <div className="flex-grow overflow-y-auto p-4 bg-base-200 rounded-xl mb-5 no-scrollbar">
+      <div className="flex-grow overflow-y-auto p-4 bg-neutral mb-5 no-scrollbar">
 
         {messages.map((message, index) => (
           <Message

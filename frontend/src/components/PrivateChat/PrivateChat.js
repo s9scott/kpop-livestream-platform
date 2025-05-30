@@ -56,7 +56,7 @@ const PrivateChat = ({
   const [videoTitle, setVideoTitle] = useState(''); // State variable for the video title
   const [isPopupOpen, setIsPopupOpen] = useState(true); // State variable for the popup
   const [privateChatVideoId, setPrivateChatVideoId] = useState(null); // State variable for the video ID
-  const [privateChatName, setPrivateChatName] = useState('')
+  const [privateChatName, setPrivateChatName] = useState('');
 
   // Fetch messages, video title, and video ID when the component mounts
   useEffect(() => {
@@ -171,51 +171,52 @@ const PrivateChat = ({
   // Handle the mention dropdown
   return (
     <div className="flex flex-col w-full h-full">
-        <div className="px-8 py-2 rounded-lg shadow-lg z-50 text-center items-center ">
 
-          <div className="flex items-center mb-1 justify-center">
-            <button className="" onClick={()=>{setSelectedPrivateChat(null); setSelectedTab('privateTab')}}>←</button>
-            <h2 className="max-w-3/4 mx-auto text-lg font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis block">{privateChatName}</h2>
-            <button className="text-sm">settings</button>
-          </div>
+      <div className="px-8 py-2 rounded-lg shadow-lg z-50 text-center items-center ">
 
-          <div className="flex flex-wrap items-center justify-around">
-            <p className="w-full md:w-3/4 whitespace-nowrap overflow-hidden text-ellipsis block text-sm">{videoTitle}</p>
-            {(videoId !== privateChatVideoId && privateChatVideoId !== null) && (
-              <button onClick={() => updateVideoId(privateChatId)} className="mt-2 px-3 py-1 text-sm text-white bg-primary rounded hover:bg-accent">
-                load video
-              </button>
-            )}
-          </div>
-          
+        <div className="flex items-center mb-1 justify-center">
+          <button className="" onClick={()=>{setSelectedPrivateChat(null); setSelectedTab('privateTab')}}>←</button>
+          <h2 className="max-w-3/4 mx-auto text-lg font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis block">{privateChatName}</h2>
+          <button className="text-sm">settings</button>
         </div>
 
-      <div className="flex-grow overflow-y-auto">
+        <div className="flex flex-wrap items-center justify-around">
+          <p className="w-full md:w-3/4 whitespace-nowrap overflow-hidden text-ellipsis block text-sm">{videoTitle}</p>
+          {(videoId !== privateChatVideoId && privateChatVideoId !== null) && (
+            <button onClick={() => updateVideoId(privateChatId)} className="mt-2 px-3 py-1 text-sm text-white bg-primary rounded hover:bg-accent">
+              load video
+            </button>
+          )}
+        </div>
+
+        </div>
+
+        <div className="flex-grow overflow-y-auto">
         <Messages
-          privacyLevel='private'
-          chatId={privateChatId}
-          messages={messages}
-          user={user}
-          formatTimestamp={formatTimestamp}
-          handleSeeAccountInfo={handleSeeAccountInfo}
-          handleRemoveMessage={handleRemoveMessage}
-          isPopupOpen={isPopupOpen}
-          setIsPopupOpen={setIsPopupOpen}
+        privacyLevel='private'
+        chatId={privateChatId}
+        messages={messages}
+        user={user}
+        formatTimestamp={formatTimestamp}
+        handleSeeAccountInfo={handleSeeAccountInfo}
+        handleRemoveMessage={handleRemoveMessage}
+        isPopupOpen={isPopupOpen}
+        setIsPopupOpen={setIsPopupOpen}
         />
         <div ref={messagesEndRef} />
-      </div>
-      <ChatInputForm
+        </div>
+        <ChatInputForm
         input={input}
         handleInputChange={handleInputChange}
         handleSendClick={handleSendClick}
         mentionDropdown={mentionDropdown}
         handleMentionClick={handleMentionClick}
         toggleUsersModal={togglePrivateUsersModal}
-      />
-      <UserInfoModal
+        />
+        <UserInfoModal
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
-      />
+        />   
     </div>
   );
 };

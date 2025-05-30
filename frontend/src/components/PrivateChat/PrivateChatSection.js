@@ -1,89 +1,58 @@
-import React, { useState } from 'react';
-import ChatCreationMenu from './ChatCreationMenu';
-import InvitationPopup from './InvitationPopup';
+/**
+ * @file PrivateChatSection.js
+ * @author Simon Tenedero
+ * @created 2025-05-26
+ * @lastModified 2025-05-28
+ * @desc file containing PrivateChatSection component
+ */
+
+import PrivateChatTabs from './PrivateChatTabs';
+import PrivateChatList from './PrivateChatList';
+import InvitationList from './InvitationList';
+import CreatePrivateChatButton from './CreatePrivateChatButton';
 
 /**
+ * This component displays a list of the users' privateChats - it is the pane displayed when private chat is selected from the main tabs
+ * Each tab has an image for the chat, the title, and a recently sent message (deciding if we will include the name of the livestreams)
  * 
- * @param user, privateChats, activeUsers, invitations, handleTabOpen, handleCreateChat, handleAcceptInvite, handleRejectInvite
- * What they are?
- * user: Variable with current user info { uid: string, username: string, email: string }
- * privateChats: Array of private chat objects { id: string, name: string, url: string, users: Array }
- * activeUsers: Array of active user objects { uid: string, username: string, email: string }
- * invitations: Array of invitation objects { id: string, chatId: string, sender: string, receiver: string }
- * handleTabOpen: Function to open a chat tab
- * handleCreateChat: Function to create a private chat
- * handleAcceptInvite: Function to accept an invitation
- * handleRejectInvite: Function to reject an invitation
+ * @param {object} chats - array containing chat objects (have fields such as id, title, etc.)
+ * @param {Function} onSelectChat - function that handles opening the chat when clicking the corresponding tab
+ * @param {Function} onCloseChat - (NOTE: STILL NEED TO IMPLEMENT) function that handles leaving chats 
+ * @param {Array} privateTabs - list of private tab objects (messages,invitations)
+ * @param {Object} selectedPrivateTab - state variable for currenlty selected tab
+ * @param {Function} setSelectedPrivateChat - function for setting the selectedPrivateTab
  * 
- * @returns PrivateChatSection
- *
+ * @returns {JSX.Element} PrivateChatSection
  */
-const PrivateChatSection = ({
+const PrivateChatSection = ({ 
   user,
-  privateChats,
-  activeUsers,
+  privateChats, 
+  setPrivateChats,
+  onSelectChat, 
+  onCloseChat, 
+  privateTabs, 
+  selectedPrivateTab, 
+  setSelectedPrivateTab,
   invitations,
-  handleTabOpen,
-  handleCreateChat,
-  handleAcceptInvite,
-  handleRejectInvite
-}) => {
-  const [showChatCreationMenu, setShowChatCreationMenu] = useState(false); // State variable to show/hide the chat creation menu
+  setNotification}) => {
 
-  // Render the private chat section with a dropdown menu to select chats
   return (
-    <>
+    
+    <div className="h-full">
+    <PrivateChatTabs privateTabs={privateTabs} selectedPrivateTab={selectedPrivateTab} onSelectPrivateTab={setSelectedPrivateTab} />
 
-      <div className="dropdown dropdown-hover menu-lg z-[1001]">
-        <div
-          tabIndex={1}
-          role="button"
-          className="btn btn-secondary text-xl hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200"
-        >
-          Select Chat
-        </div>
-        <ul className="dropdown-content menu bg-primary text-primary-content rounded-lg z-[1] w-52 p-2 mt-2 shadow">
-          {privateChats.map(chat => (
-            <li key={chat.id}>
-              <button
-                onClick={() => handleTabOpen(chat.id)}
-                className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200 w-full text-left"
-              >
-                {chat.name}
-              </button>
-            </li>
-          ))}
-          <li>
-            <button
-              onClick={() => setShowChatCreationMenu(true)}
-              className="block px-4 py-2 text-base font-semibold hover:bg-accent hover:text-lg transition-colors duration-200 w-full text-left"
-            >
-              Create Private Chat
-            </button>
-          </li>
-        </ul>
-      </div>
+    <div className="flex-col w-full h-5/6 p-2 overflow-scroll">
 
-      {/* Chat Creation Menu */}
-      {showChatCreationMenu && (
-        <ChatCreationMenu
-          activeUsers={activeUsers}
-          onCreateChat={handleCreateChat}
-          onClose={() => setShowChatCreationMenu(false)}
-          currentUser={user}
-        />
-      )}
+      {selectedPrivateTab==='messagesTab'?
+      (<PrivateChatList chats={privateChats} onSelectChat={onSelectChat} onCloseChat={onCloseChat}/>)      
+      :(<InvitationList/>)}
 
-      {/* Invitation Popups */}
-      {invitations.map((invitation) => (
-        <InvitationPopup
-          key={invitation.id}
-          invitation={invitation}
-          onAccept={() => handleAcceptInvite(invitation.id, invitation.chatId)}
-          onReject={() => handleRejectInvite(invitation.id)}
-        />
-      ))}
-    </>
+    </div>
+
+    <CreatePrivateChatButton user={user} privateChats={privateChats} setPrivateChats={setPrivateChats} invitations={invitations} setNotification={setNotification}/>
+    </div>
+    
+    
   );
 };
 

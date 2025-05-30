@@ -102,7 +102,7 @@ const CreatePrivateChatButton = ({
 
       {/* Chat Selection Dropdown */}
       
-      <button onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }} className="justify-center z-100 flex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary">    
+      <button onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }} className="justify-centerflex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary">    
           create chat
       </button>
 
