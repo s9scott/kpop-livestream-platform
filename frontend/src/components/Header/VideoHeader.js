@@ -154,7 +154,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
           onBlur={() => setTimeout(() => setIsInputFocused(false), 200)} // Delay to allow click on dropdown
           placeholder="Enter YouTube URL"
           className="h-8 flex-grow px-4 py-2 text-sm text-left text-zinc-400 focus:outline-none focus:ring-1 focus:ring-gray-100 focus:ring-inset focus:ring-offset-1 bg-white rounded-l-xl"
-          style={{boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.42)'}}
+          style={{boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.33)'}}
         />
 
         <button 
@@ -170,7 +170,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
             e.target.style.boxShadow = '-4px 0 8px rgba(0, 0, 0, 0.1)';
           }}
         >
-          <PlayIcon className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+          <PlayIcon className="w-5 h-5 text-gray-600 hover:text-gray-800 bg-transparent"/>
         </button>
 
         {isInputFocused && history.length > 0 && (

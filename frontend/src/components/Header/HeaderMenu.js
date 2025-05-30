@@ -10,7 +10,7 @@ export default function HeaderMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Definimos las clases como constantes para no repetir tanto
-  const linkBaseClass = "block px-4 py-3 text-white font-semibold transition-colors duration-200";
+  const linkBaseClass = "block px-4 py-3 text-white transition-colors duration-200 text-sm";
   const hoverClass = "hover:bg-primary";
 
   const toggleMenu = () => {
@@ -44,7 +44,7 @@ export default function HeaderMenu() {
           ></div>
           
           {/* Menú */}
-          <ul className="absolute top-full left-0 mt-2 w-52 bg-black text-white shadow-xl z-50 py-2">
+          <ul className="absolute top-full left-0 mt-2 w-52 bg-base-300 text-white shadow-xl z-50 py-2 rounded-xl">
             <li>
               <NavLink
                 to="/"
