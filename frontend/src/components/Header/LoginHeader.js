@@ -98,7 +98,10 @@ const LoginHeader = ({ user, setUser }) => {
     <div className="relative text-xsm">
       {curUser ? (
         <Menu as="div" className="relative inline-block text-left z-[1001]">
-          <MenuButton className="btn btn-secondary relative text-xsm btn-md rounded-md bg-secondary font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
+          {({ open }) => (
+            <>
+          
+          <MenuButton className="btn btn-secondary relative text-xsm btn-md rounded-md bg-secondary font-semibold shadow-sm px-4">
             <div className='flex items-center'>
               <ChevronDownIcon aria-hidden="true" className="h-5 w-5 mr-2" />
               <img
@@ -109,16 +112,19 @@ const LoginHeader = ({ user, setUser }) => {
             </div>
           </MenuButton>
 
+          {open && (
+        <>
+
           <MenuItems
             transition
-            className="absolute text-xsm right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            className="absolute text-xsm right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-primary shadow-lg transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
           >
             <div className="py-1">
               <MenuItem>
                 {({ active }) => (
                   <NavLink
                     to="/account"
-                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
+                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:text-white`}
                   >
                     Profile
                   </NavLink>
@@ -146,6 +152,10 @@ const LoginHeader = ({ user, setUser }) => {
               </MenuItem>
             </div>
           </MenuItems>
+                  </>
+              )}
+            </>
+          )}
         </Menu>
       ) : (
         <button onClick={handleSignIn} id="login" className="whitespace-nopwrap truncate mr-2 btn btn-secondary text-xsm hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 px-4 py-2">

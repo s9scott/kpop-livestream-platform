@@ -174,14 +174,14 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
         </button>
 
         {isInputFocused && history.length > 0 && (
-          <div className="absolute left-0 top-full mt-1 w-full bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50">
+          <div className="absolute left-0 top-full mt-1 bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50" style={{width: '89%'}}>
             {history.map((item, index) => (
               <div
                 key={index}
                 onMouseDown={() => handleHistoryClick(item.url)}
                 className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-300 hover:text-black text-black"
               >
-                <span className="flex-grow">{item.title}</span>
+                <span className="flex-grow truncate pr-2">{item.title}</span>
 
                 <span 
                   onMouseDown={(e) => {
