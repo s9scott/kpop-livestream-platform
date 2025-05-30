@@ -124,7 +124,7 @@ const LoginHeader = ({ user, setUser }) => {
                 {({ active }) => (
                   <NavLink
                     to="/account"
-                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:text-white`}
+                    className={`block px-4 py-2 text-black rounded hover:bg-accent hover:rounded hover:m-1 focus:text-white`}
                   >
                     Profile
                   </NavLink>
@@ -134,7 +134,7 @@ const LoginHeader = ({ user, setUser }) => {
                 {({ active }) => (
                   <NavLink
                     to="/settings"
-                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
+                    className={`block px-4 py-2 text-black rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
                   >
                     Settings
                   </NavLink>
@@ -144,7 +144,7 @@ const LoginHeader = ({ user, setUser }) => {
                 {({ active }) => (
                   <button
                     onClick={handleSignOut}
-                    className={`block w-full px-4 py-2 text-left text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
+                    className={`block w-full px-4 py-2 text-left text-black rounded hover:bg-accent hover:rounded hover:m-1 `}
                   >
                     Logout
                   </button>
