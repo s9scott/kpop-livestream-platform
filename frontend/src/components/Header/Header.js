@@ -75,17 +75,18 @@ const Header = ({
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
         <HeaderMenu />
+        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
       </div>
       <div className="hidden md:flex w-8/12 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
 
-        <div className="hidden md:flex my-4">
-          <LiveStreamsButton setVideoId={setVideoId}/>
-        </div>
-        <div className="hidden md:flex items-center">
-          <LoginHeader user={user} setUser={setUser} />
-        </div>
+      <div className="hidden md:flex my-4">
+        <LiveStreamsButton setVideoId={setVideoId}/>
+      </div>
+      <div className="hidden md:flex items-center">
+        <LoginHeader user={user} setUser={setUser} />
+      </div>
       
       
       {/* Theme Toggle Button 
@@ -100,17 +101,15 @@ const Header = ({
       <div className="flex md:hidden w-full items-center">
         {!showMobileInput ? (
           <>
-        <HeaderMenu />
-        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
-        <div className="flex items-center gap-2 ml-24">
+        <HeaderMenu/>
+        <span className="text-sm font-bold text-white ml-1 whitespace-nowrap">livestreaming prototype</span>
           <button 
                 onClick={() => setShowMobileInput(true)}
-                className="bg-transparent text-black px-4 py-2 rounded-lg text-sm font-medium"
+                className="ml-auto mr-10"
               >
-                <PlayIcon className="w-6 h-6 text-white bg-transparent"/>
+                <PlayIcon className="w-8 h-8 border border-white rounded-full px-1"/>
           </button>
           <LoginHeader user={user} setUser={setUser} />
-        </div>
         </>
         ) : (
           <div className="w-full flex items-center gap-2 px-4">

@@ -31,9 +31,6 @@ export default function HeaderMenu() {
         <Bars3Icon className="h-6 w-6 text-white" />
       </button>
 
-      {/* Título */}
-      <span className="hidden md:block text-md font-bold text-white ml-4 whitespace-nowrap">livestreaming prototype</span>
-
       {/* Menú Dropdown */}
       {isMenuOpen && (
         <>
@@ -44,12 +41,12 @@ export default function HeaderMenu() {
           ></div>
           
           {/* Menú */}
-          <ul className="absolute top-full left-0 mt-2 w-52 bg-base-300 text-white shadow-xl z-50 py-2 rounded-xl">
+          <ul className="absolute top-full left-2 mt-2 w-52 bg-base-300 text-white shadow-xl z-50 rounded-xl">
             <li>
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                  `rounded-t-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                 }
                 onClick={closeMenu}
               >
@@ -64,14 +61,14 @@ export default function HeaderMenu() {
                 }
                 onClick={closeMenu}
               >
-                Livestreamings
+                Livestreaming
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                  `rounded-b-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                 }
                 onClick={closeMenu}
               >

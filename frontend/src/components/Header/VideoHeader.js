@@ -55,7 +55,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
       setVideoId(newVideoId);
       localStorage.setItem('lastVideoId', newVideoId);
       updateHistory(title, url);
-      await addLiveStream(newVideoId, title, url);
+      await addLiveStream(newVideoId, title, url); //setDoc() in addLiveStream() handles duplicates if video has been added before
       fetchActiveStreams().then(setHistory);
       setError('');
       if (window.location.hash !== '#/load-live') {

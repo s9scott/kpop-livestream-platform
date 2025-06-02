@@ -7,6 +7,11 @@ import { addUser, fetchUserInfo } from '../../utils/usersUtils'
 import { NavLink } from 'react-router-dom'; // React Router component for navigation
 import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
 
+
+// Definimos las clases como constantes para no repetir tanto
+const linkBaseClass = "block px-4 py-3 text-white transition-colors duration-200 text-sm";
+const hoverClass = "hover:bg-primary";
+
 /**
  * LoginHeader component displays user login/logout functionality and user profile menu.
  * @param {Object} props - Component properties.
@@ -101,9 +106,8 @@ const LoginHeader = ({ user, setUser }) => {
           {({ open }) => (
             <>
           
-          <MenuButton className="btn btn-secondary relative text-xsm btn-md rounded-md bg-secondary font-semibold shadow-sm px-4">
+          <MenuButton className="text-xsm mr-2">
             <div className='flex items-center'>
-              <ChevronDownIcon aria-hidden="true" className="h-5 w-5 mr-2" />
               <img
                 alt="User Avatar"
                 src={curUser.photoURL || curUser.profilePicture}
@@ -117,14 +121,15 @@ const LoginHeader = ({ user, setUser }) => {
 
           <MenuItems
             transition
-            className="absolute text-xsm right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-primary shadow-lg transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            className="absolute top-full right-1 w-52 bg-base-300 text-white shadow-xl z-50 rounded-xl"
           >
-            <div className="py-1">
               <MenuItem>
                 {({ active }) => (
                   <NavLink
                     to="/account"
-                    className={`block px-4 py-2 text-black rounded hover:bg-accent hover:rounded hover:m-1 focus:text-white`}
+                    className={({ isActive }) =>
+                      `rounded-t-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                    }
                   >
                     Profile
                   </NavLink>
@@ -134,7 +139,9 @@ const LoginHeader = ({ user, setUser }) => {
                 {({ active }) => (
                   <NavLink
                     to="/settings"
-                    className={`block px-4 py-2 text-black rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
+                    className={({ isActive }) =>
+                      `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                    }
                   >
                     Settings
                   </NavLink>
@@ -144,13 +151,13 @@ const LoginHeader = ({ user, setUser }) => {
                 {({ active }) => (
                   <button
                     onClick={handleSignOut}
-                    className={`block w-full px-4 py-2 text-left text-black rounded hover:bg-accent hover:rounded hover:m-1 `}
+                    className={`rounded-b-xl text-left w-full ${linkBaseClass} ${hoverClass}`
+                    }
                   >
                     Logout
                   </button>
                 )}
               </MenuItem>
-            </div>
           </MenuItems>
                   </>
               )}

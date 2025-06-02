@@ -30,7 +30,7 @@ app.post('/api/summarize', async (req, res) => {
       }
       const id = extractVideoId(chatSrc);
 
-      const vidoeMessages = await getMessages(id); // Ensure async call is awaited
+      const vidoeMessages = await getMessages(id); // Ensure async call is awaited, 5 Quota Cost
       //console.log("Fetched messages:", messages);
       
       const { videoTitle, videoDescription } = await getDetails(chatSrc, res); // Ensure async call is awaited
@@ -146,7 +146,7 @@ const getMessages = async (chatSrc) => {
 
       console.log(`Fetching messages for liveChatId: ${liveChatId}`);
 
-      const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${process.env.YOUTUBE_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${process.env.YOUTUBE_API_KEY}`; //liveChatMessages.list() - 5 Quota - retrieves a batch of latest messge from given url
       const response = await axios.get(url);
       const { data } = response;
 
