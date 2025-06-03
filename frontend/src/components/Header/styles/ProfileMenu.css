@@ -1,0 +1,12 @@
+.user-avatar {
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-item {
+  cursor:pointer
+}
+
+.login-button {
+  cursor: pointer;
+}

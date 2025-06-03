@@ -8,7 +8,7 @@
 
 .active-tab-container{
     background:conic-gradient(from var(--gradient-angle),#637c54,#2d8f85,#0e4b50,#2d8f85,#637c54);
-    animation: rotation 10s linear infinite;
+    animation: rotation 5s linear infinite;
 }
 
 @keyframes rotation{
