@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage } from '../../utils/livestreamsUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
-import VideoHistoryDropdown from './VideoHistoryDropdown';
 import { PlayCircleIcon } from '@heroicons/react/24/outline';
 import { PlayIcon } from '@heroicons/react/24/solid';
 
@@ -159,7 +158,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
 
         <button 
           type="submit" 
-          className="px-4 py-1 h-8  bg-white hover:bg-gray-50 transition-all duration-200 mr-2 my-1 focus:outline-none focus:ring-2 focus:ring-gray-300 border-l border-gray-200 rounded-r-xl"
+          className="px-4 py-1 h-8  bg-white hover:bg-gray-50 transition-all duration-200 mr-2 my-1 border-l border-gray-200 rounded-r-xl"
           style={{
             transition: 'box-shadow 0.2s ease'
           }}

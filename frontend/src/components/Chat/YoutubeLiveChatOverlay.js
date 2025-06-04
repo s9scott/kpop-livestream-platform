@@ -20,6 +20,29 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
 
   const updateOverlayText = async (chatSrc) => {
     try {
+      {/* 
+      const response = await fetch("http://localhost:8080/api/getVideoAnalysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatSrc }),
+      });
+
+      if(!response.ok) {
+        throw new Error("API call failed");
+      }
+      
+      const data = await response.json();
+
+      setOverlayText(data.summary || "");
+      setTopicParagraph(data.topics || "");
+      setLanguageParagraph(data.languages || "");
+
+      console.log("Analysis data", data);
+      setLanguages(parseLabelEmojiPairs(data.languages || ""));
+      setTopics(parseLabelEmojiPairs(data.topics || ""));
+      */}
+
+      
       const [summaryRes, topicRes, languageRes] = await Promise.all([
         fetch("http://localhost:8080/api/summarize", {
           method: "POST",
@@ -45,6 +68,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
       const summaryData = await summaryRes.json();
       const topicData = await topicRes.json();
       const languageData = await languageRes.json();
+      
 
       setOverlayText(summaryData.summary || "");
       setTopicParagraph(topicData.topics || "");
@@ -53,6 +77,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
       console.log("languageData", languageData.languages);
       setLanguages(parseLabelEmojiPairs(languageData.languages || ""));
       setTopics(parseLabelEmojiPairs(topicData.topics || ""));
+      
       
     } catch (error) {
       console.error("Error updating overlay text:", error);
