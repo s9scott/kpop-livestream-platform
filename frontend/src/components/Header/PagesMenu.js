@@ -13,6 +13,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 /**
  * Hamburger Menu on left side of navbar, containing links to other pages (Home, Livestreaming, Settings)
+ * 
  * @returns {JSX.Element} The rendered menu component.
  */
 export default function PagesMenu() {
@@ -41,7 +42,7 @@ export default function PagesMenu() {
           onClick={toggleMenu}
           className="btn btn-ghost btn-circle p-1 hover:bg-gray-700"
           >
-            <Bars3Icon className="h-6 w-6 text-white" />
+            <Bars3Icon className="h-6 w-6" />
           </MenuButton>
 
           {open && (

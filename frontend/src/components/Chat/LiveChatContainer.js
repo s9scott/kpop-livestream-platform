@@ -4,9 +4,6 @@ import YouTubeLiveChatOverlay from "./YoutubeLiveChatOverlay";
 const LiveChatContainer = ({ chatSrc }) => {
   const [showSummary, setShowSummary] = useState(true);
 
-
-
-
   return (
     <div className="w-full h-[500px] bg-neutral relative text-white overflow-hidden rounded-xl">
   
