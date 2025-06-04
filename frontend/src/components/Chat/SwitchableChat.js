@@ -211,19 +211,26 @@ const SwitchableChat = ({
     { id: 'invitationsTab', name: 'invitations' },
   ];
 
-  //switchable-chat-container fixed md:w-chat-desktop md:h-chat-desktop md:inset-y-chat-desktop-top md:right-chat-desktop-right md:bottom-chat-desktop-bottom w-chat-mobile h-chat-mobile bottom-chat-mobile-bottom
-
   return (
 
     
     
-    <div className="md:w-chat-desktop md:h-chat-desktop sm:w-chat-mobile-landscape sm:h-chat-mobile-landscape w-chat-mobile-portrait h-chat-mobile-portrait">
+    <div className="
+      xl:w-chat-desktop xl:h-chat-desktop 
+      lg:w-chat-tablet-landscape lg:h-chat-tablet-landscape 
+      ipadpro-portrait:min-w-[50vw] ipadpro-portrait:max-h-[60vh]
+      md:w-chat-tablet-portrait md:h-chat-tablet-portrait
+      iphone-landscape:min-h-[575px] iphone-landscape:max-w-[350px]
+      sm:w-chat-mobile-landscape sm:h-chat-mobile-landscape 
+      w-chat-mobile-portrait h-chat-mobile-portrait"
+    >
+
       <ChatTabs
         tabs={mainTabs}
         selectedTab={selectedTab}
         onSelectTab={setSelectedTab}
       />
-      <div className="chat-content flex-grow p-4 h-[90%] md:h-[80%]">
+      <div className="chat-content flex-grow mt-6 h-[90%] md:h-[80%]">
 
         {selectedTab === 'youtubeTab' ? (
 

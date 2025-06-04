@@ -24,10 +24,10 @@ import './styles/ChatTabs.css'
 const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
   
   return (
-    <div className="flex">
+    <div className="flex gap-6">
       {tabs.length > 0 ? (
         tabs.map((tab) => (
-          <div className={`rounded-full button-container mx-3 flex items-center justify-between flex-grow flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>
+          <div className={`rounded-full button-container flex items-center justify-between flex-grow flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>
           <button
             key={tab.id}
             className={`rounded-full p-1 cursor-pointer w-full text-xs ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}

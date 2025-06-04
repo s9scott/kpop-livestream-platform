@@ -115,13 +115,13 @@ const VideoPlayerPage = ({
 
   return (
     
-    <div className="app-container min-h-screen flex flex-col bg-gradient-to-t from-base-300 via-base-200 to-base-100">
+    <div className="min-h-screen app-container flex flex-col justify-center bg-gradient-to-t from-base-300 via-base-200 to-base-100">
       {/*only render notification div if notification exists*/}
       {notification && <div className="notification">{notification}</div>}
       {videoId && (
         <>
-          <div className="flex-grow flex overflow-hidden justify-around items-start mt-10 flex-wrap">
-            <div className='"video-player-container"'>
+          <div className="flex justify-around items-start flex-wrap mt-10">
+            <div className="video-player-container">
               <VideoPlayer
                 videoId={videoId}
               />
