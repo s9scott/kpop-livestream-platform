@@ -1,9 +1,17 @@
+/**
+ * @file Header.js
+ * @author Paola Bustos, Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-06-01
+ * @desc file containing Header.js
+ */
+
 import { useState, useEffect } from 'react';
 import LightMode from '../../assets/LightMode.svg';
 import NightMode from '../../assets/NightMode.svg';
-import LoginHeader from './LoginHeader';
+import ProfileMenu from './ProfileMenu';
 import VideoHeader from './VideoHeader';
-import HeaderMenu from './HeaderMenu';
+import PagesMenu from './PagesMenu';
 import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
 import { PlayIcon } from '@heroicons/react/24/solid';
@@ -70,22 +78,23 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between w-100vw p-0" style={{boxShadow: "0 2px 8px rgb(0, 0, 0)"}}>
+    <header className="navbar flex items-center justify-between w-100vw p-0" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
       
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
-        <HeaderMenu />
+        <PagesMenu />
+        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
       </div>
-      <div className="hidden md:flex w-8/12 justify-center">
+      <div className="hidden md:flex w-1/2 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
 
-        <div className="hidden md:flex my-4">
-          <LiveStreamsButton setVideoId={setVideoId}/>
-        </div>
-        <div className="hidden md:flex items-center">
-          <LoginHeader user={user} setUser={setUser} />
-        </div>
+      <div className="hidden md:flex my-4">
+        <LiveStreamsButton setVideoId={setVideoId}/>
+      </div>
+      <div className="hidden md:flex items-center">
+        <ProfileMenu user={user} setUser={setUser} />
+      </div>
       
       
       {/* Theme Toggle Button 
@@ -100,17 +109,15 @@ const Header = ({
       <div className="flex md:hidden w-full items-center">
         {!showMobileInput ? (
           <>
-        <HeaderMenu />
-        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
-        <div className="flex items-center gap-2 ml-24">
+        <PagesMenu/>
+        <span className="text-sm font-bold text-white ml-1 whitespace-nowrap">livestreaming prototype</span>
           <button 
                 onClick={() => setShowMobileInput(true)}
-                className="bg-transparent text-black px-4 py-2 rounded-lg text-sm font-medium"
+                className="ml-auto mr-10"
               >
-                <PlayIcon className="w-6 h-6 text-white bg-transparent"/>
+                <PlayIcon className="w-8 h-8 border border-white rounded-full px-1"/>
           </button>
-          <LoginHeader user={user} setUser={setUser} />
-        </div>
+          <ProfileMenu user={user} setUser={setUser} />
         </>
         ) : (
           <div className="w-full flex items-center gap-2 px-4">

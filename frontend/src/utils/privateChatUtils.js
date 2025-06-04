@@ -213,8 +213,7 @@ export const fetchPrivateChatVideoTitle = (chatId, setVideoTitle) => {
   const chatRef = doc(db, 'privateChats', chatId);
   const unsubscribe = onSnapshot(chatRef, async (doc) => {
     if (doc.exists()) {
-      console.log(doc.videoTitle);
-      const videoTitle = doc.videoTitle
+      const videoTitle = doc.data().videoTitle
       setVideoTitle(videoTitle || 'no video');
     } else {
       console.error('Chat document does not exist.');
