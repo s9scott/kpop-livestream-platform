@@ -143,7 +143,7 @@ const VideoPlayerPage = ({
 
   return (
     
-    <div className="min-h-screen app-container flex flex-col bg-gradient-to-t from-base-300 via-base-200 to-base-100">
+    <div className="min-h-screen app-container flex flex-col bg-gradient-to-t from-base-300 via-base-200 to-base-100 xl:pt-10">
       {/*only render notification div if notification exists*/}
       {notification && <div className="notification">{notification}</div>}
         {videoId && (

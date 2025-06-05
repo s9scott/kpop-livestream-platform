@@ -25,7 +25,8 @@ const VideoPlayer = ({ videoId, chatOpen}) => {
     <div className={`
       rounded-xl overflow-hidden mb-6
 
-      xl:w-video-desktop xl:h-video-desktop 
+      desktop:w-[65vw] desktop:h-[70vh]
+      xl:w-video-iPadPro-landscape xl:h-video-iPadPro-landscape 
       lg:w-video-tablet-landscape lg:h-video-tablet-landscape
       ipadpro-portrait:w-[80vw] ipadpro-portrait:h-[35vh]
       md:w-video-tablet-portrait md:h-video-tablet-portrait

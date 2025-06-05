@@ -225,7 +225,9 @@ const SwitchableChat = ({
       </div>
       
       <div className={`
-        xl:w-chat-desktop xl:h-chat-desktop 
+
+        desktop:w-[20vw] desktop:h-[70vh]
+        xl:w-chat-iPadPro-landscape xl:h-chat-iPadPro-landscape 
         lg:w-chat-tablet-landscape lg:h-chat-tablet-landscape 
         ipadpro-portrait:min-w-[50vw] ipadpro-portrait:max-h-[60vh]
         md:w-chat-tablet-portrait md:h-chat-tablet-portrait

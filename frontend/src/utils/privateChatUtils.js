@@ -3,6 +3,25 @@ import { db } from '../firebaseConfig';
 import { fetchYoutubeVideoNameFromUrl } from './livestreamsUtils';
 
 
+/**
+ * @param {*} privateChatId, text, timestamp
+ * privateChatId: string - the ID of the private chat
+ * text: string - the text of the message to delete
+ * timestamp: string - the timestamp of the message to delete
+ * 
+ * allows user to leave private chat
+*/
+export const leavePrivateChat = async (privateChatId, text, timestamp) => {
+  const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
+  const snapshot = await getDocs(q);
+  snapshot.forEach(async (doc) => {
+    const message = doc.data();
+    if (message.text === text && message.timestamp === timestamp) {
+      await deleteDoc(doc.ref);
+      await addDoc(collection(db, 'deletedMessages'), { ...message, chatId: privateChatId });
+    }
+  });
+};
 
 //NOTE: had to add deleteDoc()
 

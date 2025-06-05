@@ -149,10 +149,10 @@ const ChatInputForm = ({
               </g>
             </svg>
           </button>
-          {/* Emoji picker toggle button */}
+          {/* Emoji picker toggle button - hide button on iPads and tablets - xl shows on iPad pro, fix*/}
           <button
             type="button"
-            className="p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            className={`hidden desktop:block p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600`}
             onClick={() => setShowEmojiDropdown(!showEmojiDropdown)}
           >
             <svg
@@ -211,7 +211,7 @@ const ChatInputForm = ({
         )}
         {/* Emoji picker */}
         {showEmojiDropdown && (
-          <div className="absolute bottom-full mb-2 rounded-lg">
+          <div className="absolute bottom-full mb-2 rounded-lg z-[100]">
             <Picker data={data} onEmojiSelect={addEmoji} theme="device" />
           </div>
         )}

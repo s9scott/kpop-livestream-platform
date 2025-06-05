@@ -6,8 +6,8 @@ module.exports = {
       width: {
 
         //desktop styles (xl) - applies to iPad pro landscape
-        'video-desktop': '55vw', 
-        'chat-desktop': '30vw', 
+        'video-iPadPro-landscape': '60vw', 
+        'chat-iPadPro-landscape': '25vw', 
 
         //landscape tablet styles (lg) - applies to iPad pro portrait
         'video-tablet-landscape': '55vw', 
@@ -34,8 +34,8 @@ module.exports = {
 
         //desktop styles (xl) - applies to iPad pro landscape
         'header-desktop': '10vh',
-        'video-desktop': '55vh',
-        'chat-desktop': '90vh',
+        'video-iPadPro-landscape': '55vh',
+        'chat-iPadPro-landscape': '65vh',
         
         //landscape tablet styles (lg) - applies to iPad pro portrait too
         'video-tablet-landscape': '50vh',
@@ -114,10 +114,11 @@ module.exports = {
       xl: '1280px',
 
       // Custom orientation breakpoints
-      'portrait': { 'raw': '(orientation: portrait)' },
-      'landscape': { 'raw': '(orientation: landscape)' },
+      'portrait': { raw: '(orientation: portrait)' },
+      'landscape': { raw: '(orientation: landscape)' },
       'iphone-landscape': {raw: '(orientation: landscape) and (max-height: 430px)',},
-      'ipadpro-portrait': {raw: '(min-width: 834px) and (max-width: 1024px) and (orientation: portrait)'},
+      'ipadpro-portrait': {raw: '(min-width: 834px) and (max-width: 1024px) and (orientation: portrait),'},
+      'desktop': {raw: '(min-width: 1370px)'}
     },
   },
   variants: {
