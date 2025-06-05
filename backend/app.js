@@ -19,9 +19,9 @@ app.post('/api/updateVideoDetails', async (req, res) => {
 	getDetails(src);
 });
 
-{/* NEW FUNCTION 
+/* NEW FUNCTION CONTAINS SUMMARY TOPICS AND LANGUAGES */
 
-app.post('api/getVideoAnalysis', async (req, res) => {
+app.post('/api/getVideoAnalysis', async (req, res) => {
   try{
     const {chatSrc} = req.body;
 
@@ -53,9 +53,9 @@ app.post('api/getVideoAnalysis', async (req, res) => {
     console.error("Error in /api/getVideoAnalysis")
   }
 }); 
-*/}
 
- 
+
+ /*
 app.post('/api/summarize', async (req, res) => {
   try {
       const { chatSrc } = req.body;
@@ -65,7 +65,7 @@ app.post('/api/summarize', async (req, res) => {
       }
       const id = extractVideoId(chatSrc);
 
-      const vidoeMessages = await getMessages(id); // Ensure async call is awaited, 5 Quota Cost
+      const videoMessages = await getMessages(id); // Ensure async call is awaited, 5 Quota Cost
       //console.log("Fetched messages:", messages);
       
       const { videoTitle, videoDescription } = await getDetails(chatSrc, res); // Ensure async call is awaited
@@ -128,7 +128,7 @@ app.post('/api/getLanguages', async (req, res) => {
       res.status(500).json({ error: "Failed to generate topics" });
   }
 });
-
+*/
 
 /**
  * 

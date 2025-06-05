@@ -20,7 +20,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
 
   const updateOverlayText = async (chatSrc) => {
     try {
-      {/* 
+  
       const response = await fetch("http://localhost:8080/api/getVideoAnalysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,9 +40,9 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
       console.log("Analysis data", data);
       setLanguages(parseLabelEmojiPairs(data.languages || ""));
       setTopics(parseLabelEmojiPairs(data.topics || ""));
-      */}
-
       
+
+      /* 
       const [summaryRes, topicRes, languageRes] = await Promise.all([
         fetch("http://localhost:8080/api/summarize", {
           method: "POST",
@@ -77,7 +77,7 @@ const YouTubeLiveChatOverlay = ({ chatSrc }) => {
       console.log("languageData", languageData.languages);
       setLanguages(parseLabelEmojiPairs(languageData.languages || ""));
       setTopics(parseLabelEmojiPairs(topicData.topics || ""));
-      
+      */
       
     } catch (error) {
       console.error("Error updating overlay text:", error);

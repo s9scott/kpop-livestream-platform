@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage } from '../../utils/livestreamsUtils';
+import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage, getVideoFromFirebase} from '../../utils/livestreamsUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PlayCircleIcon } from '@heroicons/react/24/outline';
 import { PlayIcon } from '@heroicons/react/24/solid';
@@ -42,27 +42,84 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
   };
 
   /**
+   * Gets video details either from firebase cache or youtube API as fallback
+   * @param {string} videoId - The video ID to get details for
+   * @returns {Object|null} Video details object or null if not found
+   */
+
+  const getVideoDetails = async (videoId) => {
+    try{
+      console.log(`Checking firebase for video ID: ${videoId}`);
+      const cachedVideo = await getVideoFromFirebase(videoId);
+      
+      if (cachedVideo && cachedVideo.title) {
+        console.log(`Found in firebase: ${cachedVideo.title}`);
+        return {
+          title: cachedVideo.title,
+          source: 'firebase' // For debugging purposes
+        };
+      }
+
+      console.log('Not in Firebase fetching from youtube API');
+      const videoDetails = await fetchYoutubeDetails(videoId);
+      
+      if (videoDetails && videoDetails.title) {
+        console.log(`Fetched from YouTube: ${videoDetails.title}`);
+        return {
+          title: videoDetails.title,
+          source: 'youtube' // For debugging purposes
+        };
+      }
+
+      console.log('Could not get details, using fallback');
+      return {
+        title: `Video ${videoId}`,
+        source: 'fallback'
+      };
+
+
+    } catch (error) {
+      console.error('Error getting video details:', error);
+      return {
+        title: `Video ${videoId}`,
+        source: 'error'
+      };
+    }
+  }
+
+
+
+  /**
    * Loads video details based on the provided URL, updates history, and navigates to the load-live route.
    * 
    * @param {string} url - The URL of the video to be loaded.
    */
+
   const loadVideo = async (url) => {
     const newVideoId = extractVideoId(url);
     if (newVideoId) {
-      const videoDetails = await fetchYoutubeDetails(newVideoId);
-      const title = videoDetails ? videoDetails.title : `Video ${newVideoId}`;
+
+      //const videoDetails = await fetchYoutubeDetails(newVideoId);
+      //const title = videoDetails ? videoDetails.title : `Video ${newVideoId}`;
+
+      const videoDetails = await getVideoDetails(newVideoId);
+      const title = videoDetails.title;
+
       setVideoId(newVideoId);
       localStorage.setItem('lastVideoId', newVideoId);
       updateHistory(title, url);
+
       await addLiveStream(newVideoId, title, url); //setDoc() in addLiveStream() handles duplicates if video has been added before
       fetchActiveStreams().then(setHistory);
       setError('');
+      
       if (window.location.hash !== '#/load-live') {
         navigate('/load-live');
       }
       if (user) {
         logWebsiteUsage(user.uid, `User loaded video ID: ${newVideoId}, URL: ${url}, TITLED: ${title}.`)
       }
+      console.log(`Video loaded - Source: ${videoDetails.source}, Title: ${title}`);
       } else {
       setError('Invalid YouTube URL');
     }
@@ -75,7 +132,7 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
    */
   const handleHistoryClick = async (url) => {
     setVideoUrl(url);
-    //await loadVideo(url);
+    await loadVideo(url);
   };
 
   /**
