@@ -18,8 +18,8 @@ module.exports = {
         'chat-tablet-portrait': '60vw',
         
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '50vw', 
-        'chat-mobile-landscape': '44vw',
+        'video-mobile-landscape': '40vw', 
+        'chat-mobile-landscape': '40vw',
 
         //portrait landscape styles (default)
         'video-mobile-portrait': '95vw', 
@@ -46,7 +46,7 @@ module.exports = {
         'chat-tablet-portrait': '60vh',
 
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '60vh',
+        'video-mobile-landscape': '50vh',
         'chat-mobile-landscape':'150vh',
 
         //portrait mobile styles

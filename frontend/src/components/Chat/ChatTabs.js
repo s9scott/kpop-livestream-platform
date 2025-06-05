@@ -2,7 +2,7 @@
  * @file ChatTabs.js
  * @author Simon Tenedero, Jonas Matulis
  * @created 2024-XX-XX
- * @lastModified 2025-05-28
+ * @lastModified 2025-06-04
  * @desc file containing ChatTabs
  */
 
@@ -19,21 +19,20 @@ import './styles/ChatTabs.css'
  * @param {Function} onSelectTab - Function handling behaviour of selecting a tab
  * 
  * @returns PrivateChatTabs 
- * 
  */
 const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
   
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-8">
       {tabs.length > 0 ? (
         tabs.map((tab) => (
           <div className={`rounded-full button-container flex items-center justify-between flex-grow flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>
           <button
             key={tab.id}
-            className={`rounded-full p-1 cursor-pointer w-full text-xs ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}
+            className={`rounded-full p-1 cursor-pointer w-full text-xs font-bold ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}
             onClick={() => {console.log(tab);onSelectTab(tab.id)}}
           >
-            <span className="flex-grow truncate font-bold">{tab.name || tab.url}</span>
+            {tab.name || tab.url}
           </button>
           </div>
         ))
