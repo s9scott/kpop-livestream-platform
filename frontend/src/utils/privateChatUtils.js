@@ -198,14 +198,15 @@ export const handleAcceptInvitation = async (invitationId, chatId, user, setPriv
       await updateDoc(invite.ref,{status:'accepted'});
     }
 
+    //updating private chat document
     const chatRef = doc(db,'privateChats',chatId);
     const chatSnap = await getDoc(chatRef);
     const currentMembers = chatSnap.data().members;
 
-    if(!currentMembers.includes(chatId)){
-      currentMembers.push(chatId);
+    if(!currentMembers.includes(user.uid)){
+      currentMembers.push(user.uid);
     }
-    updateDoc(chatSnap.id,{members:currentMembers})
+    updateDoc(chatRef,{members:currentMembers})
 
     
   } else {
