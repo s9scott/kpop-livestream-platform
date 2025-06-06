@@ -4,23 +4,51 @@ import { fetchYoutubeVideoNameFromUrl } from './livestreamsUtils';
 
 
 /**
- * @param {*} privateChatId, text, timestamp
- * privateChatId: string - the ID of the private chat
- * text: string - the text of the message to delete
- * timestamp: string - the timestamp of the message to delete
+ * @param {string} privateChatId - the ID of the private chat
+ * @param {object} user - user leaving chat
  * 
  * allows user to leave private chat
-*/
-export const leavePrivateChat = async (privateChatId, text, timestamp) => {
-  const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
-  const snapshot = await getDocs(q);
+ */
+export const leavePrivateChat = async (user,privateChatId) => {
+
+  const chatRef = doc(db, 'privateChats', privateChatId);
+  const chatSnap = await getDoc(chatRef);
+
+  if (!chatSnap.exists()){
+    console.error('Chat document does not exist.');
+    return;
+  }
+
+  const chatData = chatSnap.data();
+  const userData = fetchUser(user.uid);
+
+  console.log('owner=',chatData.owner);
+  console.log('user=',user.uid);
+
+  if(chatData.owner === user.uid){
+
+    if(chatData.invitedUsers.length === 0 ){
+      console.log('no one in chat');
+    }
+    else{
+      console.log('people in chat');
+    }
+  }
+  else{
+    console.log('no match');
+  }
+
+
+  /*
+  const docRef = doc((db, 'privateChats', privateChatId));
+  const snapshot = await getDoc(docRef);
   snapshot.forEach(async (doc) => {
     const message = doc.data();
     if (message.text === text && message.timestamp === timestamp) {
       await deleteDoc(doc.ref);
       await addDoc(collection(db, 'deletedMessages'), { ...message, chatId: privateChatId });
     }
-  });
+  });*/
 };
 
 //NOTE: had to add deleteDoc()
@@ -121,12 +149,31 @@ export const fetchActiveUsers = async (setActiveUsers) => {
   setActiveUsers(users);
 };
 
-export const handleAcceptInvitation = async (invitationId, chatId, user, setSelectedChat) => {
+export const handleAcceptInvitation = async (invitationId, chatId, user, setPrivateChats) => {
   const invitationRef = doc(db, 'users', user.uid, 'invitations', invitationId);
   const invitationSnap = await getDoc(invitationRef);
   if (invitationSnap.exists()) {
     await updateDoc(invitationRef, { status: 'accepted' });
-    setSelectedChat(prev => [...prev, chatId]); //prev is the current value of the state (in this case selectedChat) to be updated - we add the chatId of the chat that was accepted
+    setPrivateChats(prev => [...prev, chatId]); //prev is the current value of the state (in this case selectedChat) to be updated - we add the chatId of the chat that was accepted
+
+    //update invitation in the privateChat document collection too
+    const q = query(collection(db,'privateChats',chatId,'invitations'),where('user','==',user.uid));
+    const querySnapshot = await getDocs(q);
+    if(!querySnapshot.empty){
+      const invite = querySnapshot.docs[0];
+      await updateDoc(invite.ref,{status:'accepted'});
+    }
+
+    const chatRef = doc(db,'privateChats',chatId);
+    const chatSnap = await getDoc(chatRef);
+    const currentMembers = chatSnap.data().members;
+
+    if(!currentMembers.includes(chatId)){
+      currentMembers.push(chatId);
+    }
+    updateDoc(chatSnap.id,{members:currentMembers})
+
+    
   } else {
     console.error('Invitation document does not exist.');
   }
@@ -141,11 +188,18 @@ export const handleAcceptInvitation = async (invitationId, chatId, user, setSele
  * The status of the invitation is set to 'rejected'.
  * The invitation is not deleted from the database.
  */
-export const handleRejectInvitation = async (invitationId, user) => {
+export const handleRejectInvitation = async (invitationId, chatId, user) => {
   const invitationRef = doc(db, 'users', user.uid, 'invitations', invitationId);
   const invitationSnap = await getDoc(invitationRef);
   if (invitationSnap.exists()) {
     await updateDoc(invitationRef, { status: 'rejected' });
+
+    const q = query(collection(db,'privateChats',chatId,'invitations'),where('user','==',user.uid));
+    const querySnapshot = await getDocs(q);
+    if(!querySnapshot.empty){
+      const invite = querySnapshot.docs[0];
+      await updateDoc(invite.ref,{status:'rejected'});
+    }
   } else {
     console.error('Invitation document does not exist.');
   }
@@ -162,15 +216,32 @@ export const handleRejectInvitation = async (invitationId, user) => {
  * The invitations are added to the users' invitations collection.
 */
 export const createChat = async (chatSettings, user) => {
+
+  console.log('in createchat()');
+
   const chatData = {
     name: chatSettings.name,
     creator: user.uid,
-    invitedUsers: chatSettings.invitedUsers.map(u => u.uid),
+    owner: user.uid, //owner doesn't always equal creator, if creator leaves chat owner is chosen from remaining members in chat
+    members: [],
+    previousMembers: [],
     url: chatSettings.url,
     videoTitle: await fetchYoutubeVideoNameFromUrl(chatSettings.url),
     createdAt: new Date().toISOString(),
   };
+
   const chatRef = await addDoc(collection(db, 'privateChats'), chatData); //chat will exist in privateChats collection if request to create is made - regardless of whether invitation is accepted
+
+  //create collection with invitations, recording uid and invitation status
+  await Promise.all(
+    chatSettings.invitedUsers.map(u =>
+      addDoc(collection(db, 'privateChats', chatRef.id, 'invitations'), {
+        user: u.uid,
+        status: 'pending',
+      })
+    )
+  );
+
   chatSettings.invitedUsers.forEach(async (invitedUser) => {
     const invitationData = {
       chatId: chatRef.id,
@@ -303,22 +374,39 @@ export const fetchPrivateChatVideoId = async (chatId) => {
  * Fetches the members of a private chat from the Firestore database.
 */
 export const fetchPrivateChatMembers = async (chatId) => {
+
   const chatRef = doc(db, 'privateChats', chatId);
   const chatSnap = await getDoc(chatRef);
   
   if (chatSnap.exists()) {
     // Get the owner's data
-    const owner = await fetchUser(chatSnap.data().creator);
+    const owner = await fetchUser(chatSnap.data().owner);
 
-    // Get the invited users' data
-    const invitedUserIds = chatSnap.data().invitedUsers || [];
-    const invitedUsers = await Promise.all(invitedUserIds.map((userId) => fetchUser(userId))); //get the entire user object from their id
+    const invitationsRef = collection(db,'privateChats',chatId,'invitations');
+    const invitationsSnapshot = await getDocs(invitationsRef);
 
-    // Combine the owner with the invited users
-    const allMembers = [owner, ...invitedUsers.filter(user => user !== null)];
+    //dont use .exists() for collections
+    if(!invitationsSnapshot.empty){
+       // Get the invited users' data
+      const invitedUsersData = invitationsSnapshot.docs.map(inv => inv.data());
+      //using colon brackets to destructure object
+      const invitedUsers = await Promise.all(
+        invitedUsersData.map(async({user,status}) => {
+          const userData = await fetchUser(user);
+          return[userData,status];}
+        )); //get the entire user object from their id
 
-    return allMembers;
-  } else {
+      // Combine the owner with the invited users
+      const allMembers = [[owner,'accepted'], ...invitedUsers.filter(([userData, _]) => userData !== null)];
+
+      return allMembers;
+    }
+    else{
+      console.error('invitations do not exist');
+      return [];
+    }
+  } 
+  else {
     console.error('Chat document does not exist.');
     return [];
   }
@@ -351,17 +439,27 @@ export const fetchUser = async (userId) => {
  * If the user is already in the list, the function does nothing.
  * If the user is not in the list, the function adds the user to the list.
  */
-export const addUserToPrivateChat = async (chatId, user) => {
+export const addUserToPrivateChat = async (chatId, inviter, invitee) => {
   //not using arrayunion because it doesn't work with the emulator
-  const chatRef = doc(db, 'privateChats', chatId);
-  const chatSnap = await getDoc(chatRef);
-  if (chatSnap.exists()) {
-    const invitedUsers = chatSnap.data().invitedUsers || [];
-    if (!invitedUsers.includes(user.uid)) {
-      invitedUsers.push(user.uid);
-      await updateDoc(chatRef, { invitedUsers }); //shorthand for invitedUsers: invitedUsers
+  const invitationsRef = collection(db,'privateChats',chatId,'invitations');
+  const invitationsSnap = await getDocs(invitationsRef);
+  if (invitationsSnap.exists()) {
+    const q = query(invitationsRef,where('user','==',invitee.uid));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty){
+      await addDoc(invitationsRef,{user:invitee.uid,status:'pending'});
     }
   }
+
+  //update invitee's invitations collection
+  const invitationData = {
+    chatId: chatId,
+    invitedBy: inviter.uid,
+    invitedAt: new Date().toISOString(),
+    status: 'pending',
+  };
+
+  await addDoc(collection(db, 'users', invitee.uid, 'invitations'), invitationData);
 };
 
 
@@ -390,8 +488,8 @@ export const addPrivateChatReaction = async (privateChatId, text, timestamp, rea
  */
 export const fetchChats = async(user,setPrivateChats) =>{
   // Query for chats where the user is an invited user
-  const invitedQuery = query(collection(db, 'privateChats'), where('invitedUsers', 'array-contains', user.uid));
-  const ownerQuery = query(collection(db, 'privateChats'), where('creator', '==', user.uid));
+  const invitedQuery = query(collection(db, 'privateChats'), where('members', 'array-contains', user.uid));
+  const ownerQuery = query(collection(db, 'privateChats'), where('owner', '==', user.uid));
 
   const invitedSnapshot = await getDocs(invitedQuery);
   const ownerSnapshot = await getDocs(ownerQuery);

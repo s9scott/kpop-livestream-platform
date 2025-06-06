@@ -68,8 +68,8 @@ const CreatePrivateChatButton = ({
    * Handles rejecting a chat invitation.
    * @param {string} invitationId - ID of the invitation.
    */
-  const handleRejectInvite = async (invitationId) => {
-    await handleRejectInvitation(invitationId, user);
+  const handleRejectInvite = async (invitationId, chatId) => {
+    await handleRejectInvitation(invitationId, chatId, user);
   };
 
   /**
@@ -102,7 +102,7 @@ const CreatePrivateChatButton = ({
 
       {/* Chat Selection Dropdown */}
       
-      <button onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }} className="justify-centerflex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary">    
+      <button onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }} className="justify-centerflex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary bg-primary">    
           create chat
       </button>
 
@@ -124,7 +124,7 @@ const CreatePrivateChatButton = ({
           key={invitation.id}
           invitation={invitation}
           onAccept={() => handleAcceptInvite(invitation.id, invitation.chatId)}
-          onReject={() => handleRejectInvite(invitation.id)}
+          onReject={() => handleRejectInvite(invitation.id, invitation.chatId)}
         />
       ))}
     </>
