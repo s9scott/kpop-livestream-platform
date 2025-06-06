@@ -103,14 +103,8 @@ const PrivateChatSection = ({
           /* Messages Tab Content */
           <div className="h-full overflow-y-auto p-2">
             <PrivateChatList 
-<<<<<<< HEAD
               user={user}
               chats={privateChats} 
-=======
-              user = {user}
-              chats = {privateChats} 
-              setPrivateChats = {setPrivateChats}
->>>>>>> 10b08b54bdd2ac50b6246309ef25878defe4a4cb
               onSelectChat={onSelectChat} 
             />
           </div>
