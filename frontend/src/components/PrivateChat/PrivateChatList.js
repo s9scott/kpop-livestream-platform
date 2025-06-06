@@ -33,40 +33,41 @@ const PrivateChatList = ({
   }
 
   return (
-        <div className='px-2 w-full'>
+        <div className={`${chats.length>0?'px-2 w-full':''}`}>
 
         {chats.length > 0 ? (
+            chats.map((chat) => (
+              <div
+                key={chat.id}
+                className="flex items-center mb-3"
+                onClick={() => {onSelectChat(chat.id)}}
+              >
 
-          chats.map((chat) => (
-            <div
-              key={chat.id}
-              className="flex items-center mb-3"
-              onClick={() => {onSelectChat(chat.id)}}
-            >
-
-              <img className="w-11 h-11 mr-2 border-white rounded-full" src={TreasureLogo} alt={chat.id + " logo"} />
-              <div className="flex flex-wrap items-center justify-between p-2 cursor-pointer flex-1 text-sm">
-                  <span className="truncate font-bold mr-auto">
-                    {chat.name || chat.url}
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      leaveChat(user,chat.id);
-                    }}
-                    className="ml-2 text-base w-5 h-6"
-                  >
-                    ⋮
-                  </button>
-                <p className="w-full whitespace-nowrap text-ellipsis">userA: this is placeholder text</p>
+                <img className="w-11 h-11 mr-2 border-white rounded-full" src={TreasureLogo} alt={chat.id + " logo"} />
+                <div className="flex flex-wrap items-center justify-between p-2 cursor-pointer flex-1 text-sm">
+                    <span className="truncate font-bold mr-auto">
+                      {chat.name || chat.url}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        leaveChat(user,chat.id);
+                      }}
+                      className="ml-2 text-base w-5 h-6"
+                    >
+                      ⋮
+                    </button>
+                  <p className="w-full whitespace-nowrap text-ellipsis">userA: this is placeholder text</p>
+                </div>
+                
               </div>
-              
-            </div>))
-
+            ))
           ) : (
 
-          <div className="flex items-center justify-between p-2 flex-1 text-sm bg-base-200 text-base-content">
-            <span className="flex-grow truncate">No private chats open</span>
+          <div className="flex flex-col items-center justify-center h-full text-center p-4 mt-[40%]">
+              <div className="text-4xl mb-2">🤝</div>
+              <div className="text-sm text-gray-400 mb-1">No current chats</div>
+              <div className="text-xs text-gray-500">Why not invite some friends?</div>
           </div>
 
         )}
