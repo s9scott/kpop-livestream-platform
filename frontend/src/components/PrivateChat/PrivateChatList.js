@@ -16,13 +16,15 @@ import { leavePrivateChat, fetchChats } from '../../utils/privateChatUtils';
  * @param {Object} user - current user
  * @param {Object} chats - array containing chat objects (have fields such as id, title, etc.)
  * @param {Function} setPrivateChats - setState function for chats
+ * 
  * @param {Function} onSelectChat - function that handles opening the chat when clicking the corresponding tab
  * 
  * @returns {JSX.Element} PrivateChatList 
  */
 const PrivateChatList = ({ 
   user,
-  chats, 
+  chats,
+  setPrivateChats,
   onSelectChat}) => {
 
   const leaveChat = async (user,chatId) => {

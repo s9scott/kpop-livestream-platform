@@ -54,7 +54,7 @@ const PrivateChatSection = ({
       setTimeout(() => setNotification(''), 3000);
 
       fetchChats(user,setPrivateChats);
-      
+
     } catch (error) {
       console.error('Error accepting invitation:', error);
       setNotification('Failed to accept invitation. Please try again.');
@@ -105,6 +105,7 @@ const PrivateChatSection = ({
             <PrivateChatList 
               user={user}
               chats={privateChats} 
+              setPrivateChats={setPrivateChats}
               onSelectChat={onSelectChat} 
             />
           </div>
