@@ -24,7 +24,7 @@ import {  ArrowLeftStartOnRectangleIcon,ArrowRightStartOnRectangleIcon } from '@
  * @param {string} videoId - Current YouTube video ID.
  * @param {Function} setVideoId - Function to set video ID.
  * @param {Array} privateChats - array of all privateChats
- * @param {Function} setPrivateChars - setState function to set privateChats
+ * @param {Function} setPrivateChats - setState function to set privateChats
  * @param {Array} invitations - list of invitation objects
  * @param {string} selectedPrivateChat - current selected private chat
  * @param {Function} setSelectedPrivateChat - Function to set the selectedPrivateChat

@@ -7,7 +7,7 @@
  */
 
 import TreasureLogo from '../../assets/Treasure_logo_2023.png'; //placeholder image, need to update to be customizable
-import { leavePrivateChat } from '../../utils/privateChatUtils';
+import { leavePrivateChat, fetchChats } from '../../utils/privateChatUtils';
 
 /**
  * This component displays a list of the users' privateChats - it is the 'messages' pane displayed when selected from the private tabs
@@ -26,9 +26,9 @@ const PrivateChatList = ({
   setPrivateChats,
   onSelectChat}) => {
 
-  const leaveChat = (user,chatId) => {
-    console.log('hi')
-    leavePrivateChat(user,chatId);
+  const leaveChat = async (user,chatId) => {
+    await leavePrivateChat(user,chatId);
+    await fetchChats(user,setPrivateChats);
   }
 
   return (

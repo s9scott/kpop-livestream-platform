@@ -46,27 +46,10 @@ const CreatePrivateChatButton = ({
     if (privateChats.length < MAX_PRIVATE_CHATS) {
       await createChat(chatSettings, user); // Create new chat
       setShowChatCreationMenu(false); // Close chat creation menu
-      fetchChats(user,setPrivateChats)
+      await fetchChats(user,setPrivateChats)
     } else {
       alert(`You can only create up to ${MAX_PRIVATE_CHATS} private chats.`);
     }
-  };
-
-  /**
-   * Handles accepting a chat invitation.
-   * @param {string} invitationId - ID of the invitation.
-   * @param {string} chatId - ID of the chat to join.
-   */
-  const handleAcceptInvite = async (invitationId, chatId) => {
-    await handleAcceptInvitation(invitationId, chatId, user, setPrivateChats);
-  };
-
-  /**
-   * Handles rejecting a chat invitation.
-   * @param {string} invitationId - ID of the invitation.
-   */
-  const handleRejectInvite = async (invitationId, chatId) => {
-    await handleRejectInvitation(invitationId, chatId, user);
   };
 
   /**
