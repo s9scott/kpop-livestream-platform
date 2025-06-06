@@ -23,7 +23,6 @@ import { leavePrivateChat } from '../../utils/privateChatUtils';
 const PrivateChatList = ({ 
   user,
   chats, 
-  setPrivateChats,
   onSelectChat}) => {
 
   const leaveChat = (user,chatId) => {

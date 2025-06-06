@@ -9,7 +9,9 @@ import { fetchYoutubeVideoNameFromUrl } from './livestreamsUtils';
  * 
  * allows user to leave private chat
  */
-export const leavePrivateChat = async (user,privateChatId) => {
+export const leavePrivateChat = async (user,privateChatId) => { 
+
+  console.log(typeof(user));
 
   const chatRef = doc(db, 'privateChats', privateChatId);
   const chatSnap = await getDoc(chatRef);
@@ -20,7 +22,6 @@ export const leavePrivateChat = async (user,privateChatId) => {
   }
 
   const chatData = chatSnap.data();
-  const userData = fetchUser(user.uid);
 
   console.log('owner=',chatData.owner);
   console.log('user=',user.uid);

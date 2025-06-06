@@ -101,9 +101,9 @@ const PrivateChatSection = ({
           /* Messages Tab Content */
           <div className="h-full overflow-y-auto p-2">
             <PrivateChatList 
+              user={user}
               chats={privateChats} 
               onSelectChat={onSelectChat} 
-              onCloseChat={onCloseChat}
             />
           </div>
         ) : (
@@ -122,7 +122,7 @@ const PrivateChatSection = ({
 
     
     {/* Create Chat Button - always at bottom */}
-      <div className="flex-shrink-0 border-t bg-gray-50">
+      <div className="flex-shrink-0 border-t bg-neutral">
         <CreatePrivateChatButton 
           user={user} 
           privateChats={privateChats} 
