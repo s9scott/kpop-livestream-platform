@@ -449,8 +449,8 @@ export const fetchPrivateChatMembers = async (chatId) => {
     // Get the owner's data
     const owner = await fetchUser(chatSnap.data().owner);
 
-    const invitationsRef = collection(db,'privateChats',chatId,'invitations');
-    const invitationsSnapshot = await getDocs(invitationsRef);
+    const q = query(collection(db,'privateChats',chatId,'invitations'),where('status','!=','rejected'));
+    const invitationsSnapshot = await getDocs(q);
 
     //dont use .exists() for collections
     if(!invitationsSnapshot.empty){

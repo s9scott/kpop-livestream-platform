@@ -65,11 +65,11 @@ const PrivateChatSection = ({
   /**
    * Handles rejecting a chat invitation and updates the UI
    */
-  const handleRejectInvite = async (invitationId) => {
+  const handleRejectInvite = async (invitationId, chatId) => {
     try {
       console.log("Rejecting invitation:", { invitationId });
       
-      await handleRejectInvitation(invitationId, user);
+      await handleRejectInvitation(invitationId, chatId, user);
       
       // Remove the rejected invitation from the list
       setInvitations(prev => prev.filter(inv => inv.id !== invitationId));

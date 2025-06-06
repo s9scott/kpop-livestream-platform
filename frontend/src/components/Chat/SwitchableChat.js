@@ -313,7 +313,7 @@ const SwitchableChat = ({
             <div className="modal-content w-[90%] bg-primary rounded-lg shadow-lg p-4 w-full max-w-lg">
               <span className="close text-red-500 hover:text-red-800 cursor-pointer float-right font-bold text-white" onClick={toggleActiveUsersModal}>&times;</span>
               <h2 className="text-current text-xl font-semibold mb-4">Active Users</h2>
-              <span>{activeUsers.length > 0 && activeUsers.length != 1 ? activeUsers.length+" users active" : activeUsers.length+" user active"}</span>
+              <span>{activeUsers.length > 0 && activeUsers.length !== 1 ? activeUsers.length+" users active" : activeUsers.length+" user active"}</span>
               <ul className="max-h-64 overflow-y-auto">
                 {activeUsers.length > 0 ? (
                   activeUsers.map((activeUser, index) => (
@@ -349,14 +349,16 @@ const SwitchableChat = ({
               <h2 className="text-current text-xl font-semibold mb-4">Private Chat Members</h2>
               <ul className="max-h-64 overflow-y-auto">
                 {privateChatMembers.length > 0 ? (
-                  privateChatMembers.map((activeUser, index) => (
+                  //privateUser is a tuple (user,status)
+                  privateChatMembers.map((privateUser, index) => (
                     <li key={index} className="flex items-center mb-2">
                       <img
-                        src={activeUser.photoURL || activeUser.profilePicture}
+                        src={privateUser[0].photoURL || privateUser[0].profilePicture}
                         alt="Profile"
                         className="profile-pic w-12 h-12 rounded-full mr-2"
                       />
-                      <span className="text-current font-semibold">{activeUser.displayName || activeUser.username}</span>
+                      <p className="text-current font-semibold">{privateUser[0].displayName || privateUser[0].username}</p>
+                      <p className="text-sm ml-2"> {privateUser[1]==='pending'?'(pending)':''}</p>
                     </li>
                   ))
                 ) : (

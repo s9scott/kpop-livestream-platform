@@ -109,7 +109,7 @@ const InvitationList = ({
                                     accept
                                 </button>
                                 <button
-                                    onClick={() => onRejectInvite(invitation.id)}
+                                    onClick={() => onRejectInvite(invitation.id, invitation.chatId)}
                                     className="text-white text-sm font-light hover:bg-white hover:text-black px-2 py-1 rounded transition-colors duration-200"
                                 >
                                     decline
