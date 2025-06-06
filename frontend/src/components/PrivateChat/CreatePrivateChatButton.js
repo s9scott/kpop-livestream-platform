@@ -53,6 +53,23 @@ const CreatePrivateChatButton = ({
   };
 
   /**
+   * Handles accepting a chat invitation.
+   * @param {string} invitationId - ID of the invitation.
+   * @param {string} chatId - ID of the chat to join.
+   */
+  const handleAcceptInvite = async (invitationId, chatId) => {
+    await handleAcceptInvitation(invitationId, chatId, user, setPrivateChats);
+  };
+
+  /**
+   * Handles rejecting a chat invitation.
+   * @param {string} invitationId - ID of the invitation.
+   */
+  const handleRejectInvite = async (invitationId, chatId) => {
+    await handleRejectInvitation(invitationId, chatId, user);
+  };
+
+  /**
    * Simulates a chat invitation for testing purposes.
    */
   const handleSimulateInvite = async () => {

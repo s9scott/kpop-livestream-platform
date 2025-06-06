@@ -7,21 +7,29 @@
  */
 
 import TreasureLogo from '../../assets/Treasure_logo_2023.png'; //placeholder image, need to update to be customizable
+import { leavePrivateChat } from '../../utils/privateChatUtils';
 
 /**
  * This component displays a list of the users' privateChats - it is the 'messages' pane displayed when selected from the private tabs
  * Each tab has an image for the chat, the title, and a recently sent message (deciding if we will include the name of the livestreams)
  * 
- * @param {object} chats - array containing chat objects (have fields such as id, title, etc.)
+ * @param {Object} user - current user
+ * @param {Object} chats - array containing chat objects (have fields such as id, title, etc.)
+ * @param {Function} setPrivateChats - setState function for chats
  * @param {Function} onSelectChat - function that handles opening the chat when clicking the corresponding tab
- * @param {Function} onCloseChat - (NOTE: STILL NEED TO IMPLEMENT) function that handles leaving chats 
  * 
  * @returns {JSX.Element} PrivateChatList 
  */
 const PrivateChatList = ({ 
+  user,
   chats, 
-  onSelectChat, 
-  onCloseChat}) => {
+  setPrivateChats,
+  onSelectChat}) => {
+
+  const leaveChat = (user,chatId) => {
+    console.log('hi')
+    leavePrivateChat(user,chatId);
+  }
 
   return (
         <div className='px-2 w-full'>
@@ -43,7 +51,7 @@ const PrivateChatList = ({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onCloseChat(chat.id);
+                      leaveChat(user,chat.id);
                     }}
                     className="ml-2 text-base w-5 h-6"
                   >

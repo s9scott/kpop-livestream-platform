@@ -23,7 +23,6 @@ import {  ArrowLeftStartOnRectangleIcon,ArrowRightStartOnRectangleIcon } from '@
  * @param {Object} user - Current user.
  * @param {string} videoId - Current YouTube video ID.
  * @param {Function} setVideoId - Function to set video ID.
- * @param {Function} handleTabClose - Function to handle closing of private chat tabs.
  * @param {Array} privateChats - array of all privateChats
  * @param {Function} setPrivateChars - setState function to set privateChats
  * @param {Array} invitations - list of invitation objects
@@ -38,7 +37,6 @@ const SwitchableChat = ({
   user, 
   videoId, 
   setVideoId, 
-  handleTabClose, 
   privateChats,
   setPrivateChats,
   invitations,
@@ -273,7 +271,6 @@ const SwitchableChat = ({
                   privateChats={privateChats}
                   setPrivateChats = {setPrivateChats}
                   onSelectChat={setSelectedPrivateChat}
-                  onCloseChat={handleTabClose}
                   privateTabs={privateTabs}
                   selectedPrivateTab={selectedPrivateTab}
                   setSelectedPrivateTab={setSelectedPrivateTab}

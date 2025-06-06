@@ -43,7 +43,6 @@ const PrivateChat = ({
   user, 
   togglePrivateUsersModal, 
   privateChatMembers,
-  setPrivateChatMembers,
   setSelectedTab,
   setSelectedPrivateChat}) => {
 

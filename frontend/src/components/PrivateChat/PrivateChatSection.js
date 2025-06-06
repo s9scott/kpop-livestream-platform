@@ -18,7 +18,6 @@ import { handleAcceptInvitation, handleRejectInvitation } from '../../utils/priv
  * 
  * @param {object} chats - array containing chat objects (have fields such as id, title, etc.)
  * @param {Function} onSelectChat - function that handles opening the chat when clicking the corresponding tab
- * @param {Function} onCloseChat - (NOTE: STILL NEED TO IMPLEMENT) function that handles leaving chats 
  * @param {Array} privateTabs - list of private tab objects (messages,invitations)
  * @param {Object} selectedPrivateTab - state variable for currenlty selected tab
  * @param {Function} setSelectedPrivateChat - function for setting the selectedPrivateTab
@@ -29,8 +28,7 @@ const PrivateChatSection = ({
   user,
   privateChats, 
   setPrivateChats,
-  onSelectChat, 
-  onCloseChat, 
+  onSelectChat,  
   privateTabs, 
   selectedPrivateTab, 
   setSelectedPrivateTab,
