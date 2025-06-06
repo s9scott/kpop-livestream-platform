@@ -10,7 +10,7 @@ import PrivateChatTabs from './PrivateChatTabs';
 import PrivateChatList from './PrivateChatList';
 import InvitationList from './InvitationList';
 import CreatePrivateChatButton from './CreatePrivateChatButton';
-import { handleAcceptInvitation, handleRejectInvitation } from '../../utils/privateChatUtils';
+import { fetchChats, handleAcceptInvitation, handleRejectInvitation } from '../../utils/privateChatUtils';
 
 /**
  * This component displays a list of the users' privateChats - it is the pane displayed when private chat is selected from the main tabs
@@ -52,6 +52,8 @@ const PrivateChatSection = ({
       // Show success notification
       setNotification('Invitation accepted! Welcome to the chat.');
       setTimeout(() => setNotification(''), 3000);
+
+      fetchChats(user,setPrivateChats);
       
     } catch (error) {
       console.error('Error accepting invitation:', error);
@@ -101,8 +103,14 @@ const PrivateChatSection = ({
           /* Messages Tab Content */
           <div className="h-full overflow-y-auto p-2">
             <PrivateChatList 
+<<<<<<< HEAD
               user={user}
               chats={privateChats} 
+=======
+              user = {user}
+              chats = {privateChats} 
+              setPrivateChats = {setPrivateChats}
+>>>>>>> 10b08b54bdd2ac50b6246309ef25878defe4a4cb
               onSelectChat={onSelectChat} 
             />
           </div>

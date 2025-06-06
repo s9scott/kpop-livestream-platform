@@ -46,7 +46,7 @@ const CreatePrivateChatButton = ({
     if (privateChats.length < MAX_PRIVATE_CHATS) {
       await createChat(chatSettings, user); // Create new chat
       setShowChatCreationMenu(false); // Close chat creation menu
-      fetchChats(user,setPrivateChats)
+      await fetchChats(user,setPrivateChats)
     } else {
       alert(`You can only create up to ${MAX_PRIVATE_CHATS} private chats.`);
     }
