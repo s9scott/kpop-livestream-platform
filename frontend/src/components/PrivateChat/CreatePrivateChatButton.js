@@ -8,12 +8,9 @@
 
 import React, { useState } from 'react';
 import ChatCreationMenu from './ChatCreationMenu';
-import InvitationPopup from './InvitationPopup';
 import {
   createChat,
   simulateInvite,
-  handleAcceptInvitation,
-  handleRejectInvitation,
   fetchChats
 } from '../../utils/privateChatUtils';
 
@@ -56,23 +53,6 @@ const CreatePrivateChatButton = ({
   };
 
   /**
-   * Handles accepting a chat invitation.
-   * @param {string} invitationId - ID of the invitation.
-   * @param {string} chatId - ID of the chat to join.
-   */
-  const handleAcceptInvite = async (invitationId, chatId) => {
-    await handleAcceptInvitation(invitationId, chatId, user, setPrivateChats);
-  };
-
-  /**
-   * Handles rejecting a chat invitation.
-   * @param {string} invitationId - ID of the invitation.
-   */
-  const handleRejectInvite = async (invitationId) => {
-    await handleRejectInvitation(invitationId, user);
-  };
-
-  /**
    * Simulates a chat invitation for testing purposes.
    */
   const handleSimulateInvite = async () => {
@@ -100,11 +80,37 @@ const CreatePrivateChatButton = ({
         Simulate Invite
       </button> */}
 
-      {/* Chat Selection Dropdown */}
-      
-      <button onClick={() => { setShowChatCreationMenu(true); if (!user) { console.log("hello"); setShowLoginAlert(true);} }} className="justify-centerflex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary">    
+      {/* Login Alert Modal */}
+      {showLoginAlert && (
+        <div className="active-users-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="modal-content bg-primary rounded-lg shadow-lg p-4 w-full max-w-md dark:bg-gray-800">
+            <span 
+              className="close text-red-500 hover:text-red-800 cursor-pointer float-right" 
+              onClick={() => setShowLoginAlert(false)}
+            >
+              &times;
+            </span>
+            <h2 className="text-current text-2xl font-semibold m-4 text-center">
+              You must Login to create Private Chats!
+            </h2>
+          </div>
+        </div>
+      )}
+
+      {/* Create Chat Button */}
+      <div className="flex flex-col space-y-2 p-2">
+        <button 
+          onClick={() => { 
+            setShowChatCreationMenu(true); 
+            if (!user) { 
+              setShowLoginAlert(true);
+            } 
+          }} 
+          className="justify-center flex text-nowrap text-center w-full md:text-sm text-xxxs btn btn-secondary"
+        >    
           create chat
-      </button>
+        </button>
+      </div>
 
       {/* Chat Creation Menu */}
       {showChatCreationMenu && (
@@ -117,16 +123,6 @@ const CreatePrivateChatButton = ({
           setPrivateChats={setPrivateChats}
         />
       )}
-
-      {/* Invitation Popups */}
-      {invitations.map((invitation) => (
-        <InvitationPopup
-          key={invitation.id}
-          invitation={invitation}
-          onAccept={() => handleAcceptInvite(invitation.id, invitation.chatId)}
-          onReject={() => handleRejectInvite(invitation.id)}
-        />
-      ))}
     </>
   );
 };

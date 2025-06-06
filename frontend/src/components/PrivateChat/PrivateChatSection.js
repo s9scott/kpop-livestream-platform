@@ -10,6 +10,7 @@ import PrivateChatTabs from './PrivateChatTabs';
 import PrivateChatList from './PrivateChatList';
 import InvitationList from './InvitationList';
 import CreatePrivateChatButton from './CreatePrivateChatButton';
+import { handleAcceptInvitation, handleRejectInvitation } from '../../utils/privateChatUtils';
 
 /**
  * This component displays a list of the users' privateChats - it is the pane displayed when private chat is selected from the main tabs
@@ -34,24 +35,106 @@ const PrivateChatSection = ({
   selectedPrivateTab, 
   setSelectedPrivateTab,
   invitations,
+  setInvitations,
   setNotification}) => {
+
+
+  /**
+  * Handles accepting a chat invitation and updates the UI
+  */
+  const handleAcceptInvite = async (invitationId, chatId) => {
+    try {
+      console.log("Accepting invitation:", { invitationId, chatId });
+      
+      await handleAcceptInvitation(invitationId, chatId, user, setPrivateChats);
+      
+      // Remove the accepted invitation from the list
+      setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
+      
+      // Show success notification
+      setNotification('Invitation accepted! Welcome to the chat.');
+      setTimeout(() => setNotification(''), 3000);
+      
+    } catch (error) {
+      console.error('Error accepting invitation:', error);
+      setNotification('Failed to accept invitation. Please try again.');
+      setTimeout(() => setNotification(''), 3000);
+    }
+  };
+
+  /**
+   * Handles rejecting a chat invitation and updates the UI
+   */
+  const handleRejectInvite = async (invitationId) => {
+    try {
+      console.log("Rejecting invitation:", { invitationId });
+      
+      await handleRejectInvitation(invitationId, user);
+      
+      // Remove the rejected invitation from the list
+      setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
+      
+      // Show notification
+      setNotification('Invitation declined.');
+      setTimeout(() => setNotification(''), 3000);
+      
+    } catch (error) {
+      console.error('Error rejecting invitation:', error);
+      setNotification('Failed to decline invitation. Please try again.');
+      setTimeout(() => setNotification(''), 3000);
+    }
+  };
 
   return (
     
-    <div className="h-full">
-    <PrivateChatTabs privateTabs={privateTabs} selectedPrivateTab={selectedPrivateTab} onSelectPrivateTab={setSelectedPrivateTab} />
+    <div className="h-full flex flex-col">
+      
+      {/* Tabs for Messages and Invitations */}
+      <PrivateChatTabs 
+        privateTabs={privateTabs} 
+        selectedPrivateTab={selectedPrivateTab} 
+        onSelectPrivateTab={setSelectedPrivateTab} 
+      />
 
-    <div className="flex-col w-full h-5/6 p-2 overflow-scroll">
+      {/* Content Area - switches between Messages and Invitations */}
+      <div className="flex-1 w-full overflow-hidden">
+        
+        {selectedPrivateTab === 'messagesTab' ? (
+          /* Messages Tab Content */
+          <div className="h-full overflow-y-auto p-2">
+            <PrivateChatList 
+              chats={privateChats} 
+              onSelectChat={onSelectChat} 
+              onCloseChat={onCloseChat}
+            />
+          </div>
+        ) : (
+          /* Invitations Tab Content */
+          <div className="h-full">
+            <InvitationList 
+              invitations={invitations}
+              onAcceptInvite={handleAcceptInvite}
+              onRejectInvite={handleRejectInvite}
+              user={user}
+            />
+          </div>
+        )}
+        
+      </div>
 
-      {selectedPrivateTab==='messagesTab'?
-      (<PrivateChatList chats={privateChats} onSelectChat={onSelectChat} onCloseChat={onCloseChat}/>)      
-      :(<InvitationList/>)}
-
-    </div>
-
-    <CreatePrivateChatButton user={user} privateChats={privateChats} setPrivateChats={setPrivateChats} invitations={invitations} setNotification={setNotification}/>
-    </div>
     
+    {/* Create Chat Button - always at bottom */}
+      <div className="flex-shrink-0 border-t bg-gray-50">
+        <CreatePrivateChatButton 
+          user={user} 
+          privateChats={privateChats} 
+          setPrivateChats={setPrivateChats} 
+          invitations={invitations} 
+          setNotification={setNotification}
+        />
+      </div>
+      
+    </div>
     
   );
 };
