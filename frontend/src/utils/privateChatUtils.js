@@ -184,6 +184,8 @@ export const fetchActiveUsers = async (setActiveUsers) => {
 };
 
 export const handleAcceptInvitation = async (invitationId, chatId, user, setPrivateChats) => {
+  console.log('handleac call');
+
   const invitationRef = doc(db, 'users', user.uid, 'invitations', invitationId);
   const invitationSnap = await getDoc(invitationRef);
   if (invitationSnap.exists()) {
@@ -206,7 +208,9 @@ export const handleAcceptInvitation = async (invitationId, chatId, user, setPriv
     if(!currentMembers.includes(user.uid)){
       currentMembers.push(user.uid);
     }
-    updateDoc(chatRef,{members:currentMembers})
+    await updateDoc(chatRef,{members:currentMembers})
+
+    console.log('current members =',currentMembers);
 
     
   } else {

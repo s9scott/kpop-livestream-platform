@@ -40,6 +40,7 @@ const SwitchableChat = ({
   privateChats,
   setPrivateChats,
   invitations,
+  setInvitations,
   selectedPrivateChat,
   setSelectedPrivateChat,
   chatOpen,
@@ -275,6 +276,7 @@ const SwitchableChat = ({
                   selectedPrivateTab={selectedPrivateTab}
                   setSelectedPrivateTab={setSelectedPrivateTab}
                   invitations={invitations}
+                  setInvitations={setInvitations}
                   setNotification={()=>{}}
                 />
                 </>

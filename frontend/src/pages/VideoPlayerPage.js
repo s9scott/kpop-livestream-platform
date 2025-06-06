@@ -52,8 +52,6 @@ const VideoPlayerPage = ({
   setPrivateChats,
   invitations,
   setInvitations,
-  selectedChats,
-  setSelectedChats,
   selectedPrivateChat,
   setSelectedPrivateChat,
 }) => {
@@ -164,6 +162,7 @@ const VideoPlayerPage = ({
                 privateChats = {privateChats}
                 setPrivateChats = {setPrivateChats}
                 invitations = {invitations}
+                setInvitations={setInvitations}
                 selectedPrivateChat= {selectedPrivateChat}
                 setSelectedPrivateChat = {setSelectedPrivateChat}
                 chatOpen={chatOpen}
