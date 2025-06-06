@@ -16,6 +16,9 @@ export const leavePrivateChat = async (user,privateChatId) => {
   
   const chatRef = doc(db, 'privateChats', privateChatId);
   const chatSnap = await getDoc(chatRef);
+  
+
+  console.log('snap=',chatSnap);
 
   if (!chatSnap.exists()){
     console.error('Chat document does not exist.');
@@ -73,14 +76,14 @@ export const leavePrivateChat = async (user,privateChatId) => {
       const updatedMembers = [...chatData.members];
       const newOwner = updatedMembers.pop();
       const updatedPreviousMembers = [...chatData.previousMembers,oldOwner];
-      updateDoc(chatRef,{owner:newOwner,members:updatedMembers,previousMembers:updatedPreviousMembers})
+      await updateDoc(chatRef,{owner:newOwner,members:updatedMembers,previousMembers:updatedPreviousMembers})
     }
   }
   else if(chatData.members.includes(user.uid)){
     //if not owner, just move from members to previous members
     const updatedMembers = chatData.members.filter(uid => uid!==user.uid);
     const updatedPreviousMembers = [...chatData.previousMembers,user.uid];
-    updateDoc(chatRef,{members:updatedMembers,previousMembers:updatedPreviousMembers})
+    await updateDoc(chatRef,{members:updatedMembers,previousMembers:updatedPreviousMembers})
   }
   else{
     console.log('user is not an owner or member of chat');
