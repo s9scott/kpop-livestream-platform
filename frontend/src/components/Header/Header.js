@@ -1,12 +1,20 @@
+/**
+ * @file Header.js
+ * @author Paola Bustos, Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-06-01
+ * @desc file containing Header.js
+ */
+
 import { useState, useEffect } from 'react';
 import LightMode from '../../assets/LightMode.svg';
 import NightMode from '../../assets/NightMode.svg';
-import LoginHeader from './LoginHeader';
+import ProfileMenu from './ProfileMenu';
 import VideoHeader from './VideoHeader';
-import HeaderMenu from './HeaderMenu';
-import PrivateChatHeader from './PrivateChatHeader';
+import PagesMenu from './PagesMenu';
 import LiveStreamsButton from './LiveStreamsButton';
 import './styles/Header.css';
+import { PlayIcon } from '@heroicons/react/24/solid';
 
 /**
  * Header component for displaying navigation and user options.
@@ -33,17 +41,10 @@ const Header = ({
   setVideoId,
   videoUrl,
   setVideoUrl,
-  activeUsers,
-  privateChats,
-  invitations,
-  selectedChats,
-  setSelectedChats,
-  selectedChatId,
-  setSelectedChatId,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
-
+  const [showMobileInput, setShowMobileInput] = useState(false); 
 
   useEffect(() => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -77,44 +78,62 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between p-header-padding h-header-desktop md:h-header-mobile bg-neutral text-base-content">
+    <header className="relative flex items-center justify-between w-[100vw] py-1" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
+      
       {/* Desktop View */}
       <div className="hidden md:flex items-center">
-        <HeaderMenu />
+        <PagesMenu />
+        <span className="text-md font-bold text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
       </div>
-      <div className="hidden md:flex w-8/12 justify-center">
+      <div className="hidden md:flex w-1/2 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
       </div>
-      <div className="hidden md:flex items-center">
-        <PrivateChatHeader 
-          user={user} 
-          privateChats={privateChats} 
-          invitations={invitations} 
-          selectedChats={selectedChats} 
-          setSelectedChats={setSelectedChats} 
-          selectedChatId={selectedChatId} 
-          setSelectedChatId={setSelectedChatId} 
-        />
-      </div>
-      <div className="my-4">
+
+      <div className="hidden md:flex my-4">
         <LiveStreamsButton setVideoId={setVideoId}/>
       </div>
       <div className="hidden md:flex items-center">
-        <LoginHeader user={user} setUser={setUser} />
+        <ProfileMenu user={user} setUser={setUser} />
       </div>
+      
+      
+      {/* Theme Toggle Button 
       <label className="swap swap-rotate md:mr-1">
         <input type="checkbox" className="theme-controller" onChange={handleThemeToggle} checked={isChecked} />
         <img src={LightMode} alt="Day Mode" className="swap-off h-8 w-8 md:h-12 md:w-12" />
         <img src={NightMode} alt="Night Mode" className="swap-on h-8 w-8 md:h-12 md:w-12" />
       </label>
+      */}
 
       {/* Mobile View */}
-      <div className="flex md:hidden w-full justify-between items-center p-2">
-        <HeaderMenu />
-        <button onClick={togglePopup} className="btn btn-primary">
-          Open Menu
-        </button>
-        <LoginHeader user={user} setUser={setUser} />
+      <div className="flex md:hidden w-full items-center">
+        {!showMobileInput ? (
+          <>
+        <PagesMenu/>
+        <span className="text-sm font-bold text-white ml-1 whitespace-nowrap">livestreaming prototype</span>
+          <button 
+                onClick={() => setShowMobileInput(true)}
+                className="ml-auto mr-10"
+              >
+                <PlayIcon className="w-8 h-8 border border-white rounded-full px-1"/>
+          </button>
+          <ProfileMenu user={user} setUser={setUser} />
+        </>
+        ) : (
+          <div className="w-full flex items-center gap-2 px-4">
+            <button 
+              onClick={() => setShowMobileInput(false)}
+              className="text-white"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div className="flex-1 w-full">
+              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user} />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Popup Modal for Mobile */}
@@ -123,18 +142,7 @@ const Header = ({
           <div className="bg-white rounded-lg p-4 w-11/12 max-w-md">
             <button onClick={togglePopup} className="text-red-500 hover:text-red-800 float-right">✕</button>
             <div className="my-4">
-              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl}  user={user}/>
-            </div>
-            <div className="my-4">
-              <PrivateChatHeader 
-                user={user} 
-                privateChats={privateChats} 
-                invitations={invitations} 
-                selectedChats={selectedChats} 
-                setSelectedChats={setSelectedChats} 
-                selectedChatId={selectedChatId} 
-                setSelectedChatId={setSelectedChatId} 
-              />
+              <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} user={user}/>
             </div>
             <div className="my-4">
               <LiveStreamsButton setVideoId={setVideoId}/>

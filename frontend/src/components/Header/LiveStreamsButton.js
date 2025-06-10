@@ -20,8 +20,8 @@ const LiveStreamsButton = ({ setVideoId }) => {
 
   return (
     <div>
-      <button onClick={togglePopup} className="btn-primary px-4 py-2 text-primary rounded">
-        View Live Streams
+      <button onClick={togglePopup} className="whitespace-nowrap bg-primary text-white px-5 py-1 mr-5 rounded-lg text-sm hover:bg-red-600 transition duration-200 ease-in-out shadow-md">
+        invite users
       </button>
       {isPopupOpen && <LiveStreamsPopup onClose={togglePopup} setVideoId={setVideoId} />}
     </div>

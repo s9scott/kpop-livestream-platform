@@ -4,18 +4,15 @@ import YouTubeLiveChatOverlay from "./YoutubeLiveChatOverlay";
 const LiveChatContainer = ({ chatSrc }) => {
   const [showSummary, setShowSummary] = useState(true);
 
-
-
-
   return (
-    <div className="w-full h-[600px] relative bg-gray-900 text-white overflow-hidden">
+    <div className="w-full h-[500px] bg-neutral relative text-white overflow-hidden rounded-xl">
   
 
       {/* Summary Panel */}
       <div
         className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           showSummary ? "max-h-64 opacity-100 py-4 px-6" : "max-h-0 opacity-0 py-0 px-6"
-        } bg-black bg-opacity-90 overflow-hidden rounded-b-lg shadow-md`}
+        } overflow-hidden`}
       >
         <div className="flex justify-between items-start">
           <YouTubeLiveChatOverlay chatSrc={chatSrc} />
@@ -50,7 +47,7 @@ const LiveChatContainer = ({ chatSrc }) => {
         >
           <iframe
             className="w-full h-full border-0"
-            src={chatSrc}
+            src={chatSrc} //url format diff from emebdding youtube video (even though this uses iframe as well)
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

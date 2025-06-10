@@ -1,3 +1,11 @@
+/**
+ * @file ChatInputForm.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-28
+ * @desc file containing ChatInputForm
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
@@ -5,14 +13,14 @@ import data from '@emoji-mart/data';
 /**
  * ChatInputForm component handles user input for chat messages,
  * including support for mentions and emoji selection.
+ * Depending on the toggleUsersModal function passed, this input form can be used for native chats or private chats
  * 
- * @param {Object} props - The component props.
- * @param {string} props.input - The current value of the chat input.
- * @param {function} props.handleInputChange - Function to handle changes to the chat input value.
- * @param {function} props.handleSendClick - Function to handle sending the chat message.
- * @param {Array} props.mentionDropdown - List of users for the mention dropdown.
- * @param {function} props.handleMentionClick - Function to handle selecting a mention.
- * @param {function} props.toggleActiveUsersModal - Function to toggle the active users modal.
+ * @param {string} input - The current value of the chat input.
+ * @param {Function} handleInputChange - Function to handle changes to the chat input value.
+ * @param {Function} handleSendClick - Function to handle sending the chat message.
+ * @param {Array} mentionDropdown - List of users for the mention dropdown.
+ * @param {Function} handleMentionClick - Function to handle selecting a mention.
+ * @param {Function} toggleUsersModal - Function to toggle the user modal (can be activeUsers for native OR... privateUsers for private)
  * 
  * @returns {JSX.Element} The rendered ChatInputForm component.
  */
@@ -21,9 +29,9 @@ const ChatInputForm = ({
   handleInputChange,
   handleSendClick,
   mentionDropdown,
-  handleMentionClick,
-  toggleActiveUsersModal,
+  toggleUsersModal,
 }) => {
+
   const [showDropdown, setShowDropdown] = useState(false); // Controls the visibility of the mention dropdown
   const [filteredMentions, setFilteredMentions] = useState([]); // Stores filtered mentions based on user input
   const inputRef = useRef(input); // Reference to keep track of the current input value
@@ -96,7 +104,7 @@ const ChatInputForm = ({
     const value = inputRef.current;
     const newValue = value.substring(0, value.lastIndexOf('@')) + `@${displayName} `;
     handleInputChange({ target: { value: newValue } });
-    setFilteredMentions([]);
+    setFilteredMentions([]); //Hide dropdown after selecting a mention
     setShowDropdown(false);
   };
 
@@ -116,30 +124,35 @@ const ChatInputForm = ({
     <div className="relative">
       <form onSubmit={handleSendClick}>
         <label htmlFor="chat" className="sr-only">Your message</label>
-        <div className="flex items-center py-2 px-3 bg-accent rounded-xl mb-5 relative">
+        <div className="flex items-center py-3 px-3 bg-neutral relative rounded-xl">
+          {/*removed button to send images, may implement later.*/}
           {/* Button to toggle the active users modal */}
           <button
             type="button"
             className="inline-flex justify-center p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            onClick={toggleActiveUsersModal}
+            onClick={toggleUsersModal}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="2 2 20 20"
-              stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg fill="currentColor" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98.736 98.736" className="w-6 h-6">
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g>
+                  <g>
+                    <path d="M26.417,56.739c0-5.115,1.688-9.838,4.528-13.656c-2.974-2.673-6.893-4.313-11.205-4.313 c-9.272,0-16.789,7.518-16.789,16.789c0,0,3.95,35.276,16.789,35.276c4.962,0,8.592-5.274,11.184-11.739 c-3.025-9.953-4.248-19.888-4.488-22.026L26.417,56.739z"></path>
+                    <path d="M19.74,37.554c5.617,0,10.503-3.125,13.02-7.729c-2.513-3.413-4.006-7.619-4.006-12.173c0-2.066,0.313-4.06,0.882-5.943 c-2.625-2.358-6.088-3.808-9.896-3.808c-8.188,0-14.826,6.639-14.826,14.827C4.914,30.915,11.552,37.554,19.74,37.554z"></path>
+                    <path d="M78.996,38.77c-4.312,0-8.23,1.64-11.205,4.313c2.842,3.818,4.528,8.541,4.528,13.656l-0.019,0.33 c-0.24,2.14-1.463,12.073-4.488,22.026c2.592,6.465,6.222,11.739,11.184,11.739c12.839,0,16.789-35.276,16.789-35.276 C95.785,46.288,88.268,38.77,78.996,38.77z"></path>
+                    <path d="M65.977,29.824c2.517,4.604,7.401,7.729,13.02,7.729c8.188,0,14.826-6.639,14.826-14.826 c0-8.188-6.639-14.827-14.826-14.827c-3.809,0-7.271,1.449-9.896,3.808c0.568,1.884,0.883,3.877,0.883,5.943 C69.982,22.205,68.489,26.411,65.977,29.824z"></path>
+                    <path d="M49.368,36.751c-11.039,0-19.988,8.949-19.988,19.988c0,0,4.704,41.997,19.988,41.997s19.987-41.997,19.987-41.997 C69.355,45.7,60.407,36.751,49.368,36.751z"></path>
+                    <circle cx="49.368" cy="17.651" r="17.651"></circle>
+                  </g>
+                </g>
+              </g>
             </svg>
           </button>
-          {/* Emoji picker toggle button */}
+          {/* Emoji picker toggle button - hide button on iPads and tablets - xl shows on iPad pro, fix*/}
           <button
             type="button"
-            className="p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            className={`hidden desktop:block p-2 text-primary rounded-lg cursor-pointer hover:text-gray-900 hover:ghost-btn dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600`}
             onClick={() => setShowEmojiDropdown(!showEmojiDropdown)}
           >
             <svg
@@ -198,7 +211,7 @@ const ChatInputForm = ({
         )}
         {/* Emoji picker */}
         {showEmojiDropdown && (
-          <div className="absolute bottom-full mb-2 rounded-lg">
+          <div className="absolute bottom-full mb-2 rounded-lg z-[100]">
             <Picker data={data} onEmojiSelect={addEmoji} theme="device" />
           </div>
         )}

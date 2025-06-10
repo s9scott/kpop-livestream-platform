@@ -19,8 +19,43 @@ app.post('/api/updateVideoDetails', async (req, res) => {
 	getDetails(src);
 });
 
+/* NEW FUNCTION CONTAINS SUMMARY TOPICS AND LANGUAGES */
+
+app.post('/api/getVideoAnalysis', async (req, res) => {
+  try{
+    const {chatSrc} = req.body;
+
+    if (!chatSrc) {
+          return res.status(400).json({ error: "Missing chatSrc" });
+      }
+      const id = extractVideoId(chatSrc);
+
+    // Just one call !!!
+    const videoMessages = await getMessages(id);
+
+    const { videoTitle, videoDescription } = await getDetails(chatSrc);
+
+    // We use promise.all to execute the functions in parallel
+    const [summary, topics, languages] = await Promise.all([
+      generateSummary(videoMessages, videoTitle, videoDescription),
+      generateTopics(videoMessages, videoTitle, videoDescription),
+      generateLanguages(videoMessages, videoTitle, videoDescription)
+    ]);
+
+    console.log("Generated Analysis:", { summary, topics, languages });
+
+    res.status(200).json({
+      summary,
+      topics,
+      languages
+    });
+  } catch (error) {
+    console.error("Error in /api/getVideoAnalysis")
+  }
+}); 
 
 
+ /*
 app.post('/api/summarize', async (req, res) => {
   try {
       const { chatSrc } = req.body;
@@ -30,11 +65,11 @@ app.post('/api/summarize', async (req, res) => {
       }
       const id = extractVideoId(chatSrc);
 
-      const vidoeMessages = await getMessages(id); // Ensure async call is awaited
+      const videoMessages = await getMessages(id); // Ensure async call is awaited, 5 Quota Cost
       //console.log("Fetched messages:", messages);
       
       const { videoTitle, videoDescription } = await getDetails(chatSrc, res); // Ensure async call is awaited
-      const summary = await generateSummary(vidoeMessages, videoTitle, videoDescription); // If async, make sure it's awaited
+      const summary = await generateSummary(videoMessages, videoTitle, videoDescription); // If async, make sure it's awaited
           
 
       console.log("Generated Summary:", summary);
@@ -93,6 +128,7 @@ app.post('/api/getLanguages', async (req, res) => {
       res.status(500).json({ error: "Failed to generate topics" });
   }
 });
+*/
 
 /**
  * 
@@ -146,7 +182,7 @@ const getMessages = async (chatSrc) => {
 
       console.log(`Fetching messages for liveChatId: ${liveChatId}`);
 
-      const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${process.env.YOUTUBE_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${process.env.YOUTUBE_API_KEY}`; //liveChatMessages.list() - 5 Quota - retrieves a batch of latest messge from given url
       const response = await axios.get(url);
       const { data } = response;
 

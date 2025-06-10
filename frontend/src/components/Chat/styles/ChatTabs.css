@@ -1,0 +1,17 @@
+/*tutorial: https://www.youtube.com/watch?v=-VOUK-xFAyk*/
+
+@property --gradient-angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.active-tab-container{
+    background:conic-gradient(from var(--gradient-angle),#637c54,#2d8f85,#0e4b50,#2d8f85,#637c54);
+    animation: rotation 5s linear infinite;
+}
+
+@keyframes rotation{
+    0% {--gradient-angle: 0deg;}
+    100% {--gradient-angle: 360deg;}
+}

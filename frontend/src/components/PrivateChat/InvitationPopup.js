@@ -1,21 +1,25 @@
+/**
+ * @file InvitationPopup.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-27
+ * @desc file containing InvitationPopup
+ */
+
 import React, { useEffect, useState } from 'react';
 import { fetchPrivateChatName, fetchUser } from '../../utils/privateChatUtils';
 
 /**
- * @param invitation, onAccept, onReject
- * What they are?
- * invitation: Object with the chat invitation details { chatId: string, invitedBy: string }
- * onAccept: Function to accept the chat invitation
- * onReject: Function to reject the chat invitation
- * @returns InvitationPopup
- * 
- * What is it?
  * This component displays a popup with the details of a chat invitation.
  * It shows the name of the chat and the user who sent the invitation.
  * Users can accept or reject the invitation by clicking the corresponding buttons.
  * 
-*/
-
+ * @param {Object} invitation - Object with the chat invitation details { chatId: string, invitedBy: string }
+ * @param {Function} onAccept - Function to accept the chat invitation
+ * @param {function} onReject - Function to reject the chat invitation
+ * 
+ * @returns {JSX.Element} The rendered component
+ */
 const InvitationPopup = ({ invitation, onAccept, onReject }) => {
   const [chatName, setChatName] = useState(''); // State variable for the chat name
   const [creatorName, setCreatorName] = useState(''); // State variable for the creator's name

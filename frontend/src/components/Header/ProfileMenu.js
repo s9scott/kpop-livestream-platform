@@ -1,26 +1,38 @@
+/**
+ * @file ProfileMenu.js
+ * @author Paola Bustos, Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-06-01
+ * @desc file containing ProfileMenu.js
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { GoogleUserSignIn, signOutUser } from '../../auth/googleAuth'; // Authentication functions
 import { logWebsiteUsage} from '../../utils/livestreamsUtils';
 import { addUser, fetchUserInfo } from '../../utils/usersUtils'
 import { NavLink } from 'react-router-dom'; // React Router component for navigation
-import './styles/LoginHeader.css'; // Custom CSS for LoginHeader component
+import './styles/ProfileMenu.css'; // Custom CSS for ProfileMenu component
 
 /**
- * LoginHeader component displays user login/logout functionality and user profile menu.
+ * Menu that appears when profile is clicked on right side of navbar. displays user login/logout functionality and user profile menu.
  * @param {Object} props - Component properties.
  * @param {Object} props.user - Current user information.
  * @param {Function} props.setUser - Function to update user information.
  * @returns {JSX.Element} The rendered component.
  */
-const LoginHeader = ({ user, setUser }) => {
+const ProfileMenu = ({ user, setUser }) => {
+
+  // Definimos las clases como constantes para no repetir tanto
+  const linkBaseClass = "block px-4 py-3 text-white transition-colors duration-200 text-sm";
+  const hoverClass = "hover:bg-primary";
+
   const [curUser, setCurUser] = useState(user); // State to store the current user
   const [loginTime, setLoginTime] = useState(null); // State to store the login time for session tracking
 
   useEffect(() => {
     const lastUserData = localStorage.getItem("lastUser");
-    if (lastUserData && !curUser) {
+    if (lastUserData && !curUser) { //check that there is no current user logged in
       const lastUser = JSON.parse(lastUserData);
       setCurUser(lastUser);
       setUser(lastUser);
@@ -95,60 +107,69 @@ const LoginHeader = ({ user, setUser }) => {
   }
 
   return (
+
     <div className="relative text-xsm">
       {curUser ? (
-        <Menu as="div" className="relative inline-block text-left z-[1001]">
-          <MenuButton className="btn btn-secondary relative text-xsm btn-md rounded-md bg-secondary font-semibold shadow-sm hover:btn-accent transform hover:scale-110 hover:-translate-y-1 duration-200 delay-100 px-4">
-            <div className='flex items-center'>
-              <ChevronDownIcon aria-hidden="true" className="h-5 w-5 mr-2" />
-              <img
-                alt="User Avatar"
-                src={curUser.photoURL || curUser.profilePicture}
-                className="rounded-full w-10 h-10"
-              />
-            </div>
-          </MenuButton>
+        <Menu as="div" className="relative inline-block text-left">
+          {({ open }) => (
+            <>
+              <MenuButton className="mr-5">
+                <div className='flex items-center'>
+                  <img
+                    alt="User Avatar"
+                    src={curUser.photoURL || curUser.profilePicture}
+                    className="rounded-full w-10 h-10"
+                  />
+                </div>
+              </MenuButton>
 
-          <MenuItems
-            transition
-            className="absolute text-xsm right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-          >
-            <div className="py-1">
-              <MenuItem>
-                {({ active }) => (
-                  <NavLink
-                    to="/account"
-                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
-                  >
-                    Profile
-                  </NavLink>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ active }) => (
-                  <NavLink
-                    to="/settings"
-                    className={`block px-4 py-2 text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
-                  >
-                    Settings
-                  </NavLink>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ active }) => (
-                  <button
-                    onClick={handleSignOut}
-                    className={`block w-full px-4 py-2 text-left text-black font-semibold rounded hover:bg-accent hover:rounded hover:m-1 focus:bg-neutral focus:text-white`}
-                  >
-                    Logout
-                  </button>
-                )}
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </Menu>
-      ) : (
-        <button onClick={handleSignIn} id="login" className="whitespace-nopwrap truncate mr-2 btn btn-secondary text-xsm hover:btn-accent transform hover:-translate-y-1 hover:scale-110 delay-100 duration-200 px-4 py-2">
+              {open && (
+
+              <MenuItems
+                transition
+                className="absolute top-full right-3 w-52 bg-base-300 text-white shadow-xl rounded-xl"
+              >
+                <MenuItem>
+                  {({ active }) => (
+                    <NavLink
+                      to="/account"
+                      className={({ isActive }) =>
+                        `rounded-t-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                      }
+                    >
+                      Profile
+                    </NavLink>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ active }) => (
+                    <NavLink
+                      to="/settings"
+                      className={({ isActive }) =>
+                        `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
+                      }
+                    >
+                      Settings
+                    </NavLink>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ active }) => (
+                    <button
+                      onClick={handleSignOut}
+                      className={`rounded-b-xl text-left w-full ${linkBaseClass} ${hoverClass}`
+                      }
+                    >
+                      Logout
+                    </button>
+                  )}
+                </MenuItem>
+              </MenuItems>)}
+            </>
+          )}
+        </Menu>) 
+      : (
+        <button onClick={handleSignIn} id="login" className="whitespace-nopwrap truncate mr-2 btn btn-secondary text-xsm hover:btn-accent px-4">
           Google Login
         </button>
       )}
@@ -156,4 +177,4 @@ const LoginHeader = ({ user, setUser }) => {
   );
 };
 
-export default LoginHeader;
+export default ProfileMenu;

@@ -1,21 +1,27 @@
+/**
+ * @file Popup.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-27
+ * @desc file containing Popup
+ */
+
 import React from 'react';
 
 /**
- * @param isOpen, onClose, children
- * What they are?
- * isOpen: Boolean to determine if the popup is open
- * onClose: Function to close the popup
- * children: The content to display inside the popup
- * @returns Popup
- * 
- * This component displays a popup modal with the specified content.
+ * This component displays a modal with the specified content.
  * The popup is displayed when the isOpen prop is set to true.
  * The onClose function is called when the close button is clicked.
  * The children prop is used to render the content inside the popup.
  * 
-*/
-
+ * @param {Boolean} isOpen - Boolean to determine if the popup is open
+ * @param {Function} onClose - Function to close the popup
+ * @param {Function} children - The content to display inside the popup
+ * 
+ * @returns {JSX.Element} The rendered component
+ */
 const Popup = ({ isOpen, onClose, children }) => {
+  
   if (!isOpen) return null; // If the popup is not open, do not render anything
 
   // Render the popup with the specified content

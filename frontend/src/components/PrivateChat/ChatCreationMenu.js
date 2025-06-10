@@ -1,23 +1,38 @@
+/**
+ * @file ChatCreationMenu.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-27
+ * @desc file containing ChatCreationMenu
+ */
+
 import React, { useState, useEffect } from 'react';
 import { fetchUsers } from '../../utils/usersUtils';
 
 /**
- * 
- * @param 
- * What they are?
- * onCreateChat: Function to set the chat settings and create the chat
- * onClose: Function to close the chat creation menu
- * currentUser: Variable with current user info { uid: string, username: string, email: string }
- * @returns ChatCreationMenu
- *
- * This component is a modal that allows users to create a private chat.
+ * This component is a modal (popup) that allows users to create a private chat.
  * It displays a form with input fields for the chat name and live URL.
  * It also displays a list of users that can be invited to the chat.
  * Users can be selected or removed from the list of invited users.
  * When the create button is clicked, the chat is created with the specified settings.
+ * 
+ * @param {Function} onCreateChat - Function to set the chat settings and create the chat
+ * @param {Function} onClose - Function to close the chat creation menu
+ * @param {Object} currentUser - Object with current user info { uid: string, username: string, email: string }
+ * @param {Boolean} showLoginAlert - state variable to determine if login alert is showing (notify users they must be logged in to create chats)
+ * @param {Function} setLoginAlert - setState function for showLoginAlert
+ * @param {Function} setPrivateChats - setState function for privateChats
+ * 
+ * @returns {JSX.Element} The rendered component
  */
-
-const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, setShowLoginAlert}) => {
+const ChatCreationMenu = ({ 
+  onCreateChat, 
+  onClose, 
+  currentUser, 
+  showLoginAlert, 
+  setShowLoginAlert, 
+  setPrivateChats}) => {
+    
   const [chatName, setChatName] = useState(''); // State variable for the chat name
   const [chatUrl, setChatUrl] = useState(''); // State variable for the live URL
   const [invitedUsers, setInvitedUsers] = useState([]); // State variable for the list of invited users
@@ -43,7 +58,6 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, 
     setInvitedUsers((prev) => prev.filter((u) => u.uid !== user.uid));
   };
 
-
   // Function to create the chat with the specified settings
   const handleCreateChat = async () => {
     const chatSettings = {
@@ -53,7 +67,7 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, 
     };
 
     try {
-      await onCreateChat(chatSettings);
+      await onCreateChat(chatSettings, setPrivateChats);
       onClose(); // Close the menu after creating the chat
     } catch (error) {
       console.error('Failed to create chat:', error);
@@ -73,7 +87,7 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, 
 
       { currentUser && (
       <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[1005]">
-        <div className="bg-secondary p-6 rounded-lg text-black">
+        <div className="bg-secondary p-6 rounded-lg">
           <h2 className="text-lg font-bold mb-4">Create Private Chat</h2>
         
           <input
@@ -81,7 +95,7 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, 
             placeholder="Chat Name"
             value={chatName}
             onChange={(e) => setChatName(e.target.value)}
-            className="mb-4 p-2 border rounded w-full text-black"
+            className="mb-4 p-2 border rounded w-full"
           />
         
           <input
@@ -98,9 +112,9 @@ const ChatCreationMenu = ({ onCreateChat, onClose, currentUser, showLoginAlert, 
               <div key={user.uid} className="flex items-center justify-between">
                 <span>{user.username}</span>
                 {invitedUsers.some((u) => u.uid === user.uid) ? (
-                  <button onClick={() => handleUserRemove(user)} className="text-red-500">Remove</button>
+                  <button onClick={() => handleUserRemove(user)} className="text-primary">Remove</button>
                 ) : (
-                  <button onClick={() => handleUserSelect(user)} className="text-blue-500">Invite</button>
+                  <button onClick={() => handleUserSelect(user)} className="">Invite</button>
                 )}
               </div>
             ))}
