@@ -46,17 +46,17 @@ const App = () => {
           <Route exact path="/" element={<HomePage />} />
           <Route path="/load-live" element={
           <VideoPlayerPage 
-          user={user} 
-          videoId={videoId}
-          setVideoId={setVideoId}
-          activeUsers={activeUsers} 
-          setActiveUsers={setActiveUsers}
-          privateChats={privateChats} 
-          setPrivateChats={setPrivateChats}
-          invitations={invitations} 
-          setInvitations={setInvitations}
-          selectedPrivateChat={selectedPrivateChat}
-          setSelectedPrivateChat={setSelectedPrivateChat}
+            user={user} 
+            videoId={videoId}
+            setVideoId={setVideoId}
+            activeUsers={activeUsers} 
+            setActiveUsers={setActiveUsers}
+            privateChats={privateChats} 
+            setPrivateChats={setPrivateChats}
+            invitations={invitations} 
+            setInvitations={setInvitations}
+            selectedPrivateChat={selectedPrivateChat}
+            setSelectedPrivateChat={setSelectedPrivateChat}
       />
           } />
           <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />

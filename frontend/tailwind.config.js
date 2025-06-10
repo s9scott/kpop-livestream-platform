@@ -6,11 +6,11 @@ module.exports = {
       width: {
 
         //desktop styles (xl) - applies to iPad pro landscape
-        'video-iPadPro-landscape': '60vw', 
+        'video-iPadPro-landscape': '68vw', 
         'chat-iPadPro-landscape': '25vw', 
 
         //landscape tablet styles (lg) - applies to iPad pro portrait
-        'video-tablet-landscape': '55vw', 
+        'video-tablet-landscape': '58vw', 
         'chat-tablet-landscape': '35vw', 
 
         //portrait tablet styles (md) - md styles apply to some landscape iPhones too (XR, 12) - resolved this issue by using screen queries to specify max px height
@@ -34,11 +34,11 @@ module.exports = {
 
         //desktop styles (xl) - applies to iPad pro landscape
         'header-desktop': '10vh',
-        'video-iPadPro-landscape': '55vh',
+        'video-iPadPro-landscape': '60vh',
         'chat-iPadPro-landscape': '65vh',
         
         //landscape tablet styles (lg) - applies to iPad pro portrait too
-        'video-tablet-landscape': '50vh',
+        'video-tablet-landscape': '55vh',
         'chat-tablet-landscape': '90vh',
 
         //(md) - applies to larger iPhones too (XR, 12, etc.)
@@ -116,7 +116,7 @@ module.exports = {
       // Custom orientation breakpoints
       'portrait': { raw: '(orientation: portrait)' },
       'landscape': { raw: '(orientation: landscape)' },
-      'iphone-landscape': {raw: '(orientation: landscape) and (max-height: 430px)',},
+      'iphone-landscape': {raw: '(orientation: landscape) and (min-height: 380px) and (max-height: 430px)',},
       'ipadpro-portrait': {raw: '(min-width: 834px) and (max-width: 1024px) and (orientation: portrait),'},
       'desktop': {raw: '(min-width: 1370px)'}
     },

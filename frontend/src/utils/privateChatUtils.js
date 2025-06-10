@@ -60,6 +60,7 @@ export const leavePrivateChat = async (user,privateChatId) => {
             user,
             status: status === 'pending' ? 'chatDeleted' : status
           })
+          return ''; //map expects function with a return value
         }
       ));
 
@@ -469,8 +470,8 @@ export const fetchPrivateChatMembers = async (chatId) => {
       return allMembers;
     }
     else{
-      console.error('invitations do not exist');
-      return [];
+      //no users who are pending or accepted
+      return [[owner,'accepted']];
     }
   } 
   else {

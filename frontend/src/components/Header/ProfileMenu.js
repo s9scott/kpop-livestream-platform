@@ -110,7 +110,7 @@ const ProfileMenu = ({ user, setUser }) => {
 
     <div className="relative text-xsm">
       {curUser ? (
-        <Menu as="div" className="relative inline-block text-left z-[1000]">
+        <Menu as="div" className="relative inline-block text-left">
           {({ open }) => (
             <>
               <MenuButton className="mr-5">

@@ -175,7 +175,7 @@ const PrivateChat = ({
 
         <div className="flex items-center mb-1 justify-center">
           <button className="" onClick={()=>{setSelectedPrivateChat(null); setSelectedTab('privateTab')}}>←</button>
-          <h2 className="max-w-3/4 mx-auto text-lg font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis block">{privateChatName}</h2>
+          <h2 className="max-w-[200px] mx-auto text-md font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis block">{privateChatName}</h2>
           <button className="text-sm">settings</button>
         </div>
 

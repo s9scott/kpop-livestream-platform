@@ -78,7 +78,7 @@ const Header = ({
   };
 
   return (
-    <header className="navbar flex items-center justify-between w-100vw p-0" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
+    <header className="relative flex items-center justify-between w-[100vw] py-1" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
       
       {/* Desktop View */}
       <div className="hidden md:flex items-center">

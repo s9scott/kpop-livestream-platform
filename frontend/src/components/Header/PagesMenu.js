@@ -18,19 +18,10 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
  */
 export default function PagesMenu() {
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   // Definimos las clases como constantes para no repetir tanto
   const linkBaseClass = "block px-4 py-3 text-white transition-colors duration-200 text-sm";
   const hoverClass = "hover:bg-primary";
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
 
   return (
 
@@ -39,7 +30,6 @@ export default function PagesMenu() {
       {/*this comes from headlessui, notice how this is a function with its own return value - the menuButton and the MenuItems, the latter renders based on the 'open' argument*/}
       {({open}) => (<>
           <MenuButton 
-          onClick={toggleMenu}
           className="btn btn-ghost btn-circle p-1 hover:bg-gray-700"
           >
             <Bars3Icon className="h-6 w-6" />
@@ -53,7 +43,6 @@ export default function PagesMenu() {
                   className={({ isActive }) =>
                     `rounded-t-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                   }
-                  onClick={closeMenu}
                 >
                   Home
                 </NavLink>
@@ -64,7 +53,6 @@ export default function PagesMenu() {
                   className={({ isActive }) =>
                     `${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                   }
-                  onClick={closeMenu}
                 >
                   Livestreaming
                 </NavLink>
@@ -75,7 +63,6 @@ export default function PagesMenu() {
                   className={({ isActive }) =>
                     `rounded-b-xl ${linkBaseClass} ${hoverClass} ${isActive ? 'bg-primary' : ''}`
                   }
-                  onClick={closeMenu}
                 >
                   Settings
                 </NavLink>

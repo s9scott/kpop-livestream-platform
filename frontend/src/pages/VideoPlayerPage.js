@@ -144,7 +144,7 @@ const VideoPlayerPage = ({
     <div className="min-h-screen app-container flex flex-col bg-gradient-to-t from-base-300 via-base-200 to-base-100 xl:pt-20 desktop:pt-10">
       {/*only render notification div if notification exists*/}
       {notification && <div className="notification">{notification}</div>}
-        {videoId && (
+        {videoId ? (
           <div className={`flex flex-grow ${chatOpen?'justify-around':'justify-center'} items-start flex-wrap mt-10`}>
             <div className={`video-player-container ${chatOpen?'':'mx-auto'}`}>
               <VideoPlayer
@@ -170,7 +170,10 @@ const VideoPlayerPage = ({
               />
             </div>
           </div>
-        )}
+        ) : 
+        (<div className="flex flex-col justify-start h-[80vh]">
+          <h1 className="my-auto ml-5 text-7xl">nothing to see here. <br/> try choosing a <span className="text-primary">livestream.</span></h1>
+        </div>)}
     </div>
   );
 };

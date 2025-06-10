@@ -208,7 +208,7 @@ const NativeChat = ({
 
   return (
     <div className="relative flex flex-col w-full h-full bg-neutral rounded-xl">
-        <div className="px-8 py-2 rounded-lg shadow-lg z-50 text-center items-center">
+        <div className="px-8 py-2 rounded-lg shadow-lg text-center items-center">
           <h2 className="text-lg font-semibold text-base">native chat</h2>
           <span className="w-full whitespace-nowrap overflow-hidden text-ellipsis block text-sm">{videoTitle}</span>
         </div>
