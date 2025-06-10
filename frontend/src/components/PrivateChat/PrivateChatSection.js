@@ -94,6 +94,7 @@ const PrivateChatSection = ({
         privateTabs={privateTabs} 
         selectedPrivateTab={selectedPrivateTab} 
         onSelectPrivateTab={setSelectedPrivateTab} 
+        invitations={invitations}
       />
 
       {/* Content Area - switches between Messages and Invitations */}

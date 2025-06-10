@@ -20,7 +20,7 @@ import React from 'react';
  * @returns PrivateChatTabs 
  * 
  */
-const PrivateChatTabs = ({ privateTabs, selectedPrivateTab, onSelectPrivateTab}) => {
+const PrivateChatTabs = ({ privateTabs, selectedPrivateTab, onSelectPrivateTab, invitations}) => {
   
   return (
     <div className="flex w-full border-b pt-2 px-3 py-1">
@@ -28,10 +28,14 @@ const PrivateChatTabs = ({ privateTabs, selectedPrivateTab, onSelectPrivateTab})
         privateTabs.map((tab) => (
           <button
             key={tab.id}
-            className={`${tab.id==='messagesTab'?'mr-auto':''} p-1 fit-content flex items-center justify-between cursor-pointer text-xs ${selectedPrivateTab === tab.id ? 'text-primary' : 'text-base-content'}`}
+            className={`${tab.id==='messagesTab'?'mr-auto':''} p-1 fit-content flex items-center justify-between cursor-pointer text-sm ${selectedPrivateTab === tab.id ? 'text-primary' : 'text-base-content'}`}
             onClick={() => {console.log(typeof(onSelectPrivateTab));onSelectPrivateTab(tab.id)}}
           >
-            <span className="flex-grow truncate font-bold">{tab.name}</span>
+            <div className="flex">
+              <span className="flex-grow truncate">{tab.name}</span>
+              {/*render a red circle to say theres an invitation pending*/}
+              {tab.id==='invitationsTab' && invitations.length>0 && (<div className="bg-red-500 text-white rounded-full w-2 h-2 flex justify-center items-center text-xs"></div>)}
+            </div>
           </button>
         ))
       ) : (

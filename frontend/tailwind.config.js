@@ -59,8 +59,8 @@ module.exports = {
 
       // Text Size for Everything
       fontSize: {
-        'xs': '.75rem',
-        'sm': '.875rem',
+        'xs': '.7rem',
+        'sm': '.815rem',
         'base': '1rem',
         'lg': '1.125rem',
         'xl': '1.25rem',
@@ -76,20 +76,6 @@ module.exports = {
         // Add more customizable padding settings here...
       },
 
-      // Button Settings
-      // Add customization for button sizes, padding, and borders here...
-      borderRadius: {
-        'btn': '0.9rem', // Default button border-radius
-        // Add more customizable border-radius settings here...
-      },
-
-      // Dropdown Settings
-      // Add customization for dropdown sizes, padding, and borders here...
-      borderWidth: {
-        'dropdown': '1px', // Default border-width for dropdowns
-        // Add more customizable border-width settings here...
-      },
-
       // Spacing (Margin, Padding, etc.)
       spacing: {
         '1': '0.25rem',
@@ -100,9 +86,8 @@ module.exports = {
       },
 
       // Shadows
-      boxShadow: {
-        'btn': '0px 4px 6px -1px rgba(0, 0, 0, 0.1)', // Default shadow for buttons
-        'dropdown': '0px 4px 6px -1px rgba(0, 0, 0, 0.1)', // Default shadow for dropdowns
+      fontFamily: {
+        'DM-Sans': ['DM Sans', 'sans-serif'],
         // Add more customizable shadow settings here...
       },
     },

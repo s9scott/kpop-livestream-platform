@@ -29,7 +29,7 @@ const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
           <div className={`rounded-full button-container flex items-center justify-between flex-grow flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>
           <button
             key={tab.id}
-            className={`rounded-full p-1 cursor-pointer w-full text-xs font-bold ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}
+            className={`rounded-full p-1 cursor-pointer w-full text-sm ${selectedTab === tab.id ? 'active-tab bg-neutral' : 'text-neutral bg-accent'}`}
             onClick={() => {console.log(tab);onSelectTab(tab.id)}}
           >
             {tab.name || tab.url}
