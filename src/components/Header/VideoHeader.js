@@ -23,8 +23,8 @@ export const VideoHeader = ({ setVideoId, videoUrl, setVideoUrl}) => {
 
   const history = [
     {title:'🔴THE K-POP : 24/7 𝗟𝗜𝗩𝗘 (K-POP 24시간 실시간 스트리밍 채널)',url:'https://www.youtube.com/watch?v=JVocS7Yftw8'},
-    {title:'🔴[𝑲-𝑷𝑶𝑷 𝑳𝒊𝒗𝒆] K-pop Comebacks This Month🎆 | Show! MusicCore | #TXT #TWICE #NCTDREAM',url:'https://www.youtube.com/watch?v=iKQIOhkVeYM'},
-    {title:'lofi hip hop radio 📚 beats to relax/study to',url:'https://www.youtube.com/watch?v=jfKfPfyJRdk'},]
+    {title:'Vibing with K-POP | KBS WORLD TV',url:'https://www.youtube.com/watch?v=jhsltv-xwQg'},
+    {title:'All day K-POP Live',url:'https://www.youtube.com/watch?v=b5H3M0FY1tI'},]
 
   /**
    * Handles form submission by loading the video based on the current video URL.
