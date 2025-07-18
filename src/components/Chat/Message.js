@@ -1,46 +1,50 @@
+/**
+ * @file Message.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-05-27
+ * @desc file containing Message
+ */
+
 import React, { useState } from 'react';
-import { deleteMessage, muteUser, addReaction } from '../../utils/livestreamsUtils';
 import addEmoji from "../../assets/emoji-add.svg";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+import { useUser } from '../../context/UserContext';
 
 /**
  * Message component represents an individual chat message with options to delete, mute user,
- * add reactions, and view user information.
+ * add reactions, and view user information. 
+ * Depending on removeMessageDB, addReactionDB, and muteUserDB, this component can represent either a native chat or a private chat.
  * 
- * @param {Object} props - The component props.
- * @param {string} props.videoId - The ID of the video associated with the message.
- * @param {Object} props.message - The message object containing text, timestamp, author details, and reactions.
- * @param {Object} props.user - The current user object.
- * @param {number} props.index - The index of the message in the message list.
- * @param {function} props.formatTimestamp - Function to format the message timestamp.
- * @param {function} props.toggleOptions - Function to toggle the options dropdown visibility.
- * @param {boolean} props.showOptions - Boolean to indicate whether the options dropdown is visible.
- * @param {function} props.handleSeeAccountInfo - Function to handle viewing the account information of the message author.
- * @param {function} props.handleRemoveMessage - Function to handle the removal of a message.
+ * @param {string} chatId - NATIVE: The ID of the video associated with the message. PRIVATE: unique id
+ * @param {Object} message - The message object containing text, timestamp, author details, and reactions.
+ * @param {Function} formatTimestamp - Function to format the message timestamp.
+ * @param {Function} handleSeeAccountInfo - Function to handle viewing the account information of the message author.
+ * @param {Function} removeMessageDB - Function to handle the removal of a message from database.
+ * @param {Function} addReactionDB- Function to add reaction
+ * @param {Function} muteUserDB - Function to mute user
  * 
  * @returns {JSX.Element} The rendered Message component.
  */
 const Message = ({
-  videoId,
+  chatId,
   message,
-  user,
-  index,
   formatTimestamp,
-  toggleOptions,
-  showOptions,
   handleSeeAccountInfo,
-  handleRemoveMessage,
-  selectedTab, 
-  setSelectedTab
+  removeMessageDB,
+  addReactionDB,
+  muteUserDB
 }) => {
+
   let isUserMessage = null;
   let messageClasses = null;
+
+  const {user} = useUser();
+
   if (user !== null) { 
     isUserMessage = message.authorUid === user.uid // Checks if the message was authored by the current user
-    messageClasses = message.text.includes(`@${user.displayName}`) ? 'text-current bg-secondary rounded-xl p-1' : 'text-current';  // Adds highlighting if the message mentions the user
-  } else {
-    setSelectedTab("youtubeChat")
+    messageClasses = message.text.includes(`@${user.displayName}`) ? 'text-current bg-primary rounded-xl p-1' : 'text-current';  // Adds highlighting if the message mentions the user
   }
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Controls the visibility of the emoji picker
   const [showDropdown, setShowDropdown] = useState(false); // Controls the visibility of the options dropdown
@@ -61,30 +65,14 @@ const Message = ({
 
   /**
    * Handles the removal of a message by calling the deleteMessage function.
-   * Logs the videoId and handles errors if the removal fails.
+   * Logs the chatId and handles errors if the removal fails.
    */
   const handleRemoveClick = async () => {
     try {
-      console.log('Message removed:', videoId);
-      await deleteMessage(videoId, message.text, message.timestamp);
+      console.log('Message removed:', chatId);
+      await removeMessageDB(chatId, message.text, message.timestamp);
     } catch (error) {
       console.error('Error removing message: ', error);
-    }
-  };
-
-  /**
-   * Handles muting the user who authored the message.
-   * Prompts the user for the mute duration and mutes the user for that duration.
-   */
-  const handleMuteUserClick = async () => {
-    const muteDuration = prompt('Enter mute duration in minutes:');
-    if (muteDuration) {
-      try {
-        await muteUser(message.videoId, message.authorUid, parseInt(muteDuration));
-        alert(`User ${message.authorName} has been muted for ${muteDuration} minutes.`);
-      } catch (error) {
-        console.error('Error muting user: ', error);
-      }
     }
   };
 
@@ -94,14 +82,31 @@ const Message = ({
    * 
    * @param {string} reaction - The emoji reaction to add.
    */
-  const handleAddReaction = async (reaction) => {
-    try {
-      await addReaction(videoId, message.text, message.timestamp, reaction);
-      setShowEmojiPicker(false); // Hide the emoji picker after selection
-    } catch (error) {
-      console.error('Error adding reaction: ', error);
+    const handleAddReaction = async (reaction) => {
+      try {
+        await addReactionDB(chatId, message.text, message.timestamp, reaction);
+        setShowEmojiPicker(false); // Hide the emoji picker after selection
+      } catch (error) {
+        console.error('Error adding reaction: ', error);
+      }
+    };
+
+  /**
+   * Handles muting the user who authored the message.
+   * Prompts the user for the mute duration and mutes the user for that duration.
+   */
+  const handleMuteUserClick = async () => {
+    const muteDuration = prompt('Enter mute duration in minutes:');
+    if (muteDuration) {
+      try {
+        await muteUserDB(message.chatId, message.authorUid, parseInt(muteDuration));
+        alert(`User ${message.authorName} has been muted for ${muteDuration} minutes.`);
+      } catch (error) {
+        console.error('Error muting user: ', error);
+      }
     }
   };
+
 
   return (
     <div className="flex items-start gap-2 mb-6 relative group w-full">
@@ -115,7 +120,7 @@ const Message = ({
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center space-x-2">
             {/* Author's name and message timestamp */}
-            <span className={`text-sm font-bold ${isUserMessage ? 'text-primary' : 'text-secondary '}`}>{message.authorName}</span>
+            <span className={`text-sm font-bold ${isUserMessage ? 'text-primary' : 'text-primary '}`}>{message.authorName}</span>
             <span className="text-xs font-light text-current">{formatTimestamp(message.timestamp)}</span>
           </div>
           <div className="relative">

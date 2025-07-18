@@ -1,13 +1,14 @@
-import React from 'react';
+import React from "react";
 
 /**
  * UserInfoModal component displays user information in a modal.
- * @param {Object} props - Component properties.
- * @param {Object} props.selectedUser - The user object containing details to display.
- * @param {Function} props.setSelectedUser - Function to clear the selected user.
+ * @param {Object} selectedUser - The user object containing details to display.
+ * @param {Function} setSelectedUser - Function to clear the selected user.
+ * 
  * @returns {JSX.Element | null} The rendered modal or null if no user is selected.
  */
 const UserInfoModal = ({ selectedUser, setSelectedUser }) => {
+  
   if (!selectedUser) return null;
 
   /**

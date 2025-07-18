@@ -1,188 +1,13 @@
 /**
- * Firebase Firestore functions for the livestreams collection
+ * @file livestreamsUtils.js
+ * @author Simon Tenedero, Jonas Matulis
+ * @created 2024-XX-XX
+ * @lastModified 2025-06-04
+ * @desc module for managing livestreaming in firebase
  */
+
 import { db } from '../firebaseConfig';
-import { collection, query, orderBy, limit, where, doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, serverTimestamp, deleteDoc, increment } from 'firebase/firestore';
-
-// YOUTUBE API key
-const API_KEY = 'AIzaSyCJXkbG-hi1ECUlkXJ3yZS_-agRa9bPzCM';
-
-
-
-
-/**
- * @param {*} userId 
- * @param {*} message 
- * Function to log a message sent by a user
- * This function will create a new document for the user if it doesn't exist
- */
-export const logMessageSent = async (userId, message) => {
-  const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
-  const userDoc = await getDoc(userRef);
-
-  if (!userDoc.exists()) {
-    await setDoc(userRef, { messagesSent: [] }, { merge: true });
-  }
-
-  await updateDoc(userRef, {
-    messagesSent: arrayUnion({ text: message, timestamp: new Date() }),
-  });
-};
-
-/**
- * @param {*} userId 
- * @param {*} activity 
- * Function to log website usage by a user
- * This function will create a new document for the user if it doesn't exist
- */
-export const logWebsiteUsage = async (userId, activity) => {
-  const userRef = doc(db, 'users', userId);  // Using user UID as the document ID
-  const userDoc = await getDoc(userRef);
-
-  if (!userDoc.exists()) {
-    await setDoc(userRef, { websiteUsage: [] }, { merge: true });
-  }
-
-  await updateDoc(userRef, {
-    websiteUsage: arrayUnion({ activity, timestamp: new Date() }),
-  });
-};
-
-/**
- * @param {*} videoId 
- * @returns Array of messages from the Firestore database for a specific video
- */
-export const getActiveUsers = async (videoId) => {
-  try {
-    // Query to get the last 100 messages ordered by timestamp
-    const q = query(
-      collection(db, 'livestreams', videoId, 'messages'),
-      orderBy('timestamp', 'desc'),
-      limit(25)
-    );
-
-    const querySnapshot = await getDocs(q);
-    const userIds = new Set();
-    const now = new Date();
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 15000);
-
-    querySnapshot.forEach((doc) => {
-      const messageData = doc.data();
-      const messageTimestamp = new Date(messageData.timestamp); // Convert ISO 8601 to Date object
-      if (messageTimestamp >= fiveMinutesAgo) {
-        userIds.add(messageData.authorUid);
-      }
-    });
-
-    const activeUserPromises = Array.from(userIds).map(async (uid) => {
-      const userRef = doc(db, 'users', uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        return userSnap.data();
-      }
-      return null;
-    });
-
-    const activeUsers = await Promise.all(activeUserPromises);
-    return activeUsers.filter((user) => user !== null);
-  } catch (error) {
-    console.error("Error getting active users: ", error);
-    return [];
-  }
-};
-
-/**
- * @param videoId 
- * @returns number of active users in the last 5 minutes
- */
-export const getNumberOfActiveUsers = async (videoId) => {
-  const activeUsers = await getActiveUsers(videoId);
-  return activeUsers.length;
-};
-
-/**
- * @param videoId 
- * @returns youtube video details for the given videoId (title, description, channelTitle, publishedAt, thumbnails)
- */
-export const fetchYoutubeDetails = async (videoId) => {
-  try {
-    const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
-    const data = await response.json();
-    if (data.items && data.items.length > 0) {
-      return data.items[0].snippet;
-    } else {
-      throw new Error('Video not found');
-    }
-  } catch (error) {
-    console.error('Error fetching video details:', error);
-    return null;
-  }
-};
-
-/**
- * @returns list of active streams
- * Fetches all active streams from the Firestore database
- */
-export const fetchActiveStreams = async () => {
-  const q = query(collection(db, 'livestreams'), where('isActive', '==', true));
-  const querySnapshot = await getDocs(q);
-  const streams = [];
-  querySnapshot.forEach((doc) => {
-    streams.push({ id: doc.id, ...doc.data() });
-  });
-  return streams;
-};
-
-/**
- * @param {*} videoId 
- * @returns video details for the given videoId from firestore database (title, description, channelTitle, publishedAt, thumbnails  )
- */
-export const fetchVideoDetails = async (videoId) => {
-  const docRef = doc(db, 'videos', videoId);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    console.error("No such document!");
-    return null;
-  }
-};
-
-/**
- * @param {*} videoId 
- * @param {*} title 
- * @param {*} url 
- * Adds a new live stream to the Firestore database
- * The videoId is used as the document ID
- */
-export const addLiveStream = async (videoId, title, url) => {
-  const livestreamRef = doc(db, 'livestreams', videoId);
-  await setDoc(livestreamRef, {
-    title: title,
-    url: url,
-    isActive: true,
-    createdAt: serverTimestamp()
-  });
-};
-
-/**
- * @param {*} videoId
- * Updates the isActive field of the live stream to false
- * This effectively stops the live stream from being embeded in the website
- * The videoId is used as the document ID
- */
-export const archiveChatMessages = async (videoId) => {
-  const messagesRef = collection(db, 'livestreams', videoId, 'messages');
-  const archiveRef = collection(db, 'archive', videoId, 'messages');
-
-  const querySnapshot = await getDocs(messagesRef);
-  querySnapshot.forEach(async (doc) => {
-    const messageData = doc.data();
-    const archiveDocRef = doc(archiveRef, doc.id);
-    await setDoc(archiveDocRef, messageData);
-    await deleteDoc(doc.ref);
-  });
-};
+import { collection, query, where, doc, getDoc, getDocs, updateDoc, deleteDoc, increment } from 'firebase/firestore';
 
 /**
  * @param {*} videoId 
@@ -209,25 +34,87 @@ export const muteUser = async (videoId, uid) => {
 
 
 /**
- * @param {*} url
- * @returns the title of the youtube video from the given url
+ * Fetches the title of a YouTube video from its URL using the backend API.
+ * This function bypasses CORS issues by using the backend as a proxy.
+ * 
+ * @param {string} url - The YouTube video URL (supports various formats: watch, live, embed, short links)
+ * @returns {Promise<string>} The video title if found, or 'No video just chatting :)' if not found/error
  */
 export const fetchYoutubeVideoNameFromUrl = async (url) => {
-  if(url) {
+  // Early return if no URL provided
+  if (!url) {
+    return 'No video just chatting :)';
+  }
+
+  try {
+    console.log('Fetching video title for URL:', url);
+
+    // Primary method: Use YouTube's oEmbed API (no API key required) - note this could potentially be deprecated, and require the API key in the future.
+    // oEmbed is a format for allowing embedded representation of URLs
     try {
-      const videoId = url.split('v=')[1];
-      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet`);
-      const data = await response.json();
-      if (data.items && data.items.length > 0) {
-        return data.items[0].snippet.title;
-      } else {
-        throw new Error('Video not found');
+      // Extract the video ID from the URL using helper function
+      const videoId = extractVideoIdFromUrl(url);
+      if (videoId) {
+        const oEmbedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+        console.log('Trying oEmbed fallback:', oEmbedUrl);
+        
+        const oEmbedResponse = await fetch(oEmbedUrl);
+        if (oEmbedResponse.ok) {
+          const oEmbedData = await oEmbedResponse.json();
+          if (oEmbedData.title) {
+            console.log('Title obtained via oEmbed fallback:', oEmbedData.title);
+            return oEmbedData.title;
+          }
+        }
       }
-    } catch (error) {
-      console.error('Error fetching video details:', error);
-      return 'No video just chatting :)';
+    } catch (oEmbedError) {
+      console.warn('oEmbed fallback also failed:', oEmbedError);
+    }
+
+    return 'No video just chatting :)';
+
+  } catch (error) {
+    console.error('Error fetching video title:', error);
+    return 'No video just chatting :)';
+  }
+};
+
+/**
+ * Helper function to extract YouTube video ID from various URL formats.
+ * Supports multiple YouTube URL patterns including standard watch URLs,
+ * short URLs, embed URLs, and live stream URLs.
+ * 
+ * @param {string} url - The YouTube URL to parse
+ * @returns {string|null} The extracted video ID, or null if not found
+ * 
+ */
+const extractVideoIdFromUrl = (url) => {
+  // Return early if no URL provided
+  if (!url) return null;
+  
+  // Array of regex patterns to match different YouTube URL formats
+  const patterns = [
+    // Matches: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID, youtube.com/live/ID
+    // Captures everything after the format identifier until it hits a parameter separator or end
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/live\/)([^&\n?#]+)/,
+    
+    // Fallback pattern for URLs with v= parameter anywhere in the query string
+    // Matches: youtube.com/watch?other_param=value&v=ID or youtube.com/watch?v=ID&other_param=value
+    /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+  ];
+  
+  // Try each pattern until we find a match
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    
+    // If pattern matches and has a captured group, return the video ID
+    if (match && match[1]) {
+      return match[1];
     }
   }
+  
+  // No pattern matched - return null
+  return null;
 };
 
 /**
@@ -286,17 +173,23 @@ export const fetchLiveStreams = async () => {
 };
 
 /**
- * @param {*} liveStreamId 
- * @returns the number of active users in the live stream with the given liveStreamId
-*/
-export const fetchActiveUsersCount = async (liveStreamId) => {
-  const liveStreamRef = doc(db, 'livestreams', liveStreamId);
-  const liveStreamSnap = await getDoc(liveStreamRef);
+ * Gets video details from firebase cache 
+ * @param {string} videoId - The video ID to search for
+ * @returns {Object|null} Video document data or null if not found
+ */
 
-  if (liveStreamSnap.exists()) {
-    return liveStreamSnap.data().activeUsersCount || 0;
-  } else {
-    console.error('Live stream document does not exist.');
-    return 0;
+export const getVideoFromFirebase = async (videoId) => {
+  try{
+    const videoRef = doc(db, 'livestreams', videoId);
+    const videoSnap = await getDoc(videoRef);
+
+    if(videoSnap.exists()) {
+      return videoSnap.data();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching video from Firebase:', error);
+    return null;
   }
-};
+}

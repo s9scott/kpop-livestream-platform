@@ -1,31 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { fetchActiveStreams, addLiveStream, fetchYoutubeDetails, logWebsiteUsage } from '../../utils/livestreamsUtils';
-import { useNavigate, useLocation } from 'react-router-dom';
-import VideoHistoryDropdown from './VideoHistoryDropdown';
+import React, { useState } from 'react';
+import { getVideoFromFirebase} from '../../utils/livestreamsUtils';
+import { useNavigate } from 'react-router-dom'; //useLocation()
+import { PlayIcon } from '@heroicons/react/24/solid';
 
 /**
  * `VideoHeader` component handles video URL input, video loading, and video history management.
  * 
- * @param {Object} props - The properties passed to the component.
- * @param {Function} props.setVideoId - Function to update the current video ID.
- * @param {string} props.videoId - The current video ID.
- * @param {string} props.videoUrl - The current video URL.
- * @param {Function} props.setVideoUrl - Function to update the current video URL.
+ * @param {Function} setVideoId - Function to update the current video ID.
+ * @param {string} videoId - The current video ID.
+ * @param {string} videoUrl - The current video URL.
+ * @param {Function} setVideoUrl - Function to update the current video URL.
+ * 
  * @returns {JSX.Element} The rendered `VideoHeader` component.
  */
-export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user}) => {
-  const [url, setUrl] = useState(''); // State to store the current URL input
-  const [history, setHistory] = useState([]); // State to store video history
+export const VideoHeader = ({ setVideoId, videoUrl, setVideoUrl}) => {
+
   const [error, setError] = useState(''); // State to store error messages
   const navigate = useNavigate(); // Hook for navigation
-  const location = useLocation(); // Hook for location information
+  //const location = useLocation(); // Hook for location information
 
-  useEffect(() => {
-    // Load video history from local storage and fetch active streams on component mount
-    const savedHistory = JSON.parse(localStorage.getItem('videoHistory')) || [];
-    setHistory(savedHistory);
-    fetchActiveStreams().then(setHistory);
-  }, []);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const history = [
+    {title:'🔴THE K-POP : 24/7 𝗟𝗜𝗩𝗘 (K-POP 24시간 실시간 스트리밍 채널)',url:'https://www.youtube.com/watch?v=JVocS7Yftw8'},
+    {title:'🔴[𝑲-𝑷𝑶𝑷 𝑳𝒊𝒗𝒆] K-pop Comebacks This Month🎆 | Show! MusicCore | #TXT #TWICE #NCTDREAM',url:'https://www.youtube.com/watch?v=iKQIOhkVeYM'},
+    {title:'lofi hip hop radio 📚 beats to relax/study to',url:'https://www.youtube.com/watch?v=jfKfPfyJRdk'},]
 
   /**
    * Handles form submission by loading the video based on the current video URL.
@@ -37,28 +36,88 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
     await loadVideo(videoUrl);
   };
 
+/**
+ * Gets video details either from firebase cache or oEmbed API as fallback
+ * 
+ * @param {string} videoId - The video ID to get details for
+ * @returns {Object} Video details object with title and source
+ */
+const getVideoDetails = async (videoId) => {
+  try {
+    console.log(`Checking firebase for video ID: ${videoId}`);
+    const cachedVideo = await getVideoFromFirebase(videoId);
+    
+    // Use cached title if it exists and is not a placeholder
+    if (cachedVideo && cachedVideo.title) {
+      console.log('cache title=', cachedVideo.title);
+      if (!/^Video\s[\w-]{6,}$/i.test(cachedVideo.title)) {
+        console.log(`Found in firebase: ${cachedVideo.title}`);
+        return {
+          title: cachedVideo.title,
+          source: 'firebase'
+        };
+      }
+    }
+
+    console.log('Not in Firebase, fetching from oEmbed API');
+    
+    // Get title from oEmbed
+    const oEmbedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+    
+    const response = await fetch(oEmbedUrl);
+    
+    if (response.ok) {
+      const data = await response.json();
+      
+      if (data.title) {
+        console.log(`Fetched from oEmbed: ${data.title}`);
+        return {
+          title: data.title,
+          source: 'oembed'
+        };
+      }
+    }
+
+    // Fallback if oEmbed fails
+    console.log('oEmbed failed, using fallback');
+    return {
+      title: `Video ${videoId}`,
+      source: 'fallback'
+    };
+
+  } catch (error) {
+    console.error('Error getting video details:', error);
+    return {
+      title: `Video ${videoId}`,
+      source: 'error'
+    };
+  }
+};
+
+
+
   /**
    * Loads video details based on the provided URL, updates history, and navigates to the load-live route.
    * 
    * @param {string} url - The URL of the video to be loaded.
    */
+
   const loadVideo = async (url) => {
     const newVideoId = extractVideoId(url);
+
     if (newVideoId) {
-      const videoDetails = await fetchYoutubeDetails(newVideoId);
-      const title = videoDetails ? videoDetails.title : `Video ${newVideoId}`;
+
+      const videoDetails = await getVideoDetails(newVideoId, url);
+      const title = videoDetails.title;
+
       setVideoId(newVideoId);
       localStorage.setItem('lastVideoId', newVideoId);
-      updateHistory(title, url);
-      await addLiveStream(newVideoId, title, url);
-      fetchActiveStreams().then(setHistory);
       setError('');
+      
       if (window.location.hash !== '#/load-live') {
         navigate('/load-live');
       }
-      if (user) {
-        logWebsiteUsage(user.uid, `User loaded video ID: ${newVideoId}, URL: ${url}, TITLED: ${title}.`)
-      }
+      console.log(`Video loaded - Source: ${videoDetails.source}, Title: ${title}`);
       } else {
       setError('Invalid YouTube URL');
     }
@@ -114,45 +173,49 @@ export const VideoHeader = ({ setVideoId, videoId, videoUrl, setVideoUrl, user})
     }
   };
 
-  /**
-   * Updates the video history with the new video title and URL.
-   * 
-   * @param {string} title - The title of the video.
-   * @param {string} url - The URL of the video.
-   */
-  const updateHistory = (title, url) => {
-    const newHistory = [{ title, url }, ...history.filter((item) => item.url !== url)];
-    setHistory(newHistory);
-    localStorage.setItem('videoHistory', JSON.stringify(newHistory));
-  };
-
-  /**
-   * Clears the video history from both state and local storage.
-   */
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem('videoHistory');
-  };
-
   return (
-    <div className="md:bg-base-100 content-center w-9/12 items-center justify-center p-4 rounded-lg md:shadow-md">
+    <div className="w-full items-center justify-center bg-transparent">
       {/* Form for submitting a YouTube URL */}
-      <form onSubmit={handleSubmit} className="flex items-center space-x-4 w-full">
-        <input
+      <form onSubmit={handleSubmit} className="relative justify-center w-full">
+        <div className="flex items-center w-full rounded-lg overflow-hidden"
+        
+        >
+          <input
           type="text"
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setTimeout(() => setIsInputFocused(false), 200)} // Delay to allow click on dropdown
           placeholder="Enter YouTube URL"
-          className="flex-grow w-fit p-2 text-sm text-left border border-gray-300 text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-7 w-11/12 px-4 text-sm text-left text-zinc-400 focus:outline-none bg-white rounded-l-xl"
+          style={{boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.2)'}}
         />
-        <button type="submit" className="px-4 py-2 text-xsm bg-primary text-black whitespace-nowrap font-semibold rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-blue-500">
-          Load Video
+
+        <button 
+          type="submit" 
+          className="px-4 py-1 h-7 bg-white mr-2 my-1 focus:outline-none rounded-r-xl"
+        >
+          <PlayIcon className="w-5 h-5 text-gray-600 hover:text-gray-900 bg-transparent"/>
         </button>
-        {/* Dropdown for selecting video from history */}
-        <VideoHistoryDropdown setVideoUrl={setVideoUrl} />
+
+        {isInputFocused && history.length > 0 && (
+          <div className="absolute top-full mt-1 bg-gray-200 rounded-md shadow-lg border border-gray-300 max-h-60 overflow-y-auto z-50 w-11/12">
+            {history.map((item, index) => (
+              <div
+                key={index}
+                onMouseDown={() => handleHistoryClick(item.url)}
+                className="flex justify-between items-center px-4 py-2 cursor-pointer hover:bg-gray-300 hover:text-black text-black"
+              >
+                <span className="flex-grow truncate pr-2">{item.title}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        </div>
+        
       </form>
       {/* Display error message if there is an error */}
-      {error && <p className="ml-4 text-sm text-red-500">{error}</p>}
+      {error && <span className="absolute bottom-0 ml-3 text-xs text-red-500">{error}</span>}
     </div>
   );
 };

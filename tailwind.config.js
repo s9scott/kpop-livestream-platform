@@ -4,35 +4,63 @@ module.exports = {
     extend: {
       // Width, Height, and Position
       width: {
-        'chat-desktop': '30%', // Chat width for desktop
-        'chat-mobile': '100%', // Chat width for mobile
-        'video-desktop': '70%', // Video width for desktop
-        'video-mobile': '100%', // Video width for mobile
+
+        //desktop styles (xl) - applies to iPad pro landscape
+        'video-iPadPro-landscape': '68vw', 
+        'chat-iPadPro-landscape': '25vw', 
+
+        //landscape tablet styles (lg) - applies to iPad pro portrait
+        'video-tablet-landscape': '58vw', 
+        'chat-tablet-landscape': '35vw', 
+
+        //portrait tablet styles (md) - md styles apply to some landscape iPhones too (XR, 12) - resolved this issue by using screen queries to specify max px height
+        'video-tablet-portrait': '80vw', 
+        'chat-tablet-portrait': '60vw',
+        
+        //landscape mobile styles (sm)
+        'video-mobile-landscape': '40vw', 
+        'chat-mobile-landscape': '40vw',
+
+        //portrait landscape styles (default)
+        'video-mobile-portrait': '95vw', 
+        'chat-mobile-portrait': '95vw', 
+        
         // Add more customizable width settings here...
       },
       height: {
-        'chat-desktop': '100%', // Chat height for desktop
-        'chat-mobile': '60%', // Chat height for mobile
-        'video-desktop': '100%', // Video height for desktop
-        'video-mobile': '30%', // Video height for mobile
-        'header-desktop': '4rem', // Header height for desktop
-        'header-mobile': '3rem', // Header height for mobile
+
+        'desktop-player-page-height': '125vh',
+        'mobile-player-page-height': '150vh',
+
+        //desktop styles (xl) - applies to iPad pro landscape
+        'header-desktop': '10vh',
+        'video-iPadPro-landscape': '60vh',
+        'chat-iPadPro-landscape': '65vh',
+        
+        //landscape tablet styles (lg) - applies to iPad pro portrait too
+        'video-tablet-landscape': '55vh',
+        'chat-tablet-landscape': '90vh',
+
+        //(md) - applies to larger iPhones too (XR, 12, etc.)
+        'video-tablet-portrait': '40vh', 
+        'chat-tablet-portrait': '60vh',
+
+        //landscape mobile styles (sm)
+        'video-mobile-landscape': '50vh',
+        'chat-mobile-landscape':'150vh',
+
+        //portrait mobile styles
+        'video-mobile-portrait': '25vh',
+        'chat-mobile-portrait': '85vh',
+
         // Add more customizable height settings here...
-      },
-      inset: {
-        'chat-desktop-top': '6rem', // Top offset for desktop (md:inset-y-24)
-        'chat-desktop-right': '0', // Right position for desktop
-        'chat-desktop-bottom': '0', // Bottom position for desktop
-        'chat-mobile-bottom': '0', // Bottom position for mobile
-        'video-desktop-top': '6rem', // Top offset for desktop
-        'video-desktop-left': '0', // Left position for desktop
-        // Add more customizable inset settings here...
+
       },
 
       // Text Size for Everything
       fontSize: {
-        'xs': '.75rem',
-        'sm': '.875rem',
+        'xs': '.7rem',
+        'sm': '.88rem',
         'base': '1rem',
         'lg': '1.125rem',
         'xl': '1.25rem',
@@ -41,24 +69,8 @@ module.exports = {
         // Add more customizable font sizes here...
       },
 
-      // Header Settings
-      padding: {
-        'header-padding': '3rem', // Default padding for the header
-        // Add more customizable padding settings here...
-      },
-
-      // Button Settings
-      // Add customization for button sizes, padding, and borders here...
-      borderRadius: {
-        'btn': '0.9rem', // Default button border-radius
-        // Add more customizable border-radius settings here...
-      },
-
-      // Dropdown Settings
-      // Add customization for dropdown sizes, padding, and borders here...
-      borderWidth: {
-        'dropdown': '1px', // Default border-width for dropdowns
-        // Add more customizable border-width settings here...
+      fontFamily: {
+        'dm':['"DM Sans"','sans-serif'], //creating a shorthand for DM Sans font - imported from google
       },
 
       // Spacing (Margin, Padding, etc.)
@@ -69,13 +81,20 @@ module.exports = {
         '8': '2rem',
         // Add more customizable spacing settings here...
       },
+    },
+    screens: {
+      // Default Tailwind breakpoints (if we dont redefine these when specifying screens, they will be overridden)
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
 
-      // Shadows
-      boxShadow: {
-        'btn': '0px 4px 6px -1px rgba(0, 0, 0, 0.1)', // Default shadow for buttons
-        'dropdown': '0px 4px 6px -1px rgba(0, 0, 0, 0.1)', // Default shadow for dropdowns
-        // Add more customizable shadow settings here...
-      },
+      // Custom orientation breakpoints
+      'portrait': { raw: '(orientation: portrait)' },
+      'landscape': { raw: '(orientation: landscape)' },
+      'iphone-landscape': {raw: '(orientation: landscape) and (min-height: 380px) and (max-height: 430px)',},
+      'ipadpro-portrait': {raw: '(min-width: 834px) and (max-width: 1024px) and (orientation: portrait),'},
+      'desktop': {raw: '(min-width: 1370px)'}
     },
   },
   variants: {
@@ -85,11 +104,13 @@ module.exports = {
     themes: [
       {
         kpop_dark: {
-          "primary": "#e91e63",
-          "secondary": "#9c27b0",
-          "accent": "#ffc107",
-          "neutral": "#212121",
-          "base-100": "#121212",
+          "primary": "#819171",
+          "secondary": "#181818",
+          "accent": "#D5D6CB",
+          "neutral": "#0C0C0C", //black
+          "base-100": "#323232", //background color
+          "base-200": "#212121", //darker background (we will use to make gradient)
+          "base-300": "#0C0C0C", //darkest backround color
           "info": "#03a9f4",
           "success": "#4caf50",
           "warning": "#ff9800",

@@ -47,7 +47,7 @@ export async function GoogleUserSignIn() {
  * @returns {String} A string indicating the result of the sign-out operation.
  *                   Returns "success" if the operation is successful, otherwise "error".
  */
-export function signOutUser() {
+export function GoogleUserSignOut() {
     try {
         signOut(auth);  // Sign the user out
         console.log("User has been signed out...");
