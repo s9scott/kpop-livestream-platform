@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchUsers } from '../../utils/usersUtils';
+import { useUser } from '../../context/UserContext';
 
 /**
  * This component is a modal (popup) that allows users to create a private chat - this appears when the CreatePrivateChatButton component is clicked
@@ -35,15 +36,18 @@ const ChatCreationMenu = ({
   }) => {
     
   const [chatName, setChatName] = useState(''); // State variable for the chat name
-  const [chatUrl, setChatUrl] = useState(''); // State variable for the live URL
+  const [chatUrl, setChatUrl] = useState('https://www.youtube.com/watch?v=JVocS7Yftw8'); // State variable for the live URL
   const [invitedUsers, setInvitedUsers] = useState([]); // State variable for the list of invited users
   const [users, setUsers] = useState([]); // State variable for the list of users
+
+  const {user} = useUser();
 
   // Fetch users from the database when the component mounts
   useEffect(() => {
     const loadUsers = async () => {
       const users = await fetchUsers();
-      setUsers(users);
+      const nonSelfUsers = users.filter((u)=>u.uid!==user.uid);
+      setUsers(nonSelfUsers);
     };
     loadUsers();
   }, []);
@@ -104,6 +108,7 @@ const ChatCreationMenu = ({
             type="text"
             placeholder="Live URL"
             value={chatUrl}
+            defaultValue={'https://www.youtube.com/watch?v=JVocS7Yftw8'}
             onChange={(e) => setChatUrl(e.target.value)}
             className="mb-4 p-2 border rounded w-full"
           />

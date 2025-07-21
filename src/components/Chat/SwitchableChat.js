@@ -181,40 +181,49 @@ const SwitchableChat = ({
 
     
     <div className="flex">
-      <div className={`md:mr-2 ${chatOpen?'':''}`}>
+      <div className={`md:mr-2`}>
         <button button className={`portrait:hidden`} onClick={()=>setChatOpen(!chatOpen)}>{chatOpen?(<ArrowRightStartOnRectangleIcon className="h-7 w-7 text-white" />):(<ArrowLeftStartOnRectangleIcon className="h-7 w-7 text-white" />)}</button>
       </div>
-      
-      <div className={`
+
+      {/*
 
         desktop:w-[25vw] desktop:h-[85vh]
         xl:w-chat-iPadPro-landscape xl:h-chat-iPadPro-landscape 
         lg:w-chat-tablet-landscape lg:h-chat-tablet-landscape 
         ipadpro-portrait:min-w-[50vw] ipadpro-portrait:max-h-[60vh]
-        md:w-chat-tablet-portrait md:h-chat-tablet-portrait
+        ipadmini-portrait:w-chat-tablet-portrait ipadmini-portrait:h-chat-tablet-portrait
         iphone-landscape:min-h-[575px] iphone-landscape:max-w-[350px]
         sm:w-chat-mobile-landscape sm:h-chat-mobile-landscape 
         w-chat-mobile-portrait h-chat-mobile-portrait
-        ${chatOpen?'':"landscape:hidden"}`}
-      >
+
+      */}
+      
+      <div className={`${!chatOpen && 'landscape:hidden'} 
+        desktop:w-[25vw] desktop:h-[85vh]
+        xl:w-chat-iPadPro-landscape xl:h-chat-iPadPro-landscape 
+        lg:w-chat-tablet-landscape lg:h-chat-tablet-landscape 
+        ipadpro-portrait:min-w-[50vw] ipadpro-portrait:max-h-[60vh]
+        ipadmini-portrait:w-chat-tablet-portrait ipadmini-portrait:h-chat-tablet-portrait
+        iphone-landscape:min-h-[575px] iphone-landscape:max-w-[350px]
+        sm:w-chat-mobile-landscape sm:h-chat-mobile-landscape 
+        w-chat-mobile-portrait h-chat-mobile-portrait`}>
+        
         <ChatTabs
           chatOpen={chatOpen}
           tabs={mainTabs}
           selectedTab={selectedTab}
           onSelectTab={setSelectedTab}
         />
-        <div className="chat-content flex-grow mt-6 h-[90%] md:h-[80%]">
+        <div className="chat-content flex-grow h-[90%]">
 
           {selectedTab === 'youtubeTab' ? (
 
-            <div>
-              <LiveChatContainer chatSrc={chatSrc} />
-            </div>
+            <LiveChatContainer chatSrc={chatSrc} />
           
           ) : 
           selectedTab === 'privateTab' ? (
 
-            <div className="w-full h-full bg-neutral rounded-xl">
+            <div className="w-full h-full bg-black rounded-xl">
 
               {/*under private tab we could see all the chats or be in one specific chat*/}
               {selectedPrivateChat===null?(

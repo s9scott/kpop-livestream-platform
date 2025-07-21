@@ -47,8 +47,7 @@ const VideoPlayerPage = ({
   selectedPrivateChat,
   setSelectedPrivateChat,
 }) => {
-  
-  const [notification, setNotification] = useState('');
+
   const [chatOpen,setChatOpen] = useState(true); //tracking whether chat is collapsed or not
 
   const {user} = useUser();
@@ -96,32 +95,29 @@ const VideoPlayerPage = ({
 
   return (
     
-    <div className="min-h-screen app-container flex flex-col xl:pt-20 desktop:pt-10">
-      {/*only render notification div if notification exists*/}
-      {notification && <div className="notification">{notification}</div>}
-        {videoId ? (
-          <div className={`flex flex-grow ${chatOpen?'justify-around':'justify-center'} items-start flex-wrap mt-10`}>
-            <div className={`video-player-container ${chatOpen?'':'mx-auto'}`}>
-              <VideoPlayer
-                videoId={videoId}
-                chatOpen={chatOpen}
-              />
-            </div>
+    <div className="min-h-screen app-container flex flex-col">
 
-            <div className="switchable-chat-container">
-              <SwitchableChat
-                videoId={videoId}
-                setVideoId={setVideoId}
-                privateChats = {privateChats}
-                setPrivateChats = {setPrivateChats}
-                invitations = {invitations}
-                setInvitations={setInvitations}
-                selectedPrivateChat= {selectedPrivateChat}
-                setSelectedPrivateChat = {setSelectedPrivateChat}
-                chatOpen={chatOpen}
-                setChatOpen={setChatOpen}
-              />
-            </div>
+        {videoId ? (
+          <div className={`h-full flex items-start flex-grow flex-wrap landscape:px-10 py-6 justify-around`}>
+            
+            <VideoPlayer
+              videoId={videoId}
+              chatOpen={chatOpen}
+            />
+
+            <SwitchableChat
+              videoId={videoId}
+              setVideoId={setVideoId}
+              privateChats = {privateChats}
+              setPrivateChats = {setPrivateChats}
+              invitations = {invitations}
+              setInvitations={setInvitations}
+              selectedPrivateChat= {selectedPrivateChat}
+              setSelectedPrivateChat = {setSelectedPrivateChat}
+              chatOpen={chatOpen}
+              setChatOpen={setChatOpen}
+            />
+            
           </div>
         ) : 
         (<div className="flex flex-col justify-start h-[80vh]">

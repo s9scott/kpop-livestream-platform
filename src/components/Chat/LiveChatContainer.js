@@ -3,7 +3,8 @@ import React from "react";
 const LiveChatContainer = ({ chatSrc }) => {
 
   return (
-    <div className="w-full h-[500px] bg-neutral relative text-white overflow-hidden rounded-xl">
+    <div className="overflow-hidden rounded-xl
+    w-full h-full bg-neutral text-white">
   
       <div
           className={`transition-all duration-500 ease-in-out relative w-full ${

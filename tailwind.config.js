@@ -6,11 +6,11 @@ module.exports = {
       width: {
 
         //desktop styles (xl) - applies to iPad pro landscape
-        'video-iPadPro-landscape': '68vw', 
+        'video-iPadPro-landscape': '50vw', 
         'chat-iPadPro-landscape': '25vw', 
 
         //landscape tablet styles (lg) - applies to iPad pro portrait
-        'video-tablet-landscape': '58vw', 
+        'video-tablet-landscape': '45vw', 
         'chat-tablet-landscape': '35vw', 
 
         //portrait tablet styles (md) - md styles apply to some landscape iPhones too (XR, 12) - resolved this issue by using screen queries to specify max px height
@@ -18,12 +18,12 @@ module.exports = {
         'chat-tablet-portrait': '60vw',
         
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '40vw', 
-        'chat-mobile-landscape': '40vw',
+        'video-mobile-landscape': '39vw', 
+        'chat-mobile-landscape': '39vw',
 
         //portrait landscape styles (default)
-        'video-mobile-portrait': '95vw', 
-        'chat-mobile-portrait': '95vw', 
+        'video-mobile-portrait': '90vw', 
+        'chat-mobile-portrait': '90vw', 
         
         // Add more customizable width settings here...
       },
@@ -34,24 +34,19 @@ module.exports = {
 
         //desktop styles (xl) - applies to iPad pro landscape
         'header-desktop': '10vh',
-        'video-iPadPro-landscape': '60vh',
         'chat-iPadPro-landscape': '65vh',
         
         //landscape tablet styles (lg) - applies to iPad pro portrait too
-        'video-tablet-landscape': '55vh',
         'chat-tablet-landscape': '90vh',
 
         //(md) - applies to larger iPhones too (XR, 12, etc.)
-        'video-tablet-portrait': '40vh', 
         'chat-tablet-portrait': '60vh',
 
         //landscape mobile styles (sm)
-        'video-mobile-landscape': '50vh',
         'chat-mobile-landscape':'150vh',
 
         //portrait mobile styles
-        'video-mobile-portrait': '25vh',
-        'chat-mobile-portrait': '85vh',
+        'chat-mobile-portrait': '65vh',
 
         // Add more customizable height settings here...
 
@@ -93,6 +88,8 @@ module.exports = {
       'portrait': { raw: '(orientation: portrait)' },
       'landscape': { raw: '(orientation: landscape)' },
       'iphone-landscape': {raw: '(orientation: landscape) and (min-height: 380px) and (max-height: 430px)',},
+      'ipadmini-portrait': {raw: '(min-width: 768px) and (max-width: 820px) and (orientation: portrait) and (min-height: 1000px)'},
+      'ipadmini-landscape': {raw: '(min-width: 1000px) and (max-width: 1133px) and (orientation: landscape) and (min-height: 744px)'},
       'ipadpro-portrait': {raw: '(min-width: 834px) and (max-width: 1024px) and (orientation: portrait),'},
       'desktop': {raw: '(min-width: 1370px)'}
     },

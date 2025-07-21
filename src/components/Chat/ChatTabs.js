@@ -23,7 +23,7 @@ import './styles/ChatTabs.css'
 const ChatTabs = ({ tabs, selectedTab, onSelectTab}) => {
   
   return (
-    <div className="flex gap-8">
+    <div className="flex gap-6 mb-3">
       {tabs.length > 0 ? (
         tabs.map((tab) => (
           <div className={`rounded-full button-container flex items-center justify-between flex-1 ${selectedTab === tab.id ? 'active-tab-container p-0.5' : ''}`}>

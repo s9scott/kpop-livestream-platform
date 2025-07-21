@@ -39,12 +39,11 @@ const Header = ({
   };
 
   return (
-    <header className="relative flex items-center justify-between w-[100vw] h-[70px]" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
+    <header className="relative flex items-center justify-between w-[100vw] h-[70px] landscape:pl-10 px-2" style={{boxShadow: "0 -1px 10px rgb(0, 0, 0)"}}>
       
       {/* Desktop View */}
-      <div className="hidden md:flex items-center">
+      <div className="hidden md:flex items-center ">
         <PagesMenu />
-        <span className="text-base text-white ml-4 whitespace-nowrap mr-10">livestreaming prototype</span>
       </div>
       <div className="hidden md:flex w-1/2 justify-center">
         <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
@@ -56,10 +55,18 @@ const Header = ({
 
       {/* Mobile View */}
       <div className="flex md:hidden w-full items-center">
-        {!showMobileInput ? (
-          <>
+
         <PagesMenu/>
-        <span className="text-sm font-bold text-white ml-2 whitespace-nowrap">livestreaming prototype</span>
+        <div className="flex-1 mx-3">
+          <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+        </div>
+        <ProfileMenu />
+
+        
+        {/* collapsible video load bar
+        !showMobileInput ? (
+          <>
+         <PagesMenu/>
           <button 
                 onClick={() => setShowMobileInput(true)}
                 className="ml-4 mr-auto"
@@ -82,7 +89,7 @@ const Header = ({
               <VideoHeader setVideoId={setVideoId} videoId={videoId} videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
             </div>
           </div>
-        )}
+        )*/}
       </div>
 
       {/* Popup Modal for Mobile */}
