@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/kpop-livestream-platform/static/css/main.cfe15da1.css",
-    "main.js": "/kpop-livestream-platform/static/js/main.75fc8794.js",
+    "main.css": "/kpop-livestream-platform/static/css/main.4e88a33f.css",
+    "main.js": "/kpop-livestream-platform/static/js/main.4391fe7b.js",
     "static/media/Treasure_logo_2023.png": "/kpop-livestream-platform/static/media/Treasure_logo_2023.27f0f818fb2b028d6246.png",
     "static/media/info.svg": "/kpop-livestream-platform/static/media/info.96ebd329729a7dff8628e518cc220e31.svg",
     "static/media/emoji-add.svg": "/kpop-livestream-platform/static/media/emoji-add.6fe2ad63c155a64b339aff45124bf49b.svg",
     "index.html": "/kpop-livestream-platform/index.html",
-    "main.cfe15da1.css.map": "/kpop-livestream-platform/static/css/main.cfe15da1.css.map",
-    "main.75fc8794.js.map": "/kpop-livestream-platform/static/js/main.75fc8794.js.map"
+    "main.4e88a33f.css.map": "/kpop-livestream-platform/static/css/main.4e88a33f.css.map",
+    "main.4391fe7b.js.map": "/kpop-livestream-platform/static/js/main.4391fe7b.js.map"
   },
   "entrypoints": [
-    "static/css/main.cfe15da1.css",
-    "static/js/main.75fc8794.js"
+    "static/css/main.4e88a33f.css",
+    "static/js/main.4391fe7b.js"
   ]
 }
