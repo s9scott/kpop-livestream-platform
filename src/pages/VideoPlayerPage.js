@@ -120,8 +120,8 @@ const VideoPlayerPage = ({
             
           </div>
         ) : 
-        (<div className="flex flex-col justify-start h-[80vh]">
-          <h1 className="my-auto ml-5 text-5xl md:text-7xl  font-bold">nothing to see here. <br/> try choosing a <span className="text-primary">livestream.</span></h1>
+        (<div className="flex flex-col justify-start h-[80vh] px-10">
+          <h1 className="my-auto text-5xl md:text-7xl  font-bold">nothing to see here. <br/> try choosing a <span className="text-primary">livestream.</span></h1>
         </div>)}
     </div>
   );
