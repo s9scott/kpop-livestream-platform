@@ -12,7 +12,7 @@ const LiveChatContainer = ({ chatSrc }) => {
           } overflow-hidden rounded-t-none rounded-b-lg`}
         >
           <iframe
-            className="w-full h-full border-0"
+            className="w-full h-[95%] border-0"
             src={chatSrc} //url format diff from emebdding youtube video (even though this uses iframe as well)
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"

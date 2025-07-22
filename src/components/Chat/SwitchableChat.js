@@ -56,26 +56,31 @@ const SwitchableChat = ({
 
   useEffect(() => {
     const fetchAndSetVideoId = async () => {
-      if (selectedTab === 'privateTab') {
+      if (selectedTab !== "youtubeTab" && selectedTab !== "nativeTab") {
         try {
           const url = await fetchPrivateChatVideoUrl(selectedTab);
-          console.log('Fetched video URL:', url);
+          console.log("Fetched video URL:", url);
           const newVideoId = extractVideoId(url);
           setPrivateChatVideoId(newVideoId);
-          console.log('Fetched video ID:', newVideoId, 'privateChatVideoId:', privateChatVideoId);
-
+          console.log(
+            "Fetched video ID:",
+            newVideoId,
+            "privateChatVideoId:",
+            privateChatVideoId,
+          );
         } catch (error) {
-          console.error('Error fetching video ID:', error);
+          console.error("Error fetching video ID:", error);
         }
       }
     };
 
     fetchAndSetVideoId();
 
-    console.log('Selected Tab:', selectedTab);
-    console.log('Current Video ID:', videoId);
-    console.log('Private Chat Video ID:', privateChatVideoId);
+    console.log("Selected Tab:", selectedTab);
+    console.log("Current Video ID:", videoId);
+    console.log("Private Chat Video ID:", privateChatVideoId);
   }, [selectedTab, videoId, privateChatVideoId]);
+
 
   /**
    * Toggles the modal displaying private chat members.

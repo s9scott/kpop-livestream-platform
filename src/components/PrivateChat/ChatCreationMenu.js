@@ -50,7 +50,7 @@ const ChatCreationMenu = ({
       setUsers(nonSelfUsers);
     };
     loadUsers();
-  });
+  },[]);
 
   // Function to add a user to list of invited users
   const handleUserSelect = (user) => {

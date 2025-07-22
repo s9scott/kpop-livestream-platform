@@ -120,7 +120,7 @@ export const UserProvider = ({ children }) => {
         userDocUnsubscribe();
       }
     };
-  }); //don't put user or login time in dependency, causes infinite loop.
+  },[]); //don't put user or login time in dependency, causes infinite loop.
 
   return (
     <UserContext.Provider

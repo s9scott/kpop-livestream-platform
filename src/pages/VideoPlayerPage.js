@@ -79,7 +79,7 @@ const VideoPlayerPage = ({
         unsubscribeInvited();
       };
     }
-  }, [user, setPrivateChats, setInvitations]); //function called if user changes
+  }, [user]); //function called if user changes
 
   //this triggers on initial rendering of this component
   useEffect(() => {
