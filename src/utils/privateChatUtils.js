@@ -18,87 +18,105 @@ import {fetchUserInfo} from "./usersUtils";
  * 
  * allows user to leave private chat
  */
-export const leavePrivateChat = async (user,privateChatId) => { 
+/**
+ * allows user to leave private chat
+ *
+ * @param {object} user - user leaving chat
+ * @param {string} privateChatId - the ID of the private chat
+ *
+ * @returns {Promise<void>} - a promise that resolves when the user has left the chat
+ */
+export const leavePrivateChat = async (user, privateChatId) => {
+  console.log(typeof user);
 
-  console.log(typeof(user));
-
-  
   const chatRef = doc(db, 'privateChats', privateChatId);
   const chatSnap = await getDoc(chatRef);
-  
 
-  console.log('snap=',chatSnap);
+  console.log('snap=', chatSnap);
 
-  if (!chatSnap.exists()){
+  if (!chatSnap.exists()) {
     console.error('Chat document does not exist.');
     return;
   }
 
   const chatData = chatSnap.data();
 
-  if(chatData.owner === user.uid){
-
+  if (chatData.owner === user.uid) {
     //no members, to make new owner so delete chat
-    if(!chatData.members || chatData.members.length === 0){
-   
+    if (!chatData.members || chatData.members.length === 0) {
       //cancel invitations that are pending
-      const invitationsRef = collection(db,'privateChats',privateChatId,'invitations');
+      const invitationsRef = collection(
+        db,
+        'privateChats',
+        privateChatId,
+        'invitations'
+      );
       const invitationsSnap = await getDocs(invitationsRef);
 
-      const invitationsData = invitationsSnap.docs.map((doc)=>doc.data());
+      const invitationsData = invitationsSnap.docs.map((doc) => doc.data());
 
       console.log(invitationsData[0]);
-      
+
       //filter invitations by pending status, then set their status to cancelled in the user document
       await Promise.all(
-        invitationsData.filter(({ status }) => status === 'pending').map(({ user }) => handleCancelInvitation(privateChatId, user))
+        invitationsData
+          .filter(({ status }) => status === 'pending')
+          .map(({ user }) => handleCancelInvitation(privateChatId, user))
       );
 
       //archive chat in deletePrivateChats collection
-      const deletedRef = await addDoc(collection(db, 'deletedPrivateChats'),{
+      const deletedRef = await addDoc(collection(db, 'deletedPrivateChats'), {
         ...chatData,
         originalChatId: chatSnap.id, //save original uid
-        deletedAt: new Date()
+        deletedAt: new Date(),
       });
 
       //add invitations to archive
-      const deleteRefInvitations = collection(deletedRef,'invitations');
+      const deleteRefInvitations = collection(deletedRef, 'invitations');
       await Promise.all(
-        invitationsData.map(({user,status})=>{
-          addDoc(deleteRefInvitations,{
+        invitationsData.map(({ user, status }) => {
+          addDoc(deleteRefInvitations, {
             user,
-            status: status === 'pending' ? 'chatDeleted' : status
-          })
+            status: status === 'pending' ? 'chatDeleted' : status,
+          });
           return ''; //map expects function with a return value
-        }
-      ));
+        })
+      );
 
       //delete original invitations
-      const deleteInvitations = invitationsSnap.docs.map((doc) => deleteDoc(doc.ref));
+      const deleteInvitations = invitationsSnap.docs.map((doc) =>
+        deleteDoc(doc.ref)
+      );
       await Promise.all(deleteInvitations);
-      
+
       //delete original chat
       await deleteDoc(chatRef);
     }
     //members exist, so make one of them the new owner
-    else{
-      const oldOwner = chatData.owner
+    else {
+      const oldOwner = chatData.owner;
       const updatedMembers = [...chatData.members];
       const newOwner = updatedMembers.pop();
-      const updatedPreviousMembers = [...chatData.previousMembers,oldOwner];
-      await updateDoc(chatRef,{owner:newOwner,members:updatedMembers,previousMembers:updatedPreviousMembers})
+      const updatedPreviousMembers = [...chatData.previousMembers, oldOwner];
+      await updateDoc(chatRef, {
+        owner: newOwner,
+        members: updatedMembers,
+        previousMembers: updatedPreviousMembers,
+      });
     }
-  }
-  else if(chatData.members.includes(user.uid)){
+  } else if (chatData.members.includes(user.uid)) {
     //if not owner, just move from members to previous members
-    const updatedMembers = chatData.members.filter(uid => uid!==user.uid);
-    const updatedPreviousMembers = [...chatData.previousMembers,user.uid];
-    await updateDoc(chatRef,{members:updatedMembers,previousMembers:updatedPreviousMembers})
-  }
-  else{
+    const updatedMembers = chatData.members.filter((uid) => uid !== user.uid);
+    const updatedPreviousMembers = [...chatData.previousMembers, user.uid];
+    await updateDoc(chatRef, {
+      members: updatedMembers,
+      previousMembers: updatedPreviousMembers,
+    });
+  } else {
     console.log('user is not an owner or member of chat');
   }
 };
+
 
 //NOTE: had to add deleteDoc()
 
@@ -173,17 +191,28 @@ export const sendPrivateChatMessage = async (privateChatId, user, input, setInpu
  * 
  * Deletes a private message from a private chat.
 */
-export const deletePrivateChatMessage = async (privateChatId, text, timestamp) => {
-  const q = query(collection(db, 'privateChats', privateChatId, 'messages'), orderBy('timestamp', 'asc'));
+export const deletePrivateChatMessage = async (
+  privateChatId,
+  text,
+  timestamp
+) => {
+  const q = query(
+    collection(db, 'privateChats', privateChatId, 'messages'),
+    orderBy('timestamp', 'asc')
+  );
   const snapshot = await getDocs(q);
   snapshot.forEach(async (doc) => {
     const message = doc.data();
     if (message.text === text && message.timestamp === timestamp) {
       await deleteDoc(doc.ref);
-      await addDoc(collection(db, 'deletedMessages'), { ...message, chatId: privateChatId });
+      await addDoc(collection(db, 'deletedMessages'), {
+        ...message,
+        chatId: privateChatId,
+      });
     }
   });
 };
+
 
 /**
  * @param {*} setActiveUsers
