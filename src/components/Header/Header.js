@@ -11,7 +11,7 @@ import { useState } from 'react';
 import ProfileMenu from './ProfileMenu';
 import VideoHeader from './VideoHeader';
 import PagesMenu from './PagesMenu';
-import { PlayIcon } from '@heroicons/react/24/solid';
+//import { PlayIcon } from '@heroicons/react/24/solid';
 
 /**
  * Header component for displaying navigation and user options.
@@ -29,7 +29,7 @@ const Header = ({
   setVideoUrl,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [showMobileInput, setShowMobileInput] = useState(false); 
+  //const [showMobileInput, setShowMobileInput] = useState(false); 
 
   /**
    * Toggles the visibility of the popup modal.

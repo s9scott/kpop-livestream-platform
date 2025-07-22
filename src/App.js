@@ -1,6 +1,6 @@
 //"main" of the react app
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import VideoPlayerPage from './pages/VideoPlayerPage';
@@ -16,17 +16,6 @@ const App = () => {
   const [invitations, setInvitations] = useState([]); //user invitations
   const [privateChats, setPrivateChats] = useState([]);
   const [selectedPrivateChat, setSelectedPrivateChat] = useState(null);
-
-  const {setUser} = useUser();
-
-  //useEffect w/o dependencies, triggers once on initial render of app (not triggered on re-renders)
-  useEffect(() => {
-    const storedUser = localStorage.getItem('lastUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
   
   return (
     <div className="app">

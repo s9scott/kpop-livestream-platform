@@ -14,7 +14,6 @@ import {fetchPrivateChatVideoUrl, fetchPrivateChatMembers, fetchPendingMembers} 
 import LiveChatContainer from './LiveChatContainer';
 import ChatTabs from './ChatTabs'
 import {  ArrowLeftStartOnRectangleIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
-import { useUser } from '../../context/UserContext';
 
 
 /**
@@ -51,8 +50,6 @@ const SwitchableChat = ({
   const [privateChatMembers, setPrivateChatMembers] = useState([]);
   const [pendingChatMembers, setPendingChatMembers] = useState([]);
   const [selectedPrivateTab,setSelectedPrivateTab] = useState('messagesTab') // for privateTab panel (messageTab, invitationsTab)
-
-  const {user} = useUser();
   
   const embedDomain = window.location.hostname === 'localhost' ? 'localhost' : 's9scott.github.io';
   const chatSrc = `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${embedDomain}`;

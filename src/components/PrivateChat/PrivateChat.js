@@ -105,7 +105,7 @@ const PrivateChat = ({
         unsubscribeVideoTitle();
       };
     }
-  }, [privateChatId]);
+  }, [privateChatId, privateChatMembers]);
 
   // Scroll to the bottom of the messages container when new messages are added
   const handleSendClick = async (e) => {
